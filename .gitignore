@@ -1,7 +1,11 @@
-tmp/*
-[Cc]onfig/core.php
-[Cc]onfig/database.php
-app/tmp/*
-app/[Cc]onfig/core.php
-app/[Cc]onfig/database.php
+site/tmp/*
+site/[Cc]onfig/core.php
+site/[Cc]onfig/database.php
+site/app/tmp/*
+site/app/[Cc]onfig/core.php
+site/app/[Cc]onfig/database.php
 !empty
+
+#Ignore ssl certs
+**.crt
+**.key
