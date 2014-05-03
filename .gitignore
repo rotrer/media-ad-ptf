@@ -9,3 +9,6 @@ site/app/[Cc]onfig/database.php
 #Ignore ssl certs
 **.crt
 **.key
+
+#Ignore .DS_Store
+**.DS_Store
