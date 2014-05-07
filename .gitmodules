@@ -1,3 +1,6 @@
 [submodule "site/Vendor/googleads-php-lib"]
 	path = site/Vendor/googleads-php-lib
 	url = git@github.com:googleads/googleads-php-lib.git
+[submodule "site/Vendor/google-api-php-client"]
+	path = site/Vendor/google-api-php-client
+	url = git@github.com:google/google-api-php-client.git

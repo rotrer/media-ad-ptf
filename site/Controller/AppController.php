@@ -11,15 +11,16 @@
  */
 
 App::uses('Controller', 'Controller');
-
+#App::import('Vendor', 'phpexcelwriter', array('file' => 'PHPExcel'.DS.'Writer'.DS.'Excel2007.php')); // loads 
 /**
  * Application Controller
  *
  * Add your application-wide methods in the class below, your controllers
  * will inherit them.
  *
- * @package		app.Controller
- * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
+ * @package     app.Controller
+ * @link        http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
+	public $uses = array('Sessions');
 }
