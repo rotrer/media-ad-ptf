@@ -11,7 +11,7 @@
  */
 
 App::uses('Controller', 'Controller');
-#App::import('Vendor', 'phpexcelwriter', array('file' => 'PHPExcel'.DS.'Writer'.DS.'Excel2007.php')); // loads 
+App::import('Vendor', 'DfpUser', array('file' => 'googleads-php-lib'.DS.'src'.DS.'Google'.DS.'Api'.DS.'Ads'.DS.'Dfp'.DS.'Lib'.DS.'DfpUser.php'));
 /**
  * Application Controller
  *

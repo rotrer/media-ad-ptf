@@ -17,6 +17,8 @@
  * to use (in this case, /app/View/Pages/home.ctp)...
  */
 	Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
+
+	Router::connect('/oauth2callback', array('controller' => 'users', 'action' => 'oauth2callback'));
 /**
  * ...and connect the rest of 'Pages' controller's URLs.
  */

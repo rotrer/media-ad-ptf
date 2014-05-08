@@ -37,6 +37,19 @@ class PagesController extends AppController {
  *	or MissingViewException in debug mode.
  */
 	public function display() {
+		/*
+		*DFP
+		*/
+		$user = new DfpUser();
+
+		$redirectUri = 'http://media-adserver.media.cl/site/oauth2callback';
+  		$offline = TRUE;
+		$OAuth2Handler = $user->GetOAuth2Handler();
+		$authorizationUrl = $OAuth2Handler->GetAuthorizationUrl(
+			$user->GetOAuth2Info(), $redirectUri, $offline);
+
+		$this->set('authLogin', $authorizationUrl);
+
 		$path = func_get_args();
 
 		$count = count($path);
