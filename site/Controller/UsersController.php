@@ -10,11 +10,34 @@ App::uses('AppController', 'Controller');
 class UsersController extends AppController {
 
 /**
+*	Url redireccion oAuth 2.0
+*/
+	private $redirectUri = 'http://media-adserver.media.cl/site/oauth2callback';
+/**
  * Components
  *
  * @var array
  */
-	public $components = array('Paginator', 'Session');
+	public $components = array(
+        'Paginator',
+        'Auth' => array(
+            'authenticate' => array('Form' => array('userModel' => 'User',
+                                                    'fields' => array(
+                                                                'username' => 'username',
+                                                                'password' => 'password'
+                                                                )
+                                                    )
+                                    ),
+            'loginRedirect' => "",
+            'logoutRedirect' => array('controller' => 'users', 'action' => 'login', 'admin' => true),
+            'authorize' => array('Controller')
+        )
+    );
+
+    public function beforeFilter(){
+    	parent::beforeFilter();
+    	#$this->Auth->allow(array('oauth2callback'));
+    }
 
 /**
  * admin_index method
@@ -106,16 +129,58 @@ class UsersController extends AppController {
 /**
  * auth callback method
  *
- * @throws NotFoundException
+ * @throws ForbiddenException
  * @param none
  * @return void
  */
 	public function oauth2callback() {
 		$this->layout = 'ajax';
-		if (!$this->params['query']['code']) {
+		if ($this->params->query['code']) {
+			$code = $this->params->query['code'];
+			/*
+			*DFP
+			*/
+			$user = new DfpUser();
+			$OAuth2Handler = $user->GetOAuth2Handler();
+			$user->SetOAuth2Info( $OAuth2Handler->GetAccessToken($user->GetOAuth2Info(), $code, $this->redirectUri) );
+			$dataUser = array(
+					'google' => $user->GetOAuth2Info(),
+					'id' => $this->Auth->user('id')
+				);
+			$this->Session->write('dataUser', $dataUser);
+			$this->redirect('/dashboard');
+		} else {
 			throw new ForbiddenException(__('Sin código autorización'));
 		}
 		
 	}
-}
+
+/**
+ * login method
+ *
+ * @throws NotFoundException
+ * @param none
+ * @return void
+ */
+	public function login() {
+		if ($this->request->is('post')) {
+			if ($this->Auth->login()) {
+				/*
+				*DFP
+				*/
+				$user = new DfpUser();
+		  		$offline = TRUE;
+				$OAuth2Handler = $user->GetOAuth2Handler();
+				$authorizationUrl = $OAuth2Handler->GetAuthorizationUrl(
+					$user->GetOAuth2Info(), $this->redirectUri, $offline);
+				header("Location: $authorizationUrl");
+				exit();
+            } else {
+            	$this->Session->setFlash(__('Usuario o contraseña inválido, favor intentar nuevamente.'));
+            	$this->redirect('/');
+            }
+		} else {
+	        throw new BadRequestException('Petición no válida');
+		}
+	}
 }

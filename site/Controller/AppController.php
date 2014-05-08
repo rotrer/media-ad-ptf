@@ -23,4 +23,27 @@ App::import('Vendor', 'DfpUser', array('file' => 'googleads-php-lib'.DS.'src'.DS
  */
 class AppController extends Controller {
 	public $uses = array('Sessions');
+
+	public function isAuthorized($user) {
+        // Admin can access every action
+        if ($user['state'] === 'activo') {
+            return true;
+        }
+
+        // Default deny
+        $this->Session->setFlash(__('Acceso no autorizado'));
+        $this->Session->destroy();
+        $this->redirect(array('controller' => 'pages', 'action' => 'display', 'home'));
+        return false;
+    }
+
+    public function instanceDfp() {
+        if ($this->Session->check('dataUser')) {
+            $dataUser = $this->Session->read('dataUser');
+            $dataUser = $dataUser['google'];
+        } else {
+            $dataUser = NULL;
+        }
+        return new DfpUser(NULL, NULL, NULL, NULL, NULL, NULL, NULL, $dataUser);
+    }
 }

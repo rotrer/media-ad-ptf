@@ -1,0 +1,5 @@
+[May 08 2014 18:10:43.000000 - INFO] email= service=NetworkService method=getAllNetworks responseTime=334 requestId=dc89119114fd5d85ada92d2859a3c8e1 server=www.google.com isFault= faultMessage=null
+[May 08 2014 18:11:06.000000 - INFO] email= service=NetworkService method=getAllNetworks responseTime=215 requestId=f1f51a592fae1a3393325df6c254af0d server=www.google.com isFault= faultMessage=null
+[May 08 2014 18:11:49.000000 - INFO] email= service=NetworkService method=makeTestNetwork responseTime=859 requestId=5d98489657eec47da6a6d68859387a8b server=www.google.com isFault= faultMessage=null
+[May 08 2014 18:11:50.000000 - INFO] email= service=NetworkService method=getAllNetworks responseTime=112 requestId=affd22b1e47c6aaca5cdc0e2c6072bd7 server=www.google.com isFault= faultMessage=null
+[May 08 2014 18:14:13.000000 - INFO] email= service=NetworkService method=getAllNetworks responseTime=97 requestId=d574bb5c280ee03767ba8b7908b3a1e7 server=www.google.com isFault= faultMessage=null

@@ -26,7 +26,11 @@ class InstallsController extends AppController {
  *
  */
 	public function index() {
-		
+		$usuarioAdmin = $this->User->find('first');
+		if ($usuarioAdmin) {
+			$this->Session->setFlash(__('Sistema instalado, contactese con el administrador'));
+			$this->redirect('/');
+		}
 	}
 
 /**
