@@ -7,7 +7,7 @@
  * @since         CakePHP(tm) v 0.10.0.1076
  */
 
-$cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework');
+$cakeDescription = __d('cake_dev', 'Media AdServer');
 ?>
 <!DOCTYPE html>
 <html>

@@ -19,7 +19,7 @@ class InstallsController extends AppController {
 
     public function beforeFilter(){
     	parent::beforeFilter();
-    	$this->Auth->allow(array('index', 'create'));
+    	$this->Auth->allow(array('index', 'create', 'congrats'));
     }
 /**
  * index method
@@ -52,20 +52,26 @@ class InstallsController extends AppController {
 					$Email->from(array('admin@mediatrends.cl' => 'Media Ads'));
 					$Email->emailFormat('html');
 					$Email->to($data['email']);
-					$Email->subject('Acceso Mediatrends Ads');
+					$Email->subject('Acceso Media Ads');
 					$Email->send('<h2>Bienvenido a Mediatrends Ads</h2><h4>Tu acceso es:</h4><p>Sitio: '.Router::url('/', true).' </br>Usuario: '.$data['username'].' </br>Contraseña: (la contraseña que ingresaste)) </br></p><p>Recuerda que la primera vez que entres te pedira cambiar tu contraseña.</p>');
 
 					$this->Session->setFlash(__('Usuario creado correctamente.'));
-					return $this->redirect(array('action' => 'congrats'));
+					$this->redirect(array('action' => 'congrats'));
+					exit();
 				} else {
 					$this->Session->setFlash(__('El usuario no ha sido creado, favor intentar nuevamente.'));
 				}
 			} else {
 				$this->Session->setFlash(__('Sistema instalado, contactese con el administrador'));
 				$this->redirect('/');
+				exit();
 			}
 		} else {
 	        throw new BadRequestException('Petición no válida');
 		}
+	}
+
+	public function congrats(){
+
 	}
 }
