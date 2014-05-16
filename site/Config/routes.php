@@ -20,6 +20,7 @@
 
 	Router::connect('/oauth2callback', array('controller' => 'users', 'action' => 'oauth2callback'));
 	Router::connect('/dashboard', array('controller' => 'pages', 'action' => 'dashboard'));
+	#Router::connect('/admin', array('controller' => 'users', 'action' => 'login'));
 /**
  * ...and connect the rest of 'Pages' controller's URLs.
  */

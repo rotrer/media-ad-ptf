@@ -1,0 +1,109 @@
+<?php
+App::uses('AppController', 'Controller');
+/**
+ * AdUnits Controller
+ *
+ * @property AdUnit $AdUnit
+ * @property PaginatorComponent $Paginator
+ * @property SessionComponent $Session
+ */
+class AdUnitsController extends AppController {
+
+/**
+ * Components
+ *
+ * @var array
+ */
+	public $components = array('Paginator', 'Session');
+
+/**
+ * admin_index method
+ *
+ * @return void
+ */
+	public function admin_index() {
+		$this->AdUnit->recursive = 0;
+		$this->set('adUnits', $this->Paginator->paginate());
+	}
+
+/**
+ * admin_view method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function admin_view($id = null) {
+		if (!$this->AdUnit->exists($id)) {
+			throw new NotFoundException(__('Invalid ad unit'));
+		}
+		$options = array('conditions' => array('AdUnit.' . $this->AdUnit->primaryKey => $id));
+		$this->set('adUnit', $this->AdUnit->find('first', $options));
+	}
+
+/**
+ * admin_add method
+ *
+ * @return void
+ */
+	public function admin_add() {
+		if ($this->request->is('post')) {
+			$this->AdUnit->create();
+			if ($this->AdUnit->save($this->request->data)) {
+				$this->Session->setFlash(__('The ad unit has been saved.'));
+				return $this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('The ad unit could not be saved. Please, try again.'));
+			}
+		}
+		$zonas = $this->AdUnit->Zona->find('list');
+		$this->set(compact('zonas'));
+	}
+
+/**
+ * admin_edit method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function admin_edit($id = null) {
+		if (!$this->AdUnit->exists($id)) {
+			throw new NotFoundException(__('Invalid ad unit'));
+		}
+		if ($this->request->is(array('post', 'put'))) {
+			if ($this->AdUnit->save($this->request->data)) {
+				$this->Session->setFlash(__('The ad unit has been saved.'));
+				return $this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('The ad unit could not be saved. Please, try again.'));
+			}
+		} else {
+			$options = array('conditions' => array('AdUnit.' . $this->AdUnit->primaryKey => $id));
+			$this->request->data = $this->AdUnit->find('first', $options);
+		}
+		$zonas = $this->AdUnit->Zona->find('list');
+		$this->set(compact('zonas'));
+	}
+
+/**
+ * admin_delete method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function admin_delete($id = null) {
+		$this->AdUnit->id = $id;
+		if (!$this->AdUnit->exists()) {
+			throw new NotFoundException(__('Invalid ad unit'));
+		}
+		$this->request->onlyAllow('post', 'delete');
+		if ($this->AdUnit->delete()) {
+			$this->Session->setFlash(__('The ad unit has been deleted.'));
+		} else {
+			$this->Session->setFlash(__('The ad unit could not be deleted. Please, try again.'));
+		}
+		return $this->redirect(array('action' => 'index'));
+	}
+}

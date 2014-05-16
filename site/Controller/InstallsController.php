@@ -26,7 +26,9 @@ class InstallsController extends AppController {
  *
  */
 	public function index() {
-		$usuarioAdmin = $this->User->find('first');
+		$usuarioAdmin = $this->User->find('first', array(
+				'conditions' => array('User.role = ' => 'admin')
+			));
 		if ($usuarioAdmin) {
 			$this->Session->setFlash(__('Sistema instalado, contactese con el administrador'));
 			$this->redirect('/');
@@ -45,6 +47,7 @@ class InstallsController extends AppController {
 				$data['role'] = 'admin';
 				$data['state'] = 'activo';
 				$data['first_login'] = 1;
+				$data['can_be_deleted'] = 0;
 				$this->User->create();
 				if ($this->User->save($data)) {
 

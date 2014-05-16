@@ -24,6 +24,23 @@ App::import('Vendor', 'DfpUser', array('file' => 'googleads-php-lib'.DS.'src'.DS
 class AppController extends Controller {
 	public $uses = array('Sessions');
 
+    public function beforeFilter() {
+        if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
+            $this->layout = 'admin';
+        } 
+    }
+    public function beforeRender() {
+        if ($this->request->params['controller'] != 'installs') {
+            $this->loadModel('User');
+            $usuarioAdmin = $this->User->find('first', array(
+                    'conditions' => array('User.role = ' => 'admin')
+                ));
+            if (!$usuarioAdmin) {
+                $this->redirect(array('controller' => 'installs', 'action' => 'index', 'admin' => false));
+            }
+        }
+    }
+
 	public function isAuthorized($user) {
         // Admin can access every action
         if ($user['state'] === 'activo') {

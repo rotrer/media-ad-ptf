@@ -36,8 +36,8 @@ class UsersController extends AppController {
 
     public function beforeFilter(){
     	parent::beforeFilter();
-    	#$this->Auth->allow(array('oauth2callback'));
-    	$this->Auth->allow('*');
+    	$this->Auth->allow(array('oauth2callback'));
+    	#$this->Auth->allow('*');
     }
 
 /**
@@ -73,6 +73,12 @@ class UsersController extends AppController {
 	public function admin_add() {
 		if ($this->request->is('post')) {
 			$this->User->create();
+			#Encriptar pass
+			$this->request->data['User']['password'] = AuthComponent::password($this->request->data['User']['password']);
+			#Valores por defecto creación usuario
+			$this->request->data['User']['first_login'] = 1;
+			$this->request->data['User']['can_be_deleted'] = 1;
+
 			if ($this->User->save($this->request->data)) {
 				$this->Session->setFlash(__('The user has been saved.'));
 				return $this->redirect(array('action' => 'index'));
@@ -94,6 +100,9 @@ class UsersController extends AppController {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
+			if ( empty($this->request->data['User']['password']) ) {
+				unset($this->request->data['User']['password']);
+			}
 			if ($this->User->save($this->request->data)) {
 				$this->Session->setFlash(__('The user has been saved.'));
 				return $this->redirect(array('action' => 'index'));
@@ -126,6 +135,36 @@ class UsersController extends AppController {
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
+
+/**
+ * admin login method
+ *
+ * @throws NotFoundException
+ * @param none
+ * @return void
+ */
+	public function admin_login() {
+        if ($this->request->is('post')) {
+            if ($this->Auth->login()) {
+                //$this->redirect($this->Auth->redirect());
+                $this->redirect(array('controller' => 'users', 'action' => 'index', 'admin' => true));
+            } else {
+                $this->Session->setFlash(__('Usuario o contraseña inválido, favor intentar nuevamente.'));
+            }
+        }
+    }
+
+/**
+ * admin logout method
+ *
+ * @throws none
+ * @param none
+ * @return void
+ */
+    public function admin_logout() {
+        $this->Session->destroy();
+        $this->redirect(array('controller' => 'users', 'action' => 'login', 'admin' => true));
+    }
 
 /**
  * auth callback method

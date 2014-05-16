@@ -90,4 +90,20 @@ class User extends AppModel {
 			),
 		),
 	);
+
+/**
+ * Befeore delete
+ *
+ * Antes de eliminar un usuario revisa si puede
+ * @var array
+ */
+	public function beforeDelete($cascade = false){
+		$user = $this->findById($this->id);
+
+	    if ($user['User']['can_be_deleted'] == true) {
+	        return true;
+	    } else {
+	        return false;
+	    }
+	}
 }

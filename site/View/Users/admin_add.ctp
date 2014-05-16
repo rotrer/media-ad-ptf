@@ -3,11 +3,16 @@
 	<fieldset>
 		<legend><?php echo __('Admin Add User'); ?></legend>
 	<?php
+		echo $this->Form->input('name');
 		echo $this->Form->input('username');
 		echo $this->Form->input('password');
 		echo $this->Form->input('email');
-		echo $this->Form->input('role');
-		echo $this->Form->input('state');
+		echo $this->Form->input('role',array(
+				'options' => array('user' => 'Usuario', 'client' => 'Cliente', 'admin' => 'Administrador')
+			));
+		echo $this->Form->input('state', array(
+				'options' => array('activo' => 'Activo', 'inactivo' => 'Inactivo')
+			));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

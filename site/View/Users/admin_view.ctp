@@ -6,6 +6,11 @@
 			<?php echo h($user['User']['id']); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('Name'); ?></dt>
+		<dd>
+			<?php echo h($user['User']['name']); ?>
+			&nbsp;
+		</dd>
 		<dt><?php echo __('Username'); ?></dt>
 		<dd>
 			<?php echo h($user['User']['username']); ?>
@@ -13,7 +18,7 @@
 		</dd>
 		<dt><?php echo __('Password'); ?></dt>
 		<dd>
-			<?php echo h($user['User']['password']); ?>
+			-----------
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Email'); ?></dt>
@@ -29,6 +34,11 @@
 		<dt><?php echo __('State'); ?></dt>
 		<dd>
 			<?php echo h($user['User']['state']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('First Login'); ?></dt>
+		<dd>
+			<?php echo ($user['User']['first_login']) ? 'SÍ' : 'NO'; ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Created'); ?></dt>
