@@ -50,7 +50,11 @@ class AppController extends Controller {
         // Default deny
         $this->Session->setFlash(__('Acceso no autorizado'));
         $this->Session->destroy();
-        $this->redirect(array('controller' => 'pages', 'action' => 'display', 'home'));
+        if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
+            $this->redirect(array('controller' => 'users', 'action' => 'login', 'admin' => true));
+        } else {
+            $this->redirect(array('controller' => 'pages', 'action' => 'display', 'home'));
+        }
         return false;
     }
 

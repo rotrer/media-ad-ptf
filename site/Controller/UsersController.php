@@ -80,10 +80,10 @@ class UsersController extends AppController {
 			$this->request->data['User']['can_be_deleted'] = 1;
 
 			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(__('The user has been saved.'));
+				$this->Session->setFlash(__('Usuario guardado.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('Usuario no guardado, favor intentar nuevamente.'));
 			}
 		}
 	}
@@ -103,7 +103,10 @@ class UsersController extends AppController {
 			if ( empty($this->request->data['User']['password']) ) {
 				unset($this->request->data['User']['password']);
 			}
-			if ($this->User->save($this->request->data)) {
+
+			$saveState = $this->User->save($this->request->data);
+			debug($saveState, $showHtml = null, $showFrom = true); die();
+			if ($saveState) {
 				$this->Session->setFlash(__('The user has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {

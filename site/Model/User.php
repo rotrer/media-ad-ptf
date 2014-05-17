@@ -11,7 +11,7 @@ class User extends AppModel {
  *
  * @var string
  */
-	public $displayField = 'id';
+	public $displayField = 'email';
 
 /**
  * Validation rules
@@ -94,8 +94,8 @@ class User extends AppModel {
 /**
  * Befeore delete
  *
- * Antes de eliminar un usuario revisa si puede
- * @var array
+ * Callback antes de eliminar un usuario revisa si puede
+ * @var bool
  */
 	public function beforeDelete($cascade = false){
 		$user = $this->findById($this->id);
@@ -105,5 +105,23 @@ class User extends AppModel {
 	    } else {
 	        return false;
 	    }
+	}
+
+/**
+ * Befeore save
+ *
+ * Callback antes de guardar usuario, revisa si email está registrado
+ * @var array
+ */
+	public function beforeSave($options = array()) {
+		if (isset($this->data['User']['id']))
+			$conditions = array('User.email ' => $this->data['User']['email'], 'User.id <>' => $this->data['User']['id']);
+		else
+			$conditions = array('User.email ' => $this->data['User']['email']);
+
+    	if ($this->find('count', array('conditions' => $conditions))) {
+    		return false;
+    	}
+    	return true;
 	}
 }

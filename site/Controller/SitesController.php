@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+App::uses('String', 'Utility');
 /**
  * Sites Controller
  *
@@ -14,7 +15,21 @@ class SitesController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator', 'Session');
+	public $components = array(
+        'Paginator',
+        'Auth' => array(
+            'authenticate' => array('Form' => array('userModel' => 'User',
+                                                    'fields' => array(
+                                                                'username' => 'username',
+                                                                'password' => 'password'
+                                                                )
+                                                    )
+                                    ),
+            'loginRedirect' => "",
+            'logoutRedirect' => array('controller' => 'users', 'action' => 'login', 'admin' => true),
+            'authorize' => array('Controller')
+        )
+    );
 
 /**
  * admin_index method
@@ -56,8 +71,10 @@ class SitesController extends AppController {
 				$this->Session->setFlash(__('The site could not be saved. Please, try again.'));
 			}
 		}
+		#Generar token
 		$users = $this->Site->User->find('list');
-		$this->set(compact('users'));
+		$public_key = String::uuid();
+		$this->set(compact('users', 'public_key'));
 	}
 
 /**

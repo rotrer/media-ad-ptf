@@ -14,7 +14,21 @@ class AdUnitsController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator', 'Session');
+	public $components = array(
+        'Paginator',
+        'Auth' => array(
+            'authenticate' => array('Form' => array('userModel' => 'User',
+                                                    'fields' => array(
+                                                                'username' => 'username',
+                                                                'password' => 'password'
+                                                                )
+                                                    )
+                                    ),
+            'loginRedirect' => "",
+            'logoutRedirect' => array('controller' => 'users', 'action' => 'login', 'admin' => true),
+            'authorize' => array('Controller')
+        )
+    );
 
 /**
  * admin_index method
