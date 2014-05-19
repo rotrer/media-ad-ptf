@@ -36,6 +36,7 @@ class UsersController extends AppController {
 
     public function beforeFilter(){
     	parent::beforeFilter();
+    	$this->redirectUri = Configure::read('redirectUri');
     	$this->Auth->allow(array('oauth2callback'));
     	#$this->Auth->allow('*');
     }
