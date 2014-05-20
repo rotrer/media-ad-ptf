@@ -12,6 +12,7 @@
 
 App::uses('Controller', 'Controller');
 App::import('Vendor', 'DfpUser', array('file' => 'googleads-php-lib'.DS.'src'.DS.'Google'.DS.'Api'.DS.'Ads'.DS.'Dfp'.DS.'Lib'.DS.'DfpUser.php'));
+App::import('Vendor', 'DateTimeUtils', array('file' => 'googleads-php-lib'.DS.'src'.DS.'Google'.DS.'Api'.DS.'Ads'.DS.'Dfp'.DS.'Util'.DS.'DateTimeUtils.php'));
 /**
  * Application Controller
  *

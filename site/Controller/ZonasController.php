@@ -10,6 +10,12 @@ App::uses('AppController', 'Controller');
 class ZonasController extends AppController {
 
 /**
+ * Models
+ *
+ * @var array
+ */
+	public $uses = array('Zona', 'Site');
+/**
  * Components
  *
  * @var array
@@ -60,7 +66,7 @@ class ZonasController extends AppController {
  *
  * @return void
  */
-	public function admin_add() {
+	public function admin_add($id_site = null) {
 		if ($this->request->is('post')) {
 			$this->Zona->create();
 			if ($this->Zona->save($this->request->data)) {
@@ -70,7 +76,13 @@ class ZonasController extends AppController {
 				$this->Session->setFlash(__('The zona could not be saved. Please, try again.'));
 			}
 		}
-		$sites = $this->Zona->Site->find('list');
+		if ($id_site) {
+			$sites = $this->Site->find('first', array('conditions' => array('Site.id' => $id_site)));
+		} else {
+			$this->Session->setFlash(__('Antes de crear una zona debe generar un sitio.'));
+			return $this->redirect(array('controller' => 'sites', 'action' => 'add'));
+		}
+		
 		$adUnits = $this->Zona->AdUnit->find('list');
 		$this->set(compact('sites', 'adUnits'));
 	}

@@ -12,7 +12,7 @@ class UsersController extends AppController {
 /**
 *	Url redireccion oAuth 2.0
 */
-	private $redirectUri = 'http://media-adserver.media.cl/site/oauth2callback';
+	private $redirectUri = '';
 /**
  * Components
  *
@@ -151,10 +151,24 @@ class UsersController extends AppController {
         if ($this->request->is('post')) {
             if ($this->Auth->login()) {
                 //$this->redirect($this->Auth->redirect());
-                $this->redirect(array('controller' => 'users', 'action' => 'index', 'admin' => true));
+                #$this->redirect(array('controller' => 'users', 'action' => 'index', 'admin' => true));
+                /*
+				*DFP
+				*/
+				$user = new DfpUser();
+		  		$offline = TRUE;
+				$OAuth2Handler = $user->GetOAuth2Handler();
+				$authorizationUrl = $OAuth2Handler->GetAuthorizationUrl(
+					$user->GetOAuth2Info(), $this->redirectUri, $offline);
+				header("Location: $authorizationUrl");
+				exit();
             } else {
                 $this->Session->setFlash(__('Usuario o contraseña inválido, favor intentar nuevamente.'));
             }
+        }
+
+        if ($this->Auth->login()) {
+        	$this->redirect(array('controller' => 'users', 'action' => 'index', 'admin' => true));
         }
     }
 
@@ -192,7 +206,11 @@ class UsersController extends AppController {
 					'id' => $this->Auth->user('id')
 				);
 			$this->Session->write('dataUser', $dataUser);
-			$this->redirect('/dashboard');
+			if ($this->Auth->user('role') == 'admin' || $this->Auth->user('role') == 'user') {
+        		$this->redirect(array('controller' => 'users', 'action' => 'index', 'admin' => true));
+        	} else {
+        		$this->redirect('/dashboard');
+        	}
 		} else {
 			throw new ForbiddenException(__('Sin código autorización'));
 		}

@@ -73,8 +73,8 @@ class Site extends AppModel {
 		'User' => array(
 			'className' => 'User',
 			'joinTable' => 'users_sites',
-			'foreignKey' => 'site_id',
-			'associationForeignKey' => 'user_id',
+			'foreignKey' => 'sites_id',
+			'associationForeignKey' => 'users_id',
 			'unique' => 'keepExisting',
 			'conditions' => '',
 			'fields' => '',

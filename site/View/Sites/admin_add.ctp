@@ -12,7 +12,7 @@
 		echo $this->Form->input('User');
 	?>
 	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
+<?php echo $this->Form->end(__('Continuar')); ?>
 </div>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>

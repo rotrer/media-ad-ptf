@@ -67,31 +67,5 @@ class PagesController extends AppController {
 	}
 
 	public function dashboard() {
-		/*
-		*DFP
-		*/
-		// Log SOAP XML request and response.
-		$this->instanceDfp()->LogDefaults();
-
-		// Get the NetworkService.
-		$networkService = $this->instanceDfp()->GetService('NetworkService', 'v201403');
-
-		// Get all networks that you have access to with the current login
-		// credentials.
-		$networks = $networkService->getAllNetworks();
-
-		// Display results.
-		$i = 0;
-		if (isset($networks)) {
-			$i = 0;
-			foreach ($networks as $network) {
-			  print $i . ') Network with network code "' . $network->networkCode
-			      . '" and display name "' . $network->displayName
-			      . "\" was found.\n";
-			  $i++;
-			}
-		}
-
-		print 'Number of results found: ' . $i . "\n";
 	}
 }

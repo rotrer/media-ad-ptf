@@ -21,6 +21,7 @@ $cakeDescription = __d('cake_dev', 'Media AdServer');
 		echo $this->Html->meta('icon');
 
 		echo $this->Html->css('cake.generic');
+		echo $this->Html->script(array('//code.jquery.com/jquery-1.11.0.min.js', 'admin'));
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
@@ -55,5 +56,8 @@ $cakeDescription = __d('cake_dev', 'Media AdServer');
 		</div>
 	</div>
 	<?php echo $this->element('sql_dump'); ?>
+	<script>
+		var APP_JQ = '<?php echo $this->base; ?>';
+	</script>
 </body>
 </html>
