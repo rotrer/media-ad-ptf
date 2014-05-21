@@ -5,9 +5,10 @@
       return main.dfpOrders();
     },
     dfpOrders: function() {
-      return $("#orders").change(function() {
+      $('#orders').change(function() {
         var order_id;
         order_id = $(this).val();
+        $('#name_order').val($("#orders option:selected").text());
         return $.ajax({
           url: APP_JQ + "/admin/sites/getlinesitems",
           type: "POST",
@@ -24,6 +25,9 @@
             }
           }
         });
+      });
+      return $('#line_items').change(function() {
+        return $('#name_lineitem').val($("#line_items option:selected").text());
       });
     }
   };

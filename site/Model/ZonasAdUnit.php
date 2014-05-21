@@ -9,11 +9,11 @@ App::uses('AppModel', 'Model');
 class ZonasAdUnit extends AppModel {
 
 /**
- * Display field
+ * Primary key field
  *
  * @var string
  */
-	public $displayField = 'id';
+	public $primaryKey = 'zonas_id';
 
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed

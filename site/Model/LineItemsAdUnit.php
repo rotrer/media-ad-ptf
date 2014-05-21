@@ -1,19 +1,19 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * LitemsAdunit Model
+ * LineItemsAdUnit Model
  *
  * @property LineItems $LineItems
  * @property AdUnits $AdUnits
  */
-class LitemsAdunit extends AppModel {
+class LineItemsAdUnit extends AppModel {
 
 /**
- * Display field
+ * Primary key field
  *
  * @var string
  */
-	public $displayField = 'id';
+	public $primaryKey = 'ad_units_id';
 
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed

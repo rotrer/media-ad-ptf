@@ -1,12 +1,12 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * Site Model
+ * AdUnit Model
  *
- * @property AdOrder $AdOrder
- * @property User $User
+ * @property LineItem $LineItem
+ * @property Zona $Zona
  */
-class Site extends AppModel {
+class AdUnit extends AppModel {
 
 /**
  * Display field
@@ -31,9 +31,9 @@ class Site extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'public_key' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+		'created' => array(
+			'datetime' => array(
+				'rule' => array('datetime'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -51,11 +51,11 @@ class Site extends AppModel {
  * @var array
  */
 	public $hasAndBelongsToMany = array(
-		'AdOrder' => array(
-			'className' => 'AdOrder',
-			'joinTable' => 'sites_ad_orders',
-			'foreignKey' => 'sites_id',
-			'associationForeignKey' => 'ad_orders_id',
+		'LineItem' => array(
+			'className' => 'LineItem',
+			'joinTable' => 'line_items_ad_units',
+			'foreignKey' => 'ad_units_id',
+			'associationForeignKey' => 'line_items_id',
 			'unique' => 'keepExisting',
 			'conditions' => '',
 			'fields' => '',
@@ -64,11 +64,11 @@ class Site extends AppModel {
 			'offset' => '',
 			'finderQuery' => '',
 		),
-		'User' => array(
-			'className' => 'User',
-			'joinTable' => 'users_sites',
-			'foreignKey' => 'sites_id',
-			'associationForeignKey' => 'users_id',
+		'Zona' => array(
+			'className' => 'Zona',
+			'joinTable' => 'zonas_ad_units',
+			'foreignKey' => 'ad_units_id',
+			'associationForeignKey' => 'zonas_id',
 			'unique' => 'keepExisting',
 			'conditions' => '',
 			'fields' => '',

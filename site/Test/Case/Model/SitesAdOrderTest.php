@@ -1,11 +1,11 @@
 <?php
-App::uses('LineItem', 'Model');
+App::uses('SitesAdOrder', 'Model');
 
 /**
- * LineItem Test Case
+ * SitesAdOrder Test Case
  *
  */
-class LineItemTest extends CakeTestCase {
+class SitesAdOrderTest extends CakeTestCase {
 
 /**
  * Fixtures
@@ -13,13 +13,9 @@ class LineItemTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.line_item',
-		'app.ad_orders',
-		'app.ad_unit',
-		'app.line_items_ad_unit',
-		'app.zona',
+		'app.sites_ad_order',
 		'app.sites',
-		'app.zonas_ad_unit'
+		'app.ad_orders'
 	);
 
 /**
@@ -29,7 +25,7 @@ class LineItemTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->LineItem = ClassRegistry::init('LineItem');
+		$this->SitesAdOrder = ClassRegistry::init('SitesAdOrder');
 	}
 
 /**
@@ -38,7 +34,7 @@ class LineItemTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		unset($this->LineItem);
+		unset($this->SitesAdOrder);
 
 		parent::tearDown();
 	}

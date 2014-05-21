@@ -13,7 +13,11 @@ class OrderTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.order'
+		'app.order',
+		'app.site',
+		'app.sites_order',
+		'app.user',
+		'app.users_site'
 	);
 
 /**

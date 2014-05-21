@@ -1,11 +1,11 @@
 <?php
-App::uses('Site', 'Model');
+App::uses('AdOrder', 'Model');
 
 /**
- * Site Test Case
+ * AdOrder Test Case
  *
  */
-class SiteTest extends CakeTestCase {
+class AdOrderTest extends CakeTestCase {
 
 /**
  * Fixtures
@@ -13,8 +13,8 @@ class SiteTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.site',
 		'app.ad_order',
+		'app.site',
 		'app.sites_ad_order',
 		'app.user',
 		'app.users_site'
@@ -27,7 +27,7 @@ class SiteTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->Site = ClassRegistry::init('Site');
+		$this->AdOrder = ClassRegistry::init('AdOrder');
 	}
 
 /**
@@ -36,7 +36,7 @@ class SiteTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		unset($this->Site);
+		unset($this->AdOrder);
 
 		parent::tearDown();
 	}

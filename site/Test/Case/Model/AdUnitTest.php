@@ -14,6 +14,8 @@ class AdUnitTest extends CakeTestCase {
  */
 	public $fixtures = array(
 		'app.ad_unit',
+		'app.line_item',
+		'app.line_items_ad_unit',
 		'app.zona',
 		'app.sites',
 		'app.zonas_ad_unit'

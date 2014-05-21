@@ -1,6 +1,6 @@
 <div class="zonas form">
 <?php echo $this->Form->create('Zona'); ?>
-	<?php echo $this->Form->input('sites_id', array('type' => 'hidden', 'value' => $sites['Site']['id'])); ?>
+	<?php #echo $this->Form->input('sites_id', array('type' => 'hidden', 'value' => $sites['Site']['id'])); ?>
 	<fieldset>
 		<legend><?php echo __('Agregar Zona a un Sitio'); ?></legend>
 		<dl>
@@ -24,7 +24,13 @@
 			<?php for ($i=0; $i < 3; $i++) { ?>
 			<tr>
 				<td><?php echo $this->Form->input('name'.$i, array('div' => false, 'label' => false, 'required')); ?></td>
-				<td><?php echo $this->Form->input('ads'.$i, array('div' => false, 'label' => false, 'required')); ?></td>
+				<td>
+					<?php echo $this->Form->select('adunit'.$i, $adunits, array('div' => false, 'label' => false, 'required', 'empty' => 'Seleccione')); ?>
+					<?php #foreach ($adunits as $key => $adunit) { ?>
+						
+					<?php #} ?>
+					<?php #echo $this->Form->input('ads'.$i, array('div' => false, 'label' => false, 'required')); ?>
+				</td>
 				<td><?php echo $this->Form->input('id_tag_template'.$i, array('div' => false, 'label' => false, 'required')); ?></td>
 			</tr>
 			<?php } ?>

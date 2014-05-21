@@ -11,6 +11,12 @@ App::uses('String', 'Utility');
 class SitesController extends AppController {
 
 /**
+ * Models
+ *
+ * @var array
+ */
+	public $uses = array('Site', 'User', 'AdOrder', 'LineItem', 'SitesAdOrder');
+ /**
  * Components
  *
  * @var array
@@ -132,6 +138,47 @@ class SitesController extends AppController {
  * @return void
  */
 	public function admin_dfporders($id_site = null) {
+		if ($this->request->is('post')) {
+			##Guardar AdOrder
+			$name_order_compuesto = $this->request->data['Site']['name_order'];
+				$name_order_compuesto = explode('[', str_replace("]", "", $name_order_compuesto));
+			$orderData = array(
+					'id' => $this->request->data['Site']['order_id'],
+					'name' => $name_order_compuesto[0],
+					'status' => $name_order_compuesto[1],
+					'created' => date('Y-m-d H:i:s')
+				);
+			$responseOrder = $this->AdOrder->save($orderData);
+			
+			##Guarar LineItem
+			$name_lineitem_compuesto = $this->request->data['Site']['name_lineitem'];
+				$name_lineitem_compuesto = explode('[', str_replace("]", "", $name_lineitem_compuesto));
+			$lineitemData = array(
+					'id' => $this->request->data['Site']['line_item_id'],
+					'name' => $name_lineitem_compuesto[0],
+					'status' => $name_lineitem_compuesto[1],
+					'ad_orders_id' => $this->request->data['Site']['order_id'],
+					'created' => date('Y-m-d H:i:s')
+				);
+			$responseLineItem = $this->LineItem->save($lineitemData);
+
+			##Guardar SitesAdOrder
+			$sitesadorderData = array(
+					'sites_id' => $this->request->data['Site']['site_id'],
+					'ad_orders_id' => $this->request->data['Site']['order_id'],
+					'created' => date('Y-m-d H:i:s')
+				);
+			$responseSitesAdOrder = $this->SitesAdOrder->save($sitesadorderData);
+
+			$this->redirect(array(
+				'controller' => 'zonas',
+				'action' => 'add',
+				'admin' => true,
+				$this->request->data['Site']['site_id'],
+				$this->request->data['Site']['order_id'],
+				$this->request->data['Site']['line_item_id']
+			));
+		}
 		if (!$this->Site->exists($id_site)) {
 			#throw new NotFoundException(__('Sitio no válido'));
 			$this->Session->setFlash(__('Antes de seleccionar pedidos y sus lineas de pedido, debe generar un sitio.'));
@@ -139,80 +186,64 @@ class SitesController extends AppController {
 		}
 
 		if ($id_site) {
-			/*
-			*DFP
-			*/
-			// Log SOAP XML request and response.
-			$this->instanceDfp()->LogDefaults();
-			// Get the OrderService.
-			$orderService = $this->instanceDfp()->GetService('OrderService', 'v201403');
+			try {
+				/*
+				*DFP
+				*/
+				// Log SOAP XML request and response.
+				$this->instanceDfp()->LogDefaults();
+				// Get the OrderService.
+				$orderService = $this->instanceDfp()->GetService('OrderService', 'v201403');
 
-			// Create a datetime representing today.
-			$today = date(DateTimeUtils::$DFP_DATE_TIME_STRING_FORMAT, strtotime('now'));
+				// Create a datetime representing today.
+				$today = date(DateTimeUtils::$DFP_DATE_TIME_STRING_FORMAT, strtotime('now'));
 
-			// Create bind variables.
-			$vars = MapUtils::GetMapEntries(array('today' => new TextValue($today)));
+				// Create bind variables.
+				$vars = MapUtils::GetMapEntries(array('today' => new TextValue($today)));
 
-			// Create statement text to get all draft and pending approval orders that
-			// haven't ended and aren't archived.
-			$filterStatementText = "WHERE status IN ('DRAFT', 'PENDING_APPROVAL', 'APPROVED', 'PAUSED') "
-				. "AND endDateTime >= :today "
-				. "AND isArchived = FALSE ";
+				// Create statement text to get all draft and pending approval orders that
+				// haven't ended and aren't archived.
+				$filterStatementText = "WHERE status IN ('DRAFT', 'PENDING_APPROVAL', 'APPROVED', 'PAUSED') "
+					. "AND endDateTime >= :today "
+					. "AND isArchived = FALSE ";
 
-			$offset = 0;
+				$offset = 0;
 
-			do {
-				// Create statement to page through results.
-				$filterStatement =
-					new Statement($filterStatementText . " LIMIT 500 OFFSET "
-					. $offset, $vars);
+				do {
+					// Create statement to page through results.
+					$filterStatement =
+						new Statement($filterStatementText . " LIMIT 500 OFFSET "
+						. $offset, $vars);
 
-				// Get orders by statement.
-				$page = $orderService->getOrdersByStatement($filterStatement);
+					// Get orders by statement.
+					$page = $orderService->getOrdersByStatement($filterStatement);
 
-				// Display results.
-				$orderIds = $ordersArr = array();
-				if (isset($page->results)) {
-					$i = $page->startIndex;
-					foreach ($page->results as $order) {
-						// Archived orders cannot be approved.
-						if (!$order->isArchived) {
-							$ordersArr[$order->id] = $order->name . '[' . $order->status . ']';
-							// pr( $i . ') Order with ID "' . $order->id
-							// 		. '", name "' . $order->name
-							// 		. '", and status "' . $order->status
-							// 		. "\" will be approved." );
-
-							$i++;
-							$orderIds[] = $order->id;
+					// Display results.
+					$orderIds = $ordersArr = array();
+					if (isset($page->results)) {
+						$i = $page->startIndex;
+						foreach ($page->results as $order) {
+							// Archived orders cannot be approved.
+							if (!$order->isArchived) {
+								$ordersArr[$order->id] = $order->name . '[' . $order->status . ']';
+								$i++;
+								$orderIds[] = $order->id;
+							}
 						}
 					}
-				}
 
-				$offset += 500;
-			} while ($offset < $page->totalResultSetSize);
+					$offset += 500;
+				} while ($offset < $page->totalResultSetSize);
 
-			// pr( 'Number of orders to be approved: ' . sizeof($orderIds) );
+			} catch (OAuth2Exception $e) {
+				$this->Session->write('redirect_url', $this->request->url);
+				$this->redirect(array('controller' => 'users', 'action' => 'call_oauth', 'admin' => false));
 
-			// if (sizeof($orderIds) > 0) {
-			// 	// Create action statement.
-			// 	$filterStatementText =
-			// 		sprintf('WHERE id IN (%s)', implode(',', $orderIds));
-			// 	$filterStatement = new Statement($filterStatementText);
-
-			// 	// Create action.
-			// 	$action = new ApproveAndOverbookOrders();
-
-			// 	// Perform action.
-			// 	$result = $orderService->performOrderAction($action, $filterStatement);
-
-			// 	// Display results.
-			// 	if (isset($result) && $result->numChanges > 0) {
-			// 		pr( 'Number of orders approved: ' . $result->numChanges );
-			// 	} else {
-			// 		pr( "No orders were approved.");
-			// 	}
-			// }
+			} catch (ValidationException $e) {
+				#ExampleUtils::CheckForOAuth2Errors($e);
+			} catch (Exception $e) {
+				print $e->getMessage() . "\n";
+			}
 
 
 		}//End if ($id_site) {
@@ -276,5 +307,25 @@ class SitesController extends AppController {
 
 		exit();
 	}
-	
+
+/**
+ * admin_getplugin method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function admin_getplugin($id = null) {
+		// $this->Zona->id = $id;
+		// if (!$this->Zona->exists()) {
+		// 	throw new NotFoundException(__('Invalid zona'));
+		// }
+		// $this->request->onlyAllow('post', 'delete');
+		// if ($this->Zona->delete()) {
+		// 	$this->Session->setFlash(__('The zona has been deleted.'));
+		// } else {
+		// 	$this->Session->setFlash(__('The zona could not be deleted. Please, try again.'));
+		// }
+		// return $this->redirect(array('action' => 'index'));
+	}
 }

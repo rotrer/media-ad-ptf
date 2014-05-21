@@ -20,6 +20,14 @@
 
 	Router::connect('/oauth2callback', array('controller' => 'users', 'action' => 'oauth2callback'));
 	Router::connect('/dashboard', array('controller' => 'pages', 'action' => 'dashboard'));
+	Router::connect('/{$prefix}/zonas/add/:site_id/:order_id/:line_item_id', 
+					array('controller' => 'zonas', 'action' => 'add', 'admin' => true),
+					array(
+							'site_id' => '[0-9]+',
+							'order_id' => '[0-9]+',
+							'line_item_id' => '[0-9]+'
+						));
+
 	#Router::connect('/admin', array('controller' => 'users', 'action' => 'login'));
 /**
  * ...and connect the rest of 'Pages' controller's URLs.

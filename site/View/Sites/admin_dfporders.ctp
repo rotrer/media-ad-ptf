@@ -27,8 +27,12 @@
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Pedidos'); ?></dt>
+		<?php echo $this->Form->create(); ?>
+		<?php echo $this->Form->input('site_id', array('value' => $site['Site']['id'], 'type' => 'hidden')); ?>
+		<?php echo $this->Form->input('name_order', array('id' => 'name_order', 'type' => 'hidden')); ?>
+		<?php echo $this->Form->input('name_lineitem', array('id' => 'name_lineitem', 'type' => 'hidden')); ?>
 		<dd>
-			<select name="orders" id="orders">
+			<select name="data[Site][order_id]" id="orders">
 				<option value="">Seleccione</option>
 				<?php foreach ($orders as $key => $order) { ?>
 				<option value="<?php echo $key; ?>"><?php echo $order; ?></option>
@@ -37,11 +41,12 @@
 		</dd>
 		<dt><?php echo __('Líneas de Pedidos'); ?></dt>
 		<dd>
-			<select name="line_items" id="line_items">
+			<select name="data[Site][line_item_id]" id="line_items">
 				<option value="">Seleccione</option>
 			</select>
 			<span class="load_lines loading" style="display:none;">Cargando...</span>
 		</dd>
+		<?php echo $this->Form->end('Continuar'); ?>
 	</dl>
 </div>
 <div class="actions">

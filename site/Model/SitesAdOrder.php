@@ -1,19 +1,19 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * LineItemsCreative Model
+ * SitesAdOrder Model
  *
- * @property LineItem $LineItem
- * @property Creative $Creative
+ * @property Sites $Sites
+ * @property AdOrders $AdOrders
  */
-class LineItemsCreative extends AppModel {
+class SitesAdOrder extends AppModel {
 
 /**
- * Display field
+ * Primary key field
  *
  * @var string
  */
-	public $displayField = 'id';
+	public $primaryKey = 'sites_id';
 
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -24,16 +24,16 @@ class LineItemsCreative extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'LineItem' => array(
-			'className' => 'LineItem',
-			'foreignKey' => 'line_item_id',
+		'Sites' => array(
+			'className' => 'Sites',
+			'foreignKey' => 'sites_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		),
-		'Creative' => array(
-			'className' => 'Creative',
-			'foreignKey' => 'creative_id',
+		'AdOrders' => array(
+			'className' => 'AdOrders',
+			'foreignKey' => 'ad_orders_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

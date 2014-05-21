@@ -150,18 +150,7 @@ class UsersController extends AppController {
 	public function admin_login() {
         if ($this->request->is('post')) {
             if ($this->Auth->login()) {
-                //$this->redirect($this->Auth->redirect());
-                #$this->redirect(array('controller' => 'users', 'action' => 'index', 'admin' => true));
-                /*
-				*DFP
-				*/
-				$user = new DfpUser();
-		  		$offline = TRUE;
-				$OAuth2Handler = $user->GetOAuth2Handler();
-				$authorizationUrl = $OAuth2Handler->GetAuthorizationUrl(
-					$user->GetOAuth2Info(), $this->redirectUri, $offline);
-				header("Location: $authorizationUrl");
-				exit();
+                $this->call_oauth();
             } else {
                 $this->Session->setFlash(__('Usuario o contraseña inválido, favor intentar nuevamente.'));
             }
@@ -206,6 +195,13 @@ class UsersController extends AppController {
 					'id' => $this->Auth->user('id')
 				);
 			$this->Session->write('dataUser', $dataUser);
+			if ($this->Session->check('redirect_url')) {
+				$redirect_url = $this->Session->read('redirect_url');
+				$this->Session->write('redirect_url', '');
+				$this->redirect($redirect_url);
+				exit();
+			}
+
 			if ($this->Auth->user('role') == 'admin' || $this->Auth->user('role') == 'user') {
         		$this->redirect(array('controller' => 'users', 'action' => 'index', 'admin' => true));
         	} else {
@@ -227,16 +223,7 @@ class UsersController extends AppController {
 	public function login() {
 		if ($this->request->is('post')) {
 			if ($this->Auth->login()) {
-				/*
-				*DFP
-				*/
-				$user = new DfpUser();
-		  		$offline = TRUE;
-				$OAuth2Handler = $user->GetOAuth2Handler();
-				$authorizationUrl = $OAuth2Handler->GetAuthorizationUrl(
-					$user->GetOAuth2Info(), $this->redirectUri, $offline);
-				header("Location: $authorizationUrl");
-				exit();
+				$this->call_oauth();
             } else {
             	$this->Session->setFlash(__('Usuario o contraseña inválido, favor intentar nuevamente.'));
             	$this->redirect('/');
@@ -244,5 +231,25 @@ class UsersController extends AppController {
 		} else {
 	        throw new BadRequestException('Petición no válida');
 		}
+	}
+
+/**
+ * call_oauth method
+ *
+ * @throws NotFoundException
+ * @param none
+ * @return void
+ */
+	public function call_oauth(){
+		/*
+		*DFP
+		*/
+		$user = new DfpUser();
+  		$offline = TRUE;
+		$OAuth2Handler = $user->GetOAuth2Handler();
+		$authorizationUrl = $OAuth2Handler->GetAuthorizationUrl(
+			$user->GetOAuth2Info(), $this->redirectUri, $offline);
+		header("Location: $authorizationUrl");
+		exit();
 	}
 }

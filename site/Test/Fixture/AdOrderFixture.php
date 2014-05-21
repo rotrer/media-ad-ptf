@@ -1,9 +1,9 @@
 <?php
 /**
- * OrderFixture
+ * AdOrderFixture
  *
  */
-class OrderFixture extends CakeTestFixture {
+class AdOrderFixture extends CakeTestFixture {
 
 /**
  * Fields
@@ -31,7 +31,7 @@ class OrderFixture extends CakeTestFixture {
 			'id' => 1,
 			'name' => 'Lorem ipsum dolor sit amet',
 			'status' => 'Lorem ipsum dolor sit amet',
-			'created' => '2014-05-21 16:20:56'
+			'created' => '2014-05-21 17:18:32'
 		),
 	);
 
