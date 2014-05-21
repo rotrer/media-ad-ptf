@@ -31,7 +31,7 @@ $cakeDescription = __d('cake_dev', 'Media AdServer');
 <body>
 	<div id="container">
 		<div id="header">
-			<h1><?php echo $this->Html->link($cakeDescription, 'http://cakephp.org'); ?></h1>
+			<!--h1><?php echo $this->Html->link($cakeDescription, 'http://cakephp.org'); ?></h1-->
 			<?php echo $this->Html->link("Salir", array("controller" => "users", "action" => "logout", "admin" => true), array("style" => "float: right; color: #fff !important")); ?>
 			<div class="menu">
 				<?php echo $this->Html->link(__('Usuarios'), array('controller' => 'users', 'action' => 'index')); ?>
