@@ -29,7 +29,8 @@ class UsersController extends AppController {
                                                     )
                                     ),
             'loginRedirect' => "",
-            'logoutRedirect' => array('controller' => 'users', 'action' => 'login', 'admin' => true),
+            'logoutRedirect' => "",
+            #'logoutRedirect' => array('controller' => 'users', 'action' => 'login', 'admin' => true),
             'authorize' => array('Controller')
         )
     );
@@ -106,7 +107,7 @@ class UsersController extends AppController {
 			}
 
 			$saveState = $this->User->save($this->request->data);
-			debug($saveState, $showHtml = null, $showFrom = true); die();
+			#debug($saveState, $showHtml = null, $showFrom = true); die();
 			if ($saveState) {
 				$this->Session->setFlash(__('The user has been saved.'));
 				return $this->redirect(array('action' => 'index'));
@@ -150,6 +151,15 @@ class UsersController extends AppController {
 	public function admin_login() {
         if ($this->request->is('post')) {
             if ($this->Auth->login()) {
+            	$userData = $this->User->find('first', 
+            		array(
+            			'conditions' => array('User.id' => $this->Auth->user('id')),
+            			'fields' => array('first_login')
+        			));
+            	
+            	if ($userData['User']['first_login'] == true) {
+            		$this->redirect(array('action' => 'changepassword'));
+            	}
                 $this->call_oauth();
             } else {
                 $this->Session->setFlash(__('Usuario o contraseña inválido, favor intentar nuevamente.'));
@@ -162,6 +172,34 @@ class UsersController extends AppController {
     }
 
 /**
+ * admin_changepassword method
+ *
+ * @throws NotFoundException
+ * @param none
+ * @return void
+ */
+    public function admin_changepassword() {
+    	if ($this->request->is('post')) {
+    		if ($this->request->data['User']['nueva_pass'] == $this->request->data['User']['nueva_pass_r']) {
+    			$this->User->id = $this->Auth->user('id');
+				$dataPass = array('password' => AuthComponent::password($this->request->data['User']['nueva_pass']), 'first_login' => 0);
+				if ($this->User->save($dataPass, false)) {
+					$this->Session->setFlash(__('Contraseña actualizada correctamente..'));
+					$this->Auth->logout();
+        			$this->redirect(array('controller' => 'users', 'action' => 'login', 'admin' => true));
+				} else {
+					$this->Session->setFlash(__('La contraseña no ha sido actualizada, favor intentar nuevamente.'));
+				}
+				
+    		} else {
+    			$this->Session->setFlash(__('Las contraseñas no coinciden, favor intentar nuevamente.'));
+    		}
+    		
+    		die();
+    	}
+	}
+
+/**
  * admin logout method
  *
  * @throws none
@@ -169,7 +207,7 @@ class UsersController extends AppController {
  * @return void
  */
     public function admin_logout() {
-        $this->Session->destroy();
+        $this->Auth->logout();
         $this->redirect(array('controller' => 'users', 'action' => 'login', 'admin' => true));
     }
 

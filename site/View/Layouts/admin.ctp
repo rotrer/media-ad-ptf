@@ -21,7 +21,7 @@ $cakeDescription = __d('cake_dev', 'Media AdServer');
 		echo $this->Html->meta('icon');
 
 		echo $this->Html->css('cake.generic');
-		echo $this->Html->script(array('//code.jquery.com/jquery-1.11.0.min.js', 'admin'));
+		echo $this->Html->script(array('jquery-1.11.0.min.js', 'admin'));
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
@@ -32,12 +32,12 @@ $cakeDescription = __d('cake_dev', 'Media AdServer');
 	<div id="container">
 		<div id="header">
 			<!--h1><?php echo $this->Html->link($cakeDescription, 'http://cakephp.org'); ?></h1-->
-			<?php echo $this->Html->link("Salir", array("controller" => "users", "action" => "logout", "admin" => true), array("style" => "float: right; color: #fff !important")); ?>
+			<?php echo (isset($menuAdminAccess)) ? $this->Html->link("Salir", array("controller" => "users", "action" => "logout", "admin" => true), array("style" => "float: right; color: #fff !important")) : ''; ?>
 			<div class="menu">
-				<?php echo $this->Html->link(__('Usuarios'), array('controller' => 'users', 'action' => 'index')); ?>
-				<?php echo $this->Html->link(__('Sitios'), array('controller' => 'sites', 'action' => 'index')); ?>
-				<?php echo $this->Html->link(__('Zonas'), array('controller' => 'zonas', 'action' => 'index')); ?>
-				<?php echo $this->Html->link(__('Ad-units'), array('controller' => 'adunits', 'action' => 'index')); ?>
+				<?php echo (isset($menuAdminAccess) && $menuAdminAccess['users']) ? $this->Html->link(__('Usuarios'), array('controller' => 'users', 'action' => 'index')) : ''; ?>
+				<?php echo (isset($menuAdminAccess) && $menuAdminAccess['sites']) ? $this->Html->link(__('Sitios'), array('controller' => 'sites', 'action' => 'index')) : ''; ?>
+				<?php echo (isset($menuAdminAccess) && $menuAdminAccess['zonas']) ? $this->Html->link(__('Zonas'), array('controller' => 'zonas', 'action' => 'index')) : ''; ?>
+				<?php echo (isset($menuAdminAccess) && $menuAdminAccess['adunits']) ? $this->Html->link(__('Ad-units'), array('controller' => 'adunits', 'action' => 'index')) : ''; ?>
 			</div>
 		</div>
 		<div id="content">

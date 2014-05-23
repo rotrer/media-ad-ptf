@@ -43,14 +43,38 @@ class AppController extends Controller {
     }
 
 	public function isAuthorized($user) {
-        // Admin can access every action
         if ($user['state'] === 'activo') {
+            if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
+                switch ($user['role']) {
+                    case 'user':
+                        $menuAdminAccess = array(
+                                'users' => 0,
+                                'sites' => 1,
+                                'zonas' => 1,
+                                'adunits' => 1
+                            );
+                        break;
+                    case 'client':
+                        $menuAdminAccess = array();
+                        break;
+                    default:
+                        // Admin can access every action
+                        $menuAdminAccess = array(
+                                'users' => 1,
+                                'sites' => 1,
+                                'zonas' => 1,
+                                'adunits' => 1
+                            );
+                        break;
+                }
+                $this->set('menuAdminAccess',$menuAdminAccess);
+            }
             return true;
         }
 
         // Default deny
         $this->Session->setFlash(__('Acceso no autorizado'));
-        $this->Session->destroy();
+        $this->Auth->logout();
         if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
             $this->redirect(array('controller' => 'users', 'action' => 'login', 'admin' => true));
         } else {

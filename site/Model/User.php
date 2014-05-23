@@ -114,14 +114,16 @@ class User extends AppModel {
  * @var array
  */
 	public function beforeSave($options = array()) {
-		if (isset($this->data['User']['id']))
-			$conditions = array('User.email ' => $this->data['User']['email'], 'User.id <>' => $this->data['User']['id']);
-		else
-			$conditions = array('User.email ' => $this->data['User']['email']);
+		if ($options['validate'] == true) {
+			if (isset($this->data['User']['id']))
+				$conditions = array('User.email ' => $this->data['User']['email'], 'User.id <>' => $this->data['User']['id']);
+			else
+				$conditions = array('User.email ' => $this->data['User']['email']);
 
-    	if ($this->find('count', array('conditions' => $conditions))) {
-    		return false;
-    	}
+	    	if ($this->find('count', array('conditions' => $conditions))) {
+	    		return false;
+	    	}
+	    }
     	return true;
 	}
 }
