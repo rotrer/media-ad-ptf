@@ -194,8 +194,6 @@ class UsersController extends AppController {
     		} else {
     			$this->Session->setFlash(__('Las contraseñas no coinciden, favor intentar nuevamente.'));
     		}
-    		
-    		die();
     	}
 	}
 
@@ -261,7 +259,16 @@ class UsersController extends AppController {
 	public function login() {
 		if ($this->request->is('post')) {
 			if ($this->Auth->login()) {
-				$this->call_oauth();
+				$userData = $this->User->find('first', 
+            		array(
+            			'conditions' => array('User.id' => $this->Auth->user('id')),
+            			'fields' => array('first_login')
+        			));
+            	
+            	if ($userData['User']['first_login'] == true) {
+            		$this->redirect(array('action' => 'changepassword'));
+            	}
+                $this->call_oauth();
             } else {
             	$this->Session->setFlash(__('Usuario o contraseña inválido, favor intentar nuevamente.'));
             	$this->redirect('/');
@@ -269,6 +276,32 @@ class UsersController extends AppController {
 		} else {
 	        throw new BadRequestException('Petición no válida');
 		}
+	}
+
+/**
+ * changepassword method
+ *
+ * @throws NotFoundException
+ * @param none
+ * @return void
+ */
+    public function changepassword() {
+    	if ($this->request->is('post')) {
+    		if ($this->request->data['User']['nueva_pass'] == $this->request->data['User']['nueva_pass_r']) {
+    			$this->User->id = $this->Auth->user('id');
+				$dataPass = array('password' => AuthComponent::password($this->request->data['User']['nueva_pass']), 'first_login' => 0);
+				if ($this->User->save($dataPass, false)) {
+					$this->Session->setFlash(__('Contraseña actualizada correctamente..'));
+					$this->Auth->logout();
+        			$this->redirect('/');
+				} else {
+					$this->Session->setFlash(__('La contraseña no ha sido actualizada, favor intentar nuevamente.'));
+				}
+				
+    		} else {
+    			$this->Session->setFlash(__('Las contraseñas no coinciden, favor intentar nuevamente.'));
+    		}
+    	}
 	}
 
 /**
