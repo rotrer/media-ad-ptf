@@ -6,7 +6,7 @@
 		    'name',
 		    'email',
 		    'username',
-		    'password'
+		    #'password'
 		));
 	echo $this->Form->end('Entrar');
 ?>

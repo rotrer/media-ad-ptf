@@ -15,7 +15,7 @@ class InstallsController extends AppController {
 /**
 * cargar comonente de autorización
 */
-	public $components = array('Auth');
+	public $components = array('Auth', 'Password');
 
     public function beforeFilter(){
     	parent::beforeFilter();
@@ -43,7 +43,8 @@ class InstallsController extends AppController {
 		if ($this->request->is('post')) {
 			$data = $this->request->data['Install'];
 			if (!$this->User->findByUsername($data['username'])) {
-				$data['password'] =  AuthComponent::password($data['password']);
+				$new_pass = $this->Password->generatePassword(8);
+				$data['password'] =  AuthComponent::password($new_pass);
 				$data['role'] = 'admin';
 				$data['state'] = 'activo';
 				$data['first_login'] = 1;
@@ -56,7 +57,7 @@ class InstallsController extends AppController {
 					$Email->emailFormat('html');
 					$Email->to($data['email']);
 					$Email->subject('Acceso Media Ads');
-					$Email->send('<h2>Bienvenido a Mediatrends Ads</h2><h4>Tu acceso es:</h4><p>Sitio: '.Router::url('/', true).' </br>Usuario: '.$data['username'].' </br>Contraseña: (la contraseña que ingresaste)) </br></p><p>Recuerda que la primera vez que entres te pedira cambiar tu contraseña.</p>');
+					$Email->send('<h2>Bienvenido a Mediatrends Ads</h2><h4>Tu acceso es:</h4><p>Sitio: '.Router::url('/', true).' </br>Usuario: '.$data['username'].' </br>Contraseña: '.$new_pass.' </br></p><p>Recuerda que la primera vez que entres te pedira cambiar tu contraseña.</p>');
 
 					$this->Session->setFlash(__('Usuario creado correctamente.'));
 					$this->redirect(array('action' => 'congrats'));
