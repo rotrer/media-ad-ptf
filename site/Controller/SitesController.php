@@ -316,10 +316,10 @@ class SitesController extends AppController {
  * @return void
  */
 	public function admin_getplugin($id = null) {
-		// $this->Zona->id = $id;
-		// if (!$this->Zona->exists()) {
-		// 	throw new NotFoundException(__('Invalid zona'));
-		// }
+		$this->Site->id = $id;
+		if (!$this->Site->exists()) {
+			throw new NotFoundException(__('Invalid site'));
+		}
 		// $this->request->onlyAllow('post', 'delete');
 		// if ($this->Zona->delete()) {
 		// 	$this->Session->setFlash(__('The zona has been deleted.'));
@@ -327,5 +327,31 @@ class SitesController extends AppController {
 		// 	$this->Session->setFlash(__('The zona could not be deleted. Please, try again.'));
 		// }
 		// return $this->redirect(array('action' => 'index'));
+		$this->set('site_id', $id);
+	}
+
+/**
+ * admin_descarga method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function admin_descarga($id = null) {
+		$this->Site->id = $id;
+		if (!$this->Site->exists()) {
+			throw new NotFoundException(__('Invalid site'));
+		}
+		
+		$filename = 'daiwa_knot.pdf.zip';
+		$filepath = WWW_ROOT . DS;
+
+		header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
+        header("Content-Type: application/zip");
+        header("Content-Transfer-Encoding: Binary");
+        header("Content-Length: ".filesize($filepath.$filename));
+        header("Content-Disposition: attachment; filename=\"".$filename."\"");
+        @readfile($filepath.$filename);
+        exit;
 	}
 }

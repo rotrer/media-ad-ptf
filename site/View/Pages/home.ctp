@@ -1,4 +1,4 @@
-<h1>Bienvenido a Medeiatrends Ads</h1>
+<h1>Bienvenido</h1>
 
 <?php #echo $this->Html->link('Login', $authLogin); ?>
 
