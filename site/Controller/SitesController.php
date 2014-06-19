@@ -15,7 +15,7 @@ class SitesController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Site', 'User', 'AdOrder', 'LineItem', 'SitesAdOrder');
+	public $uses = array('Site', 'User', 'AdOrder', 'LineItem', 'SitesAdOrder', 'Zona');
  /**
  * Components
  *
@@ -345,6 +345,28 @@ class SitesController extends AppController {
 
 		if ($id) {
 			try {
+				// Get adunits
+				$zonasAll = $this->Zona->find('all', array('conditions' => array('Zona.sites_id' => $id)));
+				if ($zonasAll) {
+					foreach ($zonasAll as $key => $la_zona) {
+						$infoToPlugin[$la_zona['AdUnit'][0]['id']] = array(
+								'site' => array(
+										'domain' => $la_zona['Sites']['domain'],
+										'public_key' => $la_zona['Sites']['public_key'],
+									),
+								'zona' => array(
+										'name' => $la_zona['Zona']['name'],
+										'id_tag_template' => $la_zona['Zona']['id_tag_template'],
+									),
+								'adunit' => array(
+									)
+							);
+						$adunits_ids_arr[] = $la_zona['AdUnit'][0]['id'];
+					}
+				} else {
+					//Sin zonas...
+				}
+				$adunits_ids = implode(",", $adunits_ids_arr);
 				/*
 				*DFP
 				*/
@@ -357,35 +379,54 @@ class SitesController extends AppController {
   				$networkService = $this->instanceDfp()->GetService('NetworkService', 'v201403');
 
 				// Get the effective root ad unit's ID.
-				$network = $networkService->getCurrentNetwork(); #debug($network);
-				$effectiveRootAdUnitId = $network->effectiveRootAdUnitId; #debug($effectiveRootAdUnitId);
+				$network = $networkService->getCurrentNetwork();
+				$effectiveRootAdUnitId = $network->effectiveRootAdUnitId;
+
+				//Save network code for plugin WP
+				$infoToPlugin['networkcode'] = $network->networkCode;
 
 				// Create a statement to select the children of the effective root ad unit.
 				$filterStatement =
-					new Statement("WHERE parentId = :id AND status = 'ACTIVE' LIMIT 500",
+					new Statement("WHERE parentId = :id AND status = 'ACTIVE' AND id  IN ($adunits_ids) LIMIT 500",
 									MapUtils::GetMapEntries(array(
 																	'id' => new NumberValue($effectiveRootAdUnitId)
 																)
 															)
 								);
-				#debug($filterStatement);
 
 				// Get ad units by statement.
-				$page = $inventoryService->getAdUnitsByStatement($filterStatement); #debug($page);
+				$page = $inventoryService->getAdUnitsByStatement($filterStatement);
 
 				// Display results.
 				if (isset($page->results)) {
 					$i = $page->startIndex;
 					foreach ($page->results as $adUnit) {
-						debug($adUnit);
-						debug( $i . ') Ad unit with ID "' . $adUnit->id
-								. '", name "' . $adUnit->name
-								. '", and status "' . $adUnit->status . "\" was found.\n");
-						$i++;
+						$sizes_to_unit = array();
+						foreach ($adUnit->adUnitSizes as $key => $sizes) {
+							$sizes_to_unit[] = array(
+									'width' => $sizes->size->width,
+									'height' => $sizes->size->height,
+								);
+						}
+						// Get unit code and unit size
+						$infoToPlugin[$adUnit->id]['adunit'] = array(
+								'adunitcode' => $adUnit->adUnitCode,
+								'sizes' => $sizes_to_unit,
+							);
 					}
 				}
+				
+				//All ok to create zip plugin
+				$fileInfo = $this->createZipPlugin($infoToPlugin);
+				// $filename = 'daiwa_knot.pdf.zip';
+				// $filepath = WWW_ROOT . DS;
 
-				print 'Number of results found: ' . $page->totalResultSetSize . "\n";
+				// header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
+				// header("Content-Type: application/zip");
+				// header("Content-Transfer-Encoding: Binary");
+				// header("Content-Length: ".filesize($filepath.$filename));
+				// header("Content-Disposition: attachment; filename=\"".$filename."\"");
+				// @readfile($filepath.$filename);
 
 			} catch (OAuth2Exception $e) {
 				$this->Session->write('redirect_url', $this->request->url);
@@ -399,16 +440,43 @@ class SitesController extends AppController {
 			die();
 
 		}//End if ($id) {
-		
-		// $filename = 'daiwa_knot.pdf.zip';
-		// $filepath = WWW_ROOT . DS;
-
-		// header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
-		// header("Content-Type: application/zip");
-		// header("Content-Transfer-Encoding: Binary");
-		// header("Content-Length: ".filesize($filepath.$filename));
-		// header("Content-Disposition: attachment; filename=\"".$filename."\"");
-		// @readfile($filepath.$filename);
         exit;
+	}
+
+	private function createZipPlugin($info) {
+		$head_ads_all = $insert_adss_all = '';
+		foreach ($info as $keyad => $ad) {
+			if (isset($ad['adunit'])) {
+				//read head ads template
+				$adunit_code = (isset($ad['adunit']['adunitcode'])) ?  : '';
+				$adunit_size = (isset($ad['adunit']['sizes'][0]['width']) && isset($ad['adunit']['sizes'][0]['height'])) ? $ad['adunit']['sizes'][0]['width'] . ',' . $ad['adunit']['sizes'][0]['height'] : '';
+				$head_ads = WWW_ROOT . 'template' .DS . 'head_ads.txt';
+				$head_ads_content = file_get_contents($head_ads);
+					$find = array('{network_code}', '{adunit_code}', '{adunit_size}', '{adunit_id}');
+					$replace = array($info['networkcode'], $adunit_code, $adunit_size, $keyad);
+
+				$head_ads_all .= str_replace($find, $replace, $head_ads_content);
+
+				//read inserts ads template
+				$insert_ads = WWW_ROOT . 'template' .DS . 'insert_ads.txt';
+				$insert_ads_content = file_get_contents($insert_ads);
+			}
+		}
+		
+
+		// read base file plugin
+		$base_plugin = WWW_ROOT . 'template' .DS . 'base.txt';
+		$base_plugin_content = file_get_contents($base_plugin);
+		
+		// reaplace tags on base content
+		$base_plugin_content = str_replace("{head_ads}", $head_ads_all, $base_plugin_content);
+
+		echo "<pre>";
+		echo $insert_ads_content;
+		echo "</pre>";
+
+		#debug($base_plugin_content);
+		
+		#debug($info);
 	}
 }
