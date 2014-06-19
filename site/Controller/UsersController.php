@@ -258,6 +258,7 @@ class UsersController extends AppController {
  */
 	public function login() {
 		if ($this->request->is('post')) {
+			#debug(AuthComponent::password("media_2014")); die();
 			if ($this->Auth->login()) {
 				$userData = $this->User->find('first', 
             		array(

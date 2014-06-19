@@ -342,16 +342,73 @@ class SitesController extends AppController {
 		if (!$this->Site->exists()) {
 			throw new NotFoundException(__('Invalid site'));
 		}
-		
-		$filename = 'daiwa_knot.pdf.zip';
-		$filepath = WWW_ROOT . DS;
 
-		header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
-        header("Content-Type: application/zip");
-        header("Content-Transfer-Encoding: Binary");
-        header("Content-Length: ".filesize($filepath.$filename));
-        header("Content-Disposition: attachment; filename=\"".$filename."\"");
-        @readfile($filepath.$filename);
+		if ($id) {
+			try {
+				/*
+				*DFP
+				*/
+				// Log SOAP XML request and response.
+				$this->instanceDfp()->LogDefaults();
+				// Get the InventoryService.
+				$inventoryService = $this->instanceDfp()->GetService('InventoryService', 'v201403');
+
+				// Get the NetworkService.
+  				$networkService = $this->instanceDfp()->GetService('NetworkService', 'v201403');
+
+				// Get the effective root ad unit's ID.
+				$network = $networkService->getCurrentNetwork(); #debug($network);
+				$effectiveRootAdUnitId = $network->effectiveRootAdUnitId; #debug($effectiveRootAdUnitId);
+
+				// Create a statement to select the children of the effective root ad unit.
+				$filterStatement =
+					new Statement("WHERE parentId = :id AND status = 'ACTIVE' LIMIT 500",
+									MapUtils::GetMapEntries(array(
+																	'id' => new NumberValue($effectiveRootAdUnitId)
+																)
+															)
+								);
+				#debug($filterStatement);
+
+				// Get ad units by statement.
+				$page = $inventoryService->getAdUnitsByStatement($filterStatement); #debug($page);
+
+				// Display results.
+				if (isset($page->results)) {
+					$i = $page->startIndex;
+					foreach ($page->results as $adUnit) {
+						debug($adUnit);
+						debug( $i . ') Ad unit with ID "' . $adUnit->id
+								. '", name "' . $adUnit->name
+								. '", and status "' . $adUnit->status . "\" was found.\n");
+						$i++;
+					}
+				}
+
+				print 'Number of results found: ' . $page->totalResultSetSize . "\n";
+
+			} catch (OAuth2Exception $e) {
+				$this->Session->write('redirect_url', $this->request->url);
+				$this->redirect(array('controller' => 'users', 'action' => 'call_oauth', 'admin' => false));
+
+			} catch (ValidationException $e) {
+				#ExampleUtils::CheckForOAuth2Errors($e);
+			} catch (Exception $e) {
+				print $e->getMessage() . "\n";
+			}
+			die();
+
+		}//End if ($id) {
+		
+		// $filename = 'daiwa_knot.pdf.zip';
+		// $filepath = WWW_ROOT . DS;
+
+		// header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
+		// header("Content-Type: application/zip");
+		// header("Content-Transfer-Encoding: Binary");
+		// header("Content-Length: ".filesize($filepath.$filename));
+		// header("Content-Disposition: attachment; filename=\"".$filename."\"");
+		// @readfile($filepath.$filename);
         exit;
 	}
 }
