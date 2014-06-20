@@ -13,3 +13,5 @@ site/app/webroot/plugins/**
 
 #Ignore .DS_Store
 **.DS_Store
+
+dploy.yaml

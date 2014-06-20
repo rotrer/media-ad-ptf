@@ -447,7 +447,7 @@ class SitesController extends AppController {
 		if ($info) {
 			$head_ads_all = $insert_ads_all = '';
 			foreach ($info as $keyad => $ad) {
-				if (isset($ad['adunit'])) {
+				if (isset($ad['adunit']) && is_array($ad['adunit'])) {
 					$width =  $ad['adunit']['sizes'][0]['width'];
 					$height =  $ad['adunit']['sizes'][0]['height'];
 
@@ -474,7 +474,6 @@ class SitesController extends AppController {
 					$domain_plugin = $ad['site']['domain'];
 				}
 			}
-			
 
 			// read base file plugin
 			$base_plugin = WWW_ROOT . 'template' .DS . 'base.txt';
