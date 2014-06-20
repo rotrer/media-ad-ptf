@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: DFP Mediatrends - {domain}
+ * Plugin Name: DFP Mediatrends - newhustlemedia.com
  * Plugin URI: http://mediatrends.cl
  * Description: Personalizacion de ads
  * Version: 1.0
@@ -32,7 +32,7 @@ function head_setup_mt() {
 
 	<script type='text/javascript'>
 	googletag.cmd.push(function() {
-	{head_ads}
+	googletag.defineSlot('/20099485/Chic_INX_header', [728,90], 'zona-78069885').addService(googletag.pubads());googletag.defineSlot('/20099485/Chic_INX_content', [728,90], 'zona-78070005').addService(googletag.pubads());googletag.defineSlot('/20099485/Chic_INX_sidebar', [300,250], 'zona-78070125').addService(googletag.pubads());
 	googletag.pubads().enableSingleRequest();
 	googletag.enableServices();
 	});
@@ -75,7 +75,10 @@ function head_setup_mt() {
 	};
 	function loadAds() {
 		jQuery(document).ready(function(){
-			{insert_ads}
+			var zona78069885 = '<div id="zona-78069885" style="width:728px; height:90px;"><script type="text/javascript">googletag.cmd.push(function() { googletag.display("zona-78069885"); });</scr'+'ipt></div>';
+if (jQuery("#header_t").length > 0) { jQuery("#header_t").empty().html(zona78069885); }var zona78070005 = '<div id="zona-78070005" style="width:728px; height:90px;"><script type="text/javascript">googletag.cmd.push(function() { googletag.display("zona-78070005"); });</scr'+'ipt></div>';
+if (jQuery("#cotent_t").length > 0) { jQuery("#cotent_t").empty().html(zona78070005); }var zona78070125 = '<div id="zona-78070125" style="width:300px; height:250px;"><script type="text/javascript">googletag.cmd.push(function() { googletag.display("zona-78070125"); });</scr'+'ipt></div>';
+if (jQuery("#sidebar_t").length > 0) { jQuery("#sidebar_t").empty().html(zona78070125); }
 		});
 	}
 	</script>

@@ -418,15 +418,15 @@ class SitesController extends AppController {
 				
 				//All ok to create zip plugin
 				$fileInfo = $this->createZipPlugin($infoToPlugin);
-				// $filename = 'daiwa_knot.pdf.zip';
-				// $filepath = WWW_ROOT . DS;
-
-				// header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
-				// header("Content-Type: application/zip");
-				// header("Content-Transfer-Encoding: Binary");
-				// header("Content-Length: ".filesize($filepath.$filename));
-				// header("Content-Disposition: attachment; filename=\"".$filename."\"");
-				// @readfile($filepath.$filename);
+				if ($fileInfo) {
+					$filename = basename($fileInfo);
+					header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
+					header("Content-Type: application/zip");
+					header("Content-Transfer-Encoding: Binary");
+					header("Content-Length: ".filesize($fileInfo));
+					header("Content-Disposition: attachment; filename=\"".$filename."\"");
+					@readfile($fileInfo);
+				}
 
 			} catch (OAuth2Exception $e) {
 				$this->Session->write('redirect_url', $this->request->url);
@@ -444,39 +444,115 @@ class SitesController extends AppController {
 	}
 
 	private function createZipPlugin($info) {
-		$head_ads_all = $insert_adss_all = '';
-		foreach ($info as $keyad => $ad) {
-			if (isset($ad['adunit'])) {
-				//read head ads template
-				$adunit_code = (isset($ad['adunit']['adunitcode'])) ?  : '';
-				$adunit_size = (isset($ad['adunit']['sizes'][0]['width']) && isset($ad['adunit']['sizes'][0]['height'])) ? $ad['adunit']['sizes'][0]['width'] . ',' . $ad['adunit']['sizes'][0]['height'] : '';
-				$head_ads = WWW_ROOT . 'template' .DS . 'head_ads.txt';
-				$head_ads_content = file_get_contents($head_ads);
-					$find = array('{network_code}', '{adunit_code}', '{adunit_size}', '{adunit_id}');
-					$replace = array($info['networkcode'], $adunit_code, $adunit_size, $keyad);
+		if ($info) {
+			$head_ads_all = $insert_ads_all = '';
+			foreach ($info as $keyad => $ad) {
+				if (isset($ad['adunit'])) {
+					$width =  $ad['adunit']['sizes'][0]['width'];
+					$height =  $ad['adunit']['sizes'][0]['height'];
 
-				$head_ads_all .= str_replace($find, $replace, $head_ads_content);
+					//read head ads template
+					$adunit_code = $ad['adunit']['adunitcode'];
+					$adunit_size = $width . ',' . $height;
+					$head_ads = WWW_ROOT . 'template' .DS . 'head_ads.txt';
+					$head_ads_content = file_get_contents($head_ads);
+						$find 		= array('{network_code}', '{adunit_code}', '{adunit_size}', '{adunit_id}');
+						$replace 	= array($info['networkcode'], $adunit_code, $adunit_size, $keyad);
 
-				//read inserts ads template
-				$insert_ads = WWW_ROOT . 'template' .DS . 'insert_ads.txt';
-				$insert_ads_content = file_get_contents($insert_ads);
+					$head_ads_all .= str_replace($find, $replace, $head_ads_content);
+
+					//read inserts ads template
+					$adunit_tag_id = $ad['zona']['id_tag_template'];
+					$insert_ads = WWW_ROOT . 'template' .DS . 'insert_ads.txt';
+					$insert_ads_content = file_get_contents($insert_ads);
+						$find 		= array('{adunit_id}', '{width}', '{height}', '{adunit_tag_id}');
+						$replace 	= array($keyad, $width, $height, $adunit_tag_id);
+
+					$insert_ads_all .= str_replace($find, $replace, $insert_ads_content);
+
+					//domain plugin
+					$domain_plugin = $ad['site']['domain'];
+				}
 			}
+			
+
+			// read base file plugin
+			$base_plugin = WWW_ROOT . 'template' .DS . 'base.txt';
+			$base_plugin_content = file_get_contents($base_plugin);
+			
+			// reaplace tags on base content
+			$base_plugin_content = str_replace("{domain}", $domain_plugin, $base_plugin_content);
+			$base_plugin_content = str_replace("{head_ads}", $head_ads_all, $base_plugin_content);
+			$base_plugin_content = str_replace("{insert_ads}", $insert_ads_all, $base_plugin_content);
+
+			// create dir plugin
+			$base_path = WWW_ROOT . "plugins";
+			$path_plugin = $base_path . DS . 'mt-' . $domain_plugin;
+
+			// check if dir exists
+			if (!is_dir($path_plugin)) {
+				mkdir($path_plugin);
+			}
+
+			// create file index.php plugin
+			$index_plugin = $path_plugin . DS . $domain_plugin . '.php';
+			if (file_exists($index_plugin)) {
+				unlink($index_plugin);
+			}
+			file_put_contents($index_plugin, $base_plugin_content);
+
+			$zipFile = $base_path . DS . 'mt-' . $domain_plugin . '.zip';
+			$endZip = $this->Zip($path_plugin, $zipFile);
+			if ($endZip) {
+				return $zipFile;
+			} else {
+				return false;
+			}
+			
 		}
-		
+	}
 
-		// read base file plugin
-		$base_plugin = WWW_ROOT . 'template' .DS . 'base.txt';
-		$base_plugin_content = file_get_contents($base_plugin);
-		
-		// reaplace tags on base content
-		$base_plugin_content = str_replace("{head_ads}", $head_ads_all, $base_plugin_content);
+	public function Zip($source, $destination) {
+	    if (!extension_loaded('zip') || !file_exists($source)) {
+	        return false;
+	    }
 
-		echo "<pre>";
-		echo $insert_ads_content;
-		echo "</pre>";
+	    $zip = new ZipArchive();
+	    if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
+	        return false;
+	    }
 
-		#debug($base_plugin_content);
-		
-		#debug($info);
+	    $source = str_replace('\\', '/', realpath($source));
+
+	    if (is_dir($source) === true)
+	    {
+	        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
+
+	        foreach ($files as $file)
+	        {
+	            $file = str_replace('\\', '/', $file);
+
+	            // Ignore "." and ".." folders
+	            if( in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) )
+	                continue;
+
+	            $file = realpath($file);
+
+	            if (is_dir($file) === true)
+	            {
+	                $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+	            }
+	            else if (is_file($file) === true)
+	            {
+	                $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+	            }
+	        }
+	    }
+	    else if (is_file($source) === true)
+	    {
+	        $zip->addFromString(basename($source), file_get_contents($source));
+	    }
+
+	    return $zip->close();
 	}
 }
