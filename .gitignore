@@ -4,8 +4,8 @@ site/[Cc]onfig/database.php
 site/app/tmp/*
 site/app/[Cc]onfig/core.php
 site/app/[Cc]onfig/database.php
-site/app/webroot/plugins/**
-wp/wp-content/plugins/**
+site/app/webroot/plugins/*
+wp/wp-content/plugins/*
 !empty
 
 #Ignore ssl certs
