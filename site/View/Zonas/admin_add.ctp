@@ -1,42 +1,16 @@
 <div class="zonas form">
 <?php echo $this->Form->create('Zona'); ?>
-	<?php #echo $this->Form->input('sites_id', array('type' => 'hidden', 'value' => $sites['Site']['id'])); ?>
 	<fieldset>
-		<legend><?php echo __('Agregar Zona a un Sitio'); ?></legend>
-		<dl>
-			<dt><?php echo __('Nombre'); ?></dt>
-			<dd>
-				<?php echo h($sites['Site']['name']); ?>
-				&nbsp;
-			</dd>
-			<dt><?php echo __('Url'); ?></dt>
-			<dd>
-				<?php echo h($sites['Site']['domain']); ?>
-				&nbsp;
-			</dd>
-		</dl>
-		<table>
-			<tr>
-				<th>Zona nombre<span>*</span></th>
-				<th>Ad unit<span>*</span></th>
-				<th>ID Tag Template<span>*</span></th>
-			</tr>
-			<?php for ($i=0; $i < 3; $i++) { ?>
-			<tr>
-				<td><?php echo $this->Form->input('name'.$i, array('div' => false, 'label' => false, 'required')); ?></td>
-				<td>
-					<?php echo $this->Form->select('adunit'.$i, $adunits, array('div' => false, 'label' => false, 'required', 'empty' => 'Seleccione')); ?>
-					<?php #foreach ($adunits as $key => $adunit) { ?>
-						
-					<?php #} ?>
-					<?php #echo $this->Form->input('ads'.$i, array('div' => false, 'label' => false, 'required')); ?>
-				</td>
-				<td><?php echo $this->Form->input('id_tag_template'.$i, array('div' => false, 'label' => false, 'required')); ?></td>
-			</tr>
-			<?php } ?>
-		</table>
+		<legend><?php echo __('Admin Add Site'); ?></legend>
+	<?php
+		echo $this->Form->input('name');
+		echo $this->Form->input('id_tag_template');
+		echo $this->Form->input('adunit', array('class' => 'adunit_sel_single'));
+		echo $this->Form->input('adunit_name', array('type' => 'hidden'));
+		echo $this->Form->input('site');
+	?>
 	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
+<?php echo $this->Form->end(__('Continuar')); ?>
 </div>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>

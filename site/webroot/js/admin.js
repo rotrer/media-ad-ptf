@@ -26,6 +26,18 @@
           }
         });
       });
+      $('.adunit_sel').change(function() {
+        var id_adunit, name_adunit;
+        id_adunit = $(this).attr("id");
+        name_adunit = $("#" + id_adunit + " option:selected").text();
+        return $(this).next().val(name_adunit);
+      });
+      $('.adunit_sel_single').change(function() {
+        var id_adunit, name_adunit;
+        id_adunit = $(this).attr("id");
+        name_adunit = $("#" + id_adunit + " option:selected").text();
+        return $("#ZonaAdunitName").val(name_adunit);
+      });
       return $('#line_items').change(function() {
         return $('#name_lineitem').val($("#line_items option:selected").text());
       });

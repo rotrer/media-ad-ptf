@@ -46,6 +46,15 @@
 			</select>
 			<span class="load_lines loading" style="display:none;">Cargando...</span>
 		</dd>
+		<dt><?php echo __('Cantidad de Zonas'); ?></dt>
+		<dd>
+			<select name="data[Site][cantidad_zonas]" id="cantidad_zonas">
+				<option value="">Seleccione</option>
+				<?php for ($i=1; $i <= 20; $i++) { ?>
+				<option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+				<?php } ?>
+			</select>
+		</dd>
 		<?php echo $this->Form->end('Continuar'); ?>
 	</dl>
 </div>

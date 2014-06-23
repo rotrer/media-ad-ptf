@@ -17,6 +17,7 @@
 		<td><?php echo h($site['Site']['state']); ?>&nbsp;</td>
 		<td><?php echo h($site['Site']['created']); ?>&nbsp;</td>
 		<td class="actions">
+			<?php echo $this->Html->link(__('Get Plugin'), array('action' => 'getplugin', $site['Site']['id'])); ?>
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $site['Site']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $site['Site']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $site['Site']['id']), null, __('Are you sure you want to delete # %s?', $site['Site']['id'])); ?>

@@ -4,22 +4,20 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
-			<th><?php echo $this->Paginator->sort('ads'); ?></th>
 			<th><?php echo $this->Paginator->sort('id_tag_template'); ?></th>
 			<th><?php echo $this->Paginator->sort('sites_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('crreated'); ?></th>
+			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	<?php foreach ($zonas as $zona): ?>
 	<tr>
 		<td><?php echo h($zona['Zona']['id']); ?>&nbsp;</td>
 		<td><?php echo h($zona['Zona']['name']); ?>&nbsp;</td>
-		<td><?php echo h($zona['Zona']['ads']); ?>&nbsp;</td>
 		<td><?php echo h($zona['Zona']['id_tag_template']); ?>&nbsp;</td>
 		<td>
 			<?php echo $this->Html->link($zona['Sites']['name'], array('controller' => 'sites', 'action' => 'view', $zona['Sites']['id'])); ?>
 		</td>
-		<td><?php echo h($zona['Zona']['crreated']); ?>&nbsp;</td>
+		<td><?php echo h($zona['Zona']['created']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $zona['Zona']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $zona['Zona']['id'])); ?>

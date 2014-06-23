@@ -5,8 +5,10 @@
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('name');
-		echo $this->Form->input('public_key');
-		echo $this->Form->input('state');
+		echo $this->Form->input('public_key', array('readonly' => 'readonly'));
+		echo $this->Form->input('state', array(
+				'options' => array('activo' => 'Activo', 'inactivo' => 'Inactivo')
+			));
 		echo $this->Form->input('User');
 	?>
 	</fieldset>

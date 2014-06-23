@@ -18,6 +18,18 @@ window.main =
 						$('#line_items').empty().html(results);
 					else
 						alert "error al obtener lineas de pedido"
+
+		$('.adunit_sel').change () ->
+			id_adunit = $(this).attr("id")
+			name_adunit = $("#" + id_adunit + " option:selected").text()
+			$(this).next().val(name_adunit)
+
+		$('.adunit_sel_single').change () ->
+			id_adunit = $(this).attr("id")
+			name_adunit = $("#" + id_adunit + " option:selected").text()
+			$("#ZonaAdunitName").val(name_adunit)
+
+
 						
 		$('#line_items').change () ->
 			#nombre linea pedido

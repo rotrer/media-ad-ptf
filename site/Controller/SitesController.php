@@ -60,6 +60,10 @@ class SitesController extends AppController {
 		}
 		$options = array('conditions' => array('Site.' . $this->Site->primaryKey => $id));
 		$this->set('site', $this->Site->find('first', $options));
+
+		// Zonas y Adunits por sitios
+		$zonasAll = $this->Zona->find('all', array('conditions' => array('Zona.sites_id' => $id)));
+		$this->set('zonasAll', $zonasAll);
 	}
 
 /**
@@ -172,11 +176,12 @@ class SitesController extends AppController {
 
 			$this->redirect(array(
 				'controller' => 'zonas',
-				'action' => 'add',
+				'action' => 'addmulti',
 				'admin' => true,
 				$this->request->data['Site']['site_id'],
 				$this->request->data['Site']['order_id'],
-				$this->request->data['Site']['line_item_id']
+				$this->request->data['Site']['line_item_id'],
+				$this->request->data['Site']['cantidad_zonas'],
 			));
 		}
 		if (!$this->Site->exists($id_site)) {
@@ -447,7 +452,7 @@ class SitesController extends AppController {
 		if ($info) {
 			$head_ads_all = $insert_ads_all = '';
 			foreach ($info as $keyad => $ad) {
-				if (isset($ad['adunit']) && is_array($ad['adunit'])) {
+				if (isset($ad['adunit']) && is_array($ad['adunit']) && !empty($ad['adunit'])) {
 					$width =  $ad['adunit']['sizes'][0]['width'];
 					$height =  $ad['adunit']['sizes'][0]['height'];
 

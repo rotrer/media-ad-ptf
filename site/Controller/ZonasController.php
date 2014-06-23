@@ -14,7 +14,7 @@ class ZonasController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Zona', 'Site', 'ZonasAdUnit', 'AdUnit', 'LineItemsAdUnit');
+	public $uses = array('Zona', 'Site', 'ZonasAdUnit', 'AdUnit', 'LineItemsAdUnit', 'LineItem');
 /**
  * Components
  *
@@ -66,11 +66,127 @@ class ZonasController extends AppController {
  *
  * @return void
  */
-	public function admin_add($id_site = null, $id_order = null, $id_linetiem = null) {
+	public function admin_add() {
+		if ($this->request->is('post')) {
+			#debug($this->request->data);
+			
+			$dataZonas = $this->request->data['Zona'];
+
+			#Get indo site/adordres, line items
+			$site = $this->Site->findById($dataZonas['site']);
+			$lineItem = $this->LineItem->findByAd_orders_id($site['AdOrder'][0]['id']);
+
+			##Guardar Zonas
+			$zonaData = array(
+					'name' => $dataZonas['name'],
+					'id_tag_template' => $dataZonas['id_tag_template'],
+					'sites_id' => $dataZonas['site']
+				);
+			$this->Zona->create();
+			$responseZona = $this->Zona->save($zonaData);
+
+			##Guardar AdUnit
+			$name_adunit_compuesto = $dataZonas['adunit_name'];
+				$name_adunit_compuesto = explode('[', str_replace("]", "", $name_adunit_compuesto));
+			$adunitData = array(
+					'id' => $dataZonas['adunit'],
+					'name' => $name_adunit_compuesto[0],
+					'status' => $name_adunit_compuesto[1],
+					'created' => date('Y-m-d H:i:s')
+				);
+			$this->AdUnit->create();
+			$responseAdUnit = $this->AdUnit->save($adunitData);
+
+			##Guardar/Asociar ZonasAdUnit
+			$zonasadunitData = array(
+					'zonas_id' => $responseZona['Zona']['id'],
+					'ad_units_id' => $responseAdUnit['AdUnit']['id'],
+					'created' => date('Y-m-d H:i:s')
+				);
+			$this->ZonasAdUnit->create();
+			$responseZonasAdUnit = $this->ZonasAdUnit->save($zonasadunitData);
+
+			##Guardar/Asociar LineItemsAdUnit
+			if (!$this->LineItemsAdUnit->find('count', array('LineItemsAdUnit.line_items_id' => $lineItem['LineItem']['id'], 'LineItemsAdUnit.ad_units_id' => $responseAdUnit['AdUnit']['id']))) {
+				$lineitemsadunitData = array(
+						'line_items_id' => $lineItem['LineItem']['id'],
+						'ad_units_id' => $responseAdUnit['AdUnit']['id'],
+						'created' => date('Y-m-d H:i:s')
+					);
+				$this->LineItemsAdUnit->create();
+				$responseLineItemsAdUnit = $this->LineItemsAdUnit->save($lineitemsadunitData);
+			}
+
+			if ($responseZona && $responseAdUnit) {
+				$this->Session->setFlash(__('La zona ha sido guardad.'));
+				$this->redirect(array('controller' => 'zonas', 'action' => 'index', 'admin' => true));
+			} else {
+				$this->Session->setFlash(__('The zona could not be saved. Please, try again.'));
+			}
+		} else {
+			try {
+				// Get the InventoryService.
+				$inventoryService = $this->instanceDfp()->GetService('InventoryService', 'v201403');
+
+				// Set defaults for page and statement.
+				$page = new AdUnitPage();
+				$filterStatement = new Statement();
+				$offset = 0;
+				$adunitsArr = array();
+
+				do {
+					// Create a statement to get all ad units.
+					$filterStatement->query = "WHERE status = 'ACTIVE' LIMIT 500 OFFSET " . $offset;
+
+					// Get creatives by statement.
+					$page = $inventoryService->getAdUnitsByStatement($filterStatement);
+
+					// Display results.
+					if (isset($page->results)) {
+						$i = $page->startIndex;
+						foreach ($page->results as $adUnit) {
+							if ($adUnit->status != 'ARCHIVED') {
+								$adunitsArr[$adUnit->id] = $adUnit->name . '[' . $adUnit->status . ']';
+								// pr( $i . ') Ad unit with ID "' . $adUnit->id
+								// 	. '", name "' . $adUnit->name
+								// 	. '", and status "' . $adUnit->status . "\" was found." );
+								// $i++;	
+							}
+						}
+					}
+
+					$offset += 500;
+				} while ($offset < $page->totalResultSetSize);
+			} catch (OAuth2Exception $e) {
+				$this->Session->write('redirect_url', $this->request->url);
+				$this->redirect(array('controller' => 'users', 'action' => 'call_oauth', 'admin' => false));
+
+			} catch (ValidationException $e) {
+				#ExampleUtils::CheckForOAuth2Errors($e);
+			} catch (Exception $e) {
+				print $e->getMessage() . "\n";
+			}
+
+
+
+			$sites = $this->Site->find('list');
+			$this->set('adunits', $adunitsArr);
+		}
+		
+		#$adUnits = $this->Zona->AdUnit->find('list');
+		$this->set(compact('sites', 'adUnits', 'cantidad_zonas'));
+	}
+
+/**
+ * admin_addmulti method
+ *
+ * @return void
+ */
+	public function admin_addmulti($id_site = null, $id_order = null, $id_linetiem = null, $cantidad_zonas = 3) {
 		if ($this->request->is('post')) {
 
-			if (sizeof($this->request->params['pass']) == 3 && $this->request->data) {
-				$totalZonas = sizeof($this->request->data['Zona']) / 3;
+			if (sizeof($this->request->params['pass']) >= 3 && $this->request->data) {
+				$totalZonas = (sizeof($this->request->data['Zona']) - $cantidad_zonas) / 3;
 				$dataZonas = $this->request->data['Zona'];
 				for ($i=0; $i < $totalZonas; $i++) {
 					##Guardar Zonas
@@ -83,8 +199,12 @@ class ZonasController extends AppController {
 					$responseZona = $this->Zona->save($zonaData);
 
 					##Guardar AdUnit
+					$name_adunit_compuesto = $dataZonas['adunit_name'.$i];
+						$name_adunit_compuesto = explode('[', str_replace("]", "", $name_adunit_compuesto));
 					$adunitData = array(
 							'id' => $dataZonas['adunit'.$i],
+							'name' => $name_adunit_compuesto[0],
+							'status' => $name_adunit_compuesto[1],
 							'created' => date('Y-m-d H:i:s')
 						);
 					$this->AdUnit->create();
@@ -107,9 +227,6 @@ class ZonasController extends AppController {
 						);
 					$this->LineItemsAdUnit->create();
 					$responseLineItemsAdUnit = $this->LineItemsAdUnit->save($lineitemsadunitData);
-					
-					#$log = $this->LineItemsAdUnit->getDataSource()->getLog(false, false);
-					#debug($log);
 				}
 
 				$this->Session->setFlash(__('Proceso completado, descargue el plugin.'));
@@ -136,7 +253,7 @@ class ZonasController extends AppController {
 
 				do {
 					// Create a statement to get all ad units.
-					$filterStatement->query = 'LIMIT 500 OFFSET ' . $offset;
+					$filterStatement->query = "WHERE status = 'ACTIVE' LIMIT 500 OFFSET " . $offset;
 
 					// Get creatives by statement.
 					$page = $inventoryService->getAdUnitsByStatement($filterStatement);
@@ -177,7 +294,7 @@ class ZonasController extends AppController {
 		}
 		
 		#$adUnits = $this->Zona->AdUnit->find('list');
-		$this->set(compact('sites', 'adUnits'));
+		$this->set(compact('sites', 'adUnits', 'cantidad_zonas'));
 	}
 
 /**
@@ -202,7 +319,7 @@ class ZonasController extends AppController {
 			$options = array('conditions' => array('Zona.' . $this->Zona->primaryKey => $id));
 			$this->request->data = $this->Zona->find('first', $options);
 		}
-		$sites = $this->Zona->Site->find('list');
+		$sites = $this->Site->find('list');
 		$adUnits = $this->Zona->AdUnit->find('list');
 		$this->set(compact('sites', 'adUnits'));
 	}

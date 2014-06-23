@@ -75,32 +75,6 @@ class AdUnitsController extends AppController {
 	}
 
 /**
- * admin_edit method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function admin_edit($id = null) {
-		if (!$this->AdUnit->exists($id)) {
-			throw new NotFoundException(__('Invalid ad unit'));
-		}
-		if ($this->request->is(array('post', 'put'))) {
-			if ($this->AdUnit->save($this->request->data)) {
-				$this->Session->setFlash(__('The ad unit has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The ad unit could not be saved. Please, try again.'));
-			}
-		} else {
-			$options = array('conditions' => array('AdUnit.' . $this->AdUnit->primaryKey => $id));
-			$this->request->data = $this->AdUnit->find('first', $options);
-		}
-		$zonas = $this->AdUnit->Zona->find('list');
-		$this->set(compact('zonas'));
-	}
-
-/**
  * admin_delete method
  *
  * @throws NotFoundException

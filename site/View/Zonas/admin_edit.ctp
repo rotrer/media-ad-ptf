@@ -5,11 +5,10 @@
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('name');
-		echo $this->Form->input('ads');
 		echo $this->Form->input('id_tag_template');
 		echo $this->Form->input('sites_id');
-		echo $this->Form->input('crreated');
-		echo $this->Form->input('AdUnit');
+		echo $this->Form->input('created');
+		echo $this->Form->input('AdUnit', array('type' => 'select'));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

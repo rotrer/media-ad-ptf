@@ -6,19 +6,14 @@
 			<?php echo h($adUnit['AdUnit']['id']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Dfp Id'); ?></dt>
-		<dd>
-			<?php echo h($adUnit['AdUnit']['dfp_id']); ?>
-			&nbsp;
-		</dd>
 		<dt><?php echo __('Name'); ?></dt>
 		<dd>
 			<?php echo h($adUnit['AdUnit']['name']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Sizes'); ?></dt>
+		<dt><?php echo __('Status'); ?></dt>
 		<dd>
-			<?php echo h($adUnit['AdUnit']['sizes']); ?>
+			<?php echo h($adUnit['AdUnit']['status']); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Created'); ?></dt>
@@ -31,7 +26,6 @@
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
-		<li><?php echo $this->Html->link(__('Edit Ad Unit'), array('action' => 'edit', $adUnit['AdUnit']['id'])); ?> </li>
 		<li><?php echo $this->Form->postLink(__('Delete Ad Unit'), array('action' => 'delete', $adUnit['AdUnit']['id']), null, __('Are you sure you want to delete # %s?', $adUnit['AdUnit']['id'])); ?> </li>
 		<li><?php echo $this->Html->link(__('List Ad Units'), array('action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Ad Unit'), array('action' => 'add')); ?> </li>
@@ -46,20 +40,18 @@
 	<tr>
 		<th><?php echo __('Id'); ?></th>
 		<th><?php echo __('Name'); ?></th>
-		<th><?php echo __('Ads'); ?></th>
 		<th><?php echo __('Id Tag Template'); ?></th>
 		<th><?php echo __('Sites Id'); ?></th>
-		<th><?php echo __('Crreated'); ?></th>
+		<th><?php echo __('Created'); ?></th>
 		<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	<?php foreach ($adUnit['Zona'] as $zona): ?>
 		<tr>
 			<td><?php echo $zona['id']; ?></td>
 			<td><?php echo $zona['name']; ?></td>
-			<td><?php echo $zona['ads']; ?></td>
 			<td><?php echo $zona['id_tag_template']; ?></td>
 			<td><?php echo $zona['sites_id']; ?></td>
-			<td><?php echo $zona['crreated']; ?></td>
+			<td><?php echo $zona['created']; ?></td>
 			<td class="actions">
 				<?php echo $this->Html->link(__('View'), array('controller' => 'zonas', 'action' => 'view', $zona['id'])); ?>
 				<?php echo $this->Html->link(__('Edit'), array('controller' => 'zonas', 'action' => 'edit', $zona['id'])); ?>
@@ -69,10 +61,4 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('New Zona'), array('controller' => 'zonas', 'action' => 'add')); ?> </li>
-		</ul>
-	</div>
 </div>
