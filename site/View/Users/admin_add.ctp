@@ -4,9 +4,10 @@
 		<legend><?php echo __('Admin Add User'); ?></legend>
 	<?php
 		echo $this->Form->input('name');
-		echo $this->Form->input('username');
-		echo $this->Form->input('password');
 		echo $this->Form->input('email');
+	?>
+	<div class="check_email" style="display:none;"></div>
+	<?php
 		echo $this->Form->input('role',array(
 				'options' => array('user' => 'Usuario', 'client' => 'Cliente', 'admin' => 'Administrador')
 			));

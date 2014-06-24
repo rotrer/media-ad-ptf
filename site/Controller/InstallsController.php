@@ -43,7 +43,7 @@ class InstallsController extends AppController {
 		if ($this->request->is('post')) {
 			$data = $this->request->data['Install'];
 			if (!$this->User->findByUsername($data['username'])) {
-				$new_pass = $this->Password->generatePassword(8);
+				$new_pass = $this->Password->generatePassword();
 				$data['password'] =  AuthComponent::password($new_pass);
 				$data['role'] = 'admin';
 				$data['state'] = 'activo';

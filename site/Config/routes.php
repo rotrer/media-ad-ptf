@@ -18,6 +18,7 @@
  */
 	Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
 
+	Router::connect('/admin', array('controller' => 'users', 'action' => 'login', 'admin' => true));#Route admin login
 	Router::connect('/oauth2callback', array('controller' => 'users', 'action' => 'oauth2callback'));
 	Router::connect('/dashboard', array('controller' => 'pages', 'action' => 'dashboard'));
 	Router::connect('/{$prefix}/zonas/add/:site_id/:order_id/:line_item_id', 

@@ -28,12 +28,28 @@ window.main =
 			id_adunit = $(this).attr("id")
 			name_adunit = $("#" + id_adunit + " option:selected").text()
 			$("#ZonaAdunitName").val(name_adunit)
-
-
 						
 		$('#line_items').change () ->
 			#nombre linea pedido
 			$('#name_lineitem').val( $("#line_items option:selected").text() )
+
+		$('#UserEmail').change () ->
+			email = $(this).val()
+			if email is ""
+				return false
+			$.ajax
+				url: APP_JQ + "/admin/users/checkemail"
+				type: "POST"
+				data: "email=" + email
+				beforeSend: ->
+					$('.check_email').empty().html("Revisando disponibilidad de correo.").show()
+					$('input[type="submit"]').attr('disabled','disabled').css('opacity', '.5');
+				success: (results) ->
+					if results is "1"
+						$('.check_email').hide().empty()
+						$('input[type="submit"]').removeAttr('disabled').css('opacity', '1');
+					else
+						$('.check_email').empty().html("El correo ingresado ya se encuentra utilizado.").show()
 					
 
 $('document').ready ->

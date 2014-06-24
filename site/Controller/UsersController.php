@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+App::uses('CakeEmail', 'Network/Email');
 /**
  * Users Controller
  *
@@ -20,12 +21,14 @@ class UsersController extends AppController {
  */
 	public $components = array(
         'Paginator',
+        'Password',
+        'MathCaptcha' => array('timer' => 3, 'tabsafe' => true),
         'Auth' => array(
             'authenticate' => array('Form' => array('userModel' => 'User',
                                                     'fields' => array(
-                                                                'username' => 'username',
+                                                                'username' => 'email',
                                                                 'password' => 'password'
-                                                                )
+                                                            )
                                                     )
                                     ),
             'loginRedirect' => "",
@@ -75,13 +78,23 @@ class UsersController extends AppController {
 	public function admin_add() {
 		if ($this->request->is('post')) {
 			$this->User->create();
-			#Encriptar pass
-			$this->request->data['User']['password'] = AuthComponent::password($this->request->data['User']['password']);
+			#Asignar email como como username
+			$this->request->data['User']['username'] = str_replace(array("@","-",".","_"), "", $this->request->data['User']['email']);
+			#Generar y Encriptar password
+			$new_pass = $this->Password->generatePassword();
+			$this->request->data['User']['password'] = AuthComponent::password($new_pass);
 			#Valores por defecto creación usuario
 			$this->request->data['User']['first_login'] = 1;
 			$this->request->data['User']['can_be_deleted'] = 1;
-
+			
 			if ($this->User->save($this->request->data)) {
+				$Email = new CakeEmail();
+				$Email->from(array('admin@mediatrends.cl' => 'Media Ads'));
+				$Email->emailFormat('html');
+				$Email->to($this->request->data['User']['email']);
+				$Email->subject('Acceso Media Ads');
+				$Email->send('<h2>Bienvenido a Mediatrends Ads</h2><h4>Tu acceso es:</h4><p>Sitio: '.Router::url('/', true).' </br>Usuario: ' . $this->request->data['User']['email'] . ' </br>Contraseña: ' . $new_pass . ' </br></p><p>Recuerda que la primera vez que entres te pedira cambiar tu contraseña.</p>');
+				
 				$this->Session->setFlash(__('Usuario guardado.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
@@ -259,21 +272,30 @@ class UsersController extends AppController {
 	public function login() {
 		if ($this->request->is('post')) {
 			#debug(AuthComponent::password("media_2014")); die();
-			if ($this->Auth->login()) {
-				$userData = $this->User->find('first', 
-            		array(
-            			'conditions' => array('User.id' => $this->Auth->user('id')),
-            			'fields' => array('first_login')
-        			));
-            	
-            	if ($userData['User']['first_login'] == true) {
-            		$this->redirect(array('action' => 'changepassword'));
-            	}
-                $this->call_oauth();
-            } else {
-            	$this->Session->setFlash(__('Usuario o contraseña inválido, favor intentar nuevamente.'));
+			if ($this->MathCaptcha->validate(
+		        array($this->request->data['User']['captcha'],
+		              $this->request->data['User']['result'])
+		      )) 
+			{
+				if ($this->Auth->login()) {
+					$userData = $this->User->find('first', 
+	            		array(
+	            			'conditions' => array('User.id' => $this->Auth->user('id')),
+	            			'fields' => array('first_login')
+	        			));
+	            	
+	            	if ($userData['User']['first_login'] == true) {
+	            		$this->redirect(array('action' => 'changepassword'));
+	            	}
+	                $this->call_oauth();
+	            } else {
+	            	$this->Session->setFlash(__('Usuario o contraseña inválido, favor intentar nuevamente.'));
+	            	$this->redirect('/');
+	            }
+           	} else {
+           		$this->Session->setFlash(__('Parece que eres un robot, vuelve a calcular!'));
             	$this->redirect('/');
-            }
+           	}
 		} else {
 	        throw new BadRequestException('Petición no válida');
 		}
@@ -323,5 +345,24 @@ class UsersController extends AppController {
 			$user->GetOAuth2Info(), $this->redirectUri, $offline);
 		header("Location: $authorizationUrl");
 		exit();
+	}
+
+/**
+ * admin_checkemail method
+ *
+ * @throws NotFoundException
+ * @param throw POST request
+ * @return void
+ */
+	public function admin_checkemail(){
+		$this->layout = 'ajax';
+		$response = 999;
+		if ($this->request->is('post')) {
+			$countEmail =  $this->User->find('count', array('conditions' => array('User.email' => $this->request->data['email'])));
+			if (!$countEmail) {
+				$response = 1;
+			}
+		}
+		echo $response;
 	}
 }

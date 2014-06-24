@@ -11,11 +11,6 @@
 			<?php echo h($user['User']['name']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Username'); ?></dt>
-		<dd>
-			<?php echo h($user['User']['username']); ?>
-			&nbsp;
-		</dd>
 		<dt><?php echo __('Password'); ?></dt>
 		<dd>
 			-----------

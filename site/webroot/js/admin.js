@@ -38,8 +38,32 @@
         name_adunit = $("#" + id_adunit + " option:selected").text();
         return $("#ZonaAdunitName").val(name_adunit);
       });
-      return $('#line_items').change(function() {
+      $('#line_items').change(function() {
         return $('#name_lineitem').val($("#line_items option:selected").text());
+      });
+      return $('#UserEmail').change(function() {
+        var email;
+        email = $(this).val();
+        if (email === "") {
+          return false;
+        }
+        return $.ajax({
+          url: APP_JQ + "/admin/users/checkemail",
+          type: "POST",
+          data: "email=" + email,
+          beforeSend: function() {
+            $('.check_email').empty().html("Revisando disponibilidad de correo.").show();
+            return $('input[type="submit"]').attr('disabled', 'disabled').css('opacity', '.5');
+          },
+          success: function(results) {
+            if (results === "1") {
+              $('.check_email').hide().empty();
+              return $('input[type="submit"]').removeAttr('disabled').css('opacity', '1');
+            } else {
+              return $('.check_email').empty().html("El correo ingresado ya se encuentra utilizado.").show();
+            }
+          }
+        });
       });
     }
   };
