@@ -42,9 +42,11 @@ class InstallsController extends AppController {
 	public function create() {
 		if ($this->request->is('post')) {
 			$data = $this->request->data['Install'];
+			$data['username'] = str_replace(array("@","-",".","_"), "", $data['email']);
 			if (!$this->User->findByUsername($data['username'])) {
 				$new_pass = $this->Password->generatePassword();
 				$data['password'] =  AuthComponent::password($new_pass);
+				#Asignar email como como username
 				$data['role'] = 'admin';
 				$data['state'] = 'activo';
 				$data['first_login'] = 1;

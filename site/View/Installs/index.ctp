@@ -5,7 +5,7 @@
 			'legend' => __('Crear Adminsitrador'),
 		    'name',
 		    'email',
-		    'username',
+		    #'username',
 		    #'password'
 		));
 	echo $this->Form->end('Entrar');

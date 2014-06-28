@@ -48,8 +48,8 @@ $cakeDescription = __d('cake_dev', 'Media AdServer');
 		</div>
 		<div id="footer">
 			<?php echo $this->Html->link(
-					$this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
-					'http://www.cakephp.org/',
+					'Mediatrends',
+					'http://www.mediatrends.cl/',
 					array('target' => '_blank', 'escape' => false)
 				);
 			?>
