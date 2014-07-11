@@ -47,7 +47,6 @@ $cakeDescription = __d('cake_dev', 'Media AdServer');
 			<?php echo $this->fetch('content'); ?>
 		</div>
 		<div id="footer">
-			
 		</div>
 	</div>
 	<?php echo $this->element('sql_dump'); ?>
