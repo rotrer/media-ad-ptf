@@ -4,7 +4,7 @@
 		<legend><?php echo __('Nuevo Usuario'); ?></legend>
 	<?php
 		echo $this->Form->input('name', array('label' => 'Nombre'));
-		echo $this->Form->input('email', array('label' => 'Email'));
+		echo $this->Form->input('email', array('label' => 'Email', 'class' => 'checkemail'));
 	?>
 	<div class="check_email" style="display:none;"></div>
 	<?php

@@ -182,6 +182,8 @@ class UsersController extends AppController {
         if ($this->Auth->login()) {
         	$this->redirect(array('controller' => 'users', 'action' => 'index', 'admin' => true));
         }
+        $this->set('captcha', $this->MathCaptcha->getCaptcha());
+		$this->set('captcha_result', $this->MathCaptcha->getResult());
     }
 
 /**

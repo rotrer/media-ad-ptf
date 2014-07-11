@@ -7,7 +7,7 @@
 		echo $this->Form->input('name', array('label' => 'Nombre'));
 		echo $this->Form->input('username', array('type' => 'hidden'));
 		echo $this->Form->input('password', array('value' => '', 'required' => false, 'label' => 'Contraseña'));
-		echo $this->Form->input('email');
+		echo $this->Form->input('email', array('label' => 'Email', 'class' => 'checkemail'));
 		echo $this->Form->input('role',array(
 				'options' => array('user' => 'Usuario', 'client' => 'Cliente', 'admin' => 'Administrador'),
 				'label' => 'Rol'

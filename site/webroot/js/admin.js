@@ -41,7 +41,7 @@
       $('#line_items').change(function() {
         return $('#name_lineitem').val($("#line_items option:selected").text());
       });
-      return $('#UserEmail').change(function() {
+      return $('.checkemail').change(function() {
         var email;
         email = $(this).val();
         if (email === "") {
