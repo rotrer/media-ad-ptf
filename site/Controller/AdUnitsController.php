@@ -52,7 +52,15 @@ class AdUnitsController extends AppController {
 			throw new NotFoundException(__('Invalid ad unit'));
 		}
 		$options = array('conditions' => array('AdUnit.' . $this->AdUnit->primaryKey => $id));
-		$this->set('adUnit', $this->AdUnit->find('first', $options));
+		$adunit = $this->AdUnit->find('first', $options);
+
+		if($adunit['Zona']) foreach ($adunit['Zona'] as $key => $zona) {
+			$siteInfo = $this->AdUnit->Zona->find('first', array('conditions' => array('Zona.id' => $zona['id'])));
+			$adunit['Zona'][$key]['sites_name'] = $siteInfo['Sites']['name'];
+			
+		}
+
+		$this->set('adUnit', $adunit);
 	}
 
 /**

@@ -26,36 +26,34 @@
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
-		<li><?php echo $this->Form->postLink(__('Delete Ad Unit'), array('action' => 'delete', $adUnit['AdUnit']['id']), null, __('Are you sure you want to delete # %s?', $adUnit['AdUnit']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('List Ad Units'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Ad Unit'), array('action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Zonas'), array('controller' => 'zonas', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Zona'), array('controller' => 'zonas', 'action' => 'add')); ?> </li>
+		<li><?php echo $this->Form->postLink(__('Eliminar Ad Unit'), array('action' => 'delete', $adUnit['AdUnit']['id']), null, __('Seguro desea eliminar # %s?', $adUnit['AdUnit']['name'])); ?> </li>
+		<li><?php echo $this->Html->link(__('Lista Ad Units'), array('action' => 'index')); ?> </li>
+		<!--<li><?php echo $this->Html->link(__('New Ad Unit'), array('action' => 'add')); ?> </li>-->
+		<li><?php echo $this->Html->link(__('Lista Zonas'), array('controller' => 'zonas', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('Nueva Zona'), array('controller' => 'zonas', 'action' => 'add')); ?> </li>
 	</ul>
 </div>
 <div class="related">
-	<h3><?php echo __('Related Zonas'); ?></h3>
+	<h3><?php echo __('Zonas Relacionadas'); ?></h3>
 	<?php if (!empty($adUnit['Zona'])): ?>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Name'); ?></th>
+		<th><?php echo __('Nombre'); ?></th>
 		<th><?php echo __('Id Tag Template'); ?></th>
-		<th><?php echo __('Sites Id'); ?></th>
-		<th><?php echo __('Created'); ?></th>
-		<th class="actions"><?php echo __('Actions'); ?></th>
+		<th><?php echo __('Sitio'); ?></th>
+		<th><?php echo __('Fecha Registro'); ?></th>
+		<th class="actions"><?php echo __('Acciones'); ?></th>
 	</tr>
 	<?php foreach ($adUnit['Zona'] as $zona): ?>
 		<tr>
-			<td><?php echo $zona['id']; ?></td>
-			<td><?php echo $zona['name']; ?></td>
+			<td><?php echo $this->Html->link($zona['name'], array('controller' => 'zonas', 'action' => 'view', $zona['id'], 'admin' => true)); ?></td>
 			<td><?php echo $zona['id_tag_template']; ?></td>
-			<td><?php echo $zona['sites_id']; ?></td>
-			<td><?php echo $zona['created']; ?></td>
+			<td><?php echo $this->Html->link($zona['sites_name'], array('controller' => 'sites', 'action' => 'view', $zona['sites_id'], 'admin' => true)); ?></td>
+			<td><?php echo date('d-m-Y', strtotime($zona['created'])); ?></td>
 			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'zonas', 'action' => 'view', $zona['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'zonas', 'action' => 'edit', $zona['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'zonas', 'action' => 'delete', $zona['id']), null, __('Are you sure you want to delete # %s?', $zona['id'])); ?>
+				<?php echo $this->Html->link(__('Ver'), array('controller' => 'zonas', 'action' => 'view', $zona['id'])); ?>
+				<?php echo $this->Html->link(__('Editar'), array('controller' => 'zonas', 'action' => 'edit', $zona['id'])); ?>
+				<?php echo $this->Form->postLink(__('Eliminar'), array('controller' => 'zonas', 'action' => 'delete', $zona['id']), null, __('Seguro desea eliminar %s?', $zona['name'] . ' / ' . $zona['sites_name'])); ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>
