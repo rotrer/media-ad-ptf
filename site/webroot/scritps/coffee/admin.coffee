@@ -33,7 +33,7 @@ window.main =
 			#nombre linea pedido
 			$('#name_lineitem').val( $("#line_items option:selected").text() )
 
-		$('#UserEmail').change () ->
+		$('.checkemail').change () ->
 			email = $(this).val()
 			if email is ""
 				return false

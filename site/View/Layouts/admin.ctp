@@ -47,12 +47,6 @@ $cakeDescription = __d('cake_dev', 'Media AdServer');
 			<?php echo $this->fetch('content'); ?>
 		</div>
 		<div id="footer">
-			<?php echo $this->Html->link(
-					'Mediatrends',
-					'http://www.mediatrends.cl/',
-					array('target' => '_blank', 'escape' => false)
-				);
-			?>
 		</div>
 	</div>
 	<?php echo $this->element('sql_dump'); ?>

@@ -6,22 +6,22 @@
 			<?php echo h($site['Site']['id']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Name'); ?></dt>
+		<dt><?php echo __('Nombre'); ?></dt>
 		<dd>
 			<?php echo h($site['Site']['name']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Public Key'); ?></dt>
+		<dt><?php echo __('Llave Pública'); ?></dt>
 		<dd>
 			<?php echo h($site['Site']['public_key']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('State'); ?></dt>
+		<dt><?php echo __('Estado'); ?></dt>
 		<dd>
 			<?php echo h($site['Site']['state']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Created'); ?></dt>
+		<dt><?php echo __('Fecha registro'); ?></dt>
 		<dd>
 			<?php echo h($site['Site']['created']); ?>
 			&nbsp;
@@ -59,13 +59,13 @@
 	</dl>
 </div>
 <div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
+	<h3><?php echo __('Acciones'); ?></h3>
 	<ul>
-		<li><?php echo $this->Html->link(__('Edit Site'), array('action' => 'edit', $site['Site']['id'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Delete Site'), array('action' => 'delete', $site['Site']['id']), null, __('Are you sure you want to delete # %s?', $site['Site']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('List Sites'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Site'), array('action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('Editar Sitio'), array('action' => 'edit', $site['Site']['id'])); ?> </li>
+		<li><?php echo $this->Form->postLink(__('Eliminar Sitio'), array('action' => 'delete', $site['Site']['id']), null, __('Seguro desea eliminar %s?', $site['Site']['name'])); ?> </li>
+		<li><?php echo $this->Html->link(__('Lista de Sitios'), array('action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('Nuevo Sitio'), array('action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('Lista de Usuarios'), array('controller' => 'users', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('Nuevo Usuario'), array('controller' => 'users', 'action' => 'add')); ?> </li>
 	</ul>
 </div>

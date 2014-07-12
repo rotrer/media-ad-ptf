@@ -75,7 +75,7 @@ class SitesController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Site->create();
 			if ($this->Site->save($this->request->data)) {
-				$this->Session->setFlash(__('Sitio guardado correctament, ahora seleccione pedidos y líneas de pedidos para continuar.'));
+				$this->Session->setFlash(__('Sitio guardado correctamente, ahora seleccione pedidos y líneas de pedidos para continuar.'));
 				return $this->redirect(array('action' => 'dfporders', $this->Site->id));
 			} else {
 				$this->Session->setFlash(__('Sitio no ha sido guardado, favor intentar nuevamente.'));
