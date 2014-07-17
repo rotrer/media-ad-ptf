@@ -1,0 +1,20 @@
+2014-07-17 17:59:09 Error: [MissingControllerException] Controller class SiteController could not be found.
+Exception Attributes: array (
+  'class' => 'SiteController',
+  'plugin' => NULL,
+)
+Request URL: /site/oauth2callback?code=4%2F-vYwBelhBV9136by5tyzlgzgBHb1.EuxrQl0tp10TsjMf6whcw_7J8ayMjgI
+Stack Trace:
+#0 /Users/cristian/Proyectos/labs/ptf/app/webroot/index.php(108): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-07-17 18:01:57 Error: [OAuth2Exception] SSL read: error:00000000:lib(0):func(0):reason(0), errno 54
+Request URL: /site/oauth2callback?code=4%2F_L1cCyKfhxY9JOgxkXRi4z48QPOW.ErOOfD6XMpgYsjMf6whcw_7R_bGMjgI
+Stack Trace:
+#0 /Users/cristian/Proyectos/labs/ptf/app/Vendor/googleads-php-lib/src/Google/Api/Ads/Common/Util/SimpleOAuth2Handler.php(74): SimpleOAuth2Handler->MakeRequest('https://account...', Array)
+#1 /Users/cristian/Proyectos/labs/ptf/app/Controller/UsersController.php(243): SimpleOAuth2Handler->GetAccessToken(Array, '4/_L1cCyKfhxY9J...', 'http://media-ad...')
+#2 [internal function]: UsersController->oauth2callback()
+#3 /Users/cristian/Proyectos/labs/ptf/lib/Cake/Controller/Controller.php(490): ReflectionMethod->invokeArgs(Object(UsersController), Array)
+#4 /Users/cristian/Proyectos/labs/ptf/lib/Cake/Routing/Dispatcher.php(191): Controller->invokeAction(Object(CakeRequest))
+#5 /Users/cristian/Proyectos/labs/ptf/lib/Cake/Routing/Dispatcher.php(165): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest))
+#6 /Users/cristian/Proyectos/labs/ptf/app/webroot/index.php(108): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#7 {main}

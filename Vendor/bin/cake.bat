@@ -1,1 +1,0 @@
-../pear-pear.cakephp.org/CakePHP/bin/cake.bat
