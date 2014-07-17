@@ -1,1 +1,0 @@
-googletag.defineSlot('/{network_code}/{adunit_code}', [{adunit_size}], 'zona-{adunit_id}').addService(googletag.pubads());
