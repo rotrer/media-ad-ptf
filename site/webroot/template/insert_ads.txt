@@ -1,0 +1,2 @@
+var zona{adunit_id} = '<div id="zona-{adunit_id}" style="width:{width}px; height:{height}px;"><script type="text/javascript">googletag.cmd.push(function() { googletag.display("zona-{adunit_id}"); });</scr'+'ipt></div>';
+if (jQuery("{adunit_tag_id}").length > 0) { jQuery("{adunit_tag_id}").empty().html(zona{adunit_id}); }

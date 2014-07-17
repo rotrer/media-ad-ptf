@@ -1,8 +1,7 @@
-site/tmp/*
-site/[Cc]onfig/core.php
-site/[Cc]onfig/database.php
-site/webroot/plugins/*
-wp/wp-content/plugins/*
+app/tmp/*
+app/[Cc]onfig/core.php
+app/[Cc]onfig/database.php
+app/webroot/plugins/*
 !empty
 
 #Ignore ssl certs
@@ -11,5 +10,3 @@ wp/wp-content/plugins/*
 
 #Ignore .DS_Store
 **.DS_Store
-
-dploy.yaml
