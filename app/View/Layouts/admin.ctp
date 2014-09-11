@@ -47,7 +47,8 @@ $cakeDescription = __d('cake_dev', 'Media AdServer');
 								'label' => false,
 								'div' => false,
 								'style' => 'float: right;',
-								'onchange' => 'javascript:document.changenetwork.submit();'
+								'onchange' => 'javascript:document.changenetwork.submit();',
+								'selected' => $networksAdsSelected
 							));
 						?>
 					<?php echo $this->Form->end(); ?>

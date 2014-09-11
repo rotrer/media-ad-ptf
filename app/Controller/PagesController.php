@@ -79,6 +79,8 @@ class PagesController extends AppController {
 	}
 
 	public function admin_setnetwork() {
-		var_dump($this->request->data);
+		$this->Session->write('networksAdsSelected', $this->request->data['Pages']['network']);
+		$this->redirect(array('controller' => 'sites', 'action' => 'index', 'admin' => true));
+		exit();
 	}
 }

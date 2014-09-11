@@ -41,6 +41,7 @@ class AppController extends Controller {
 						}
 				}
 				$this->set('networksAds', $this->Session->read('networksAds'));
+				$this->set('networksAdsSelected', $this->Session->read('networksAdsSelected'));
 		}
 
 	public function isAuthorized($user) {
