@@ -332,6 +332,8 @@ class SitesController extends AppController {
 		// 	$this->Session->setFlash(__('The zona could not be deleted. Please, try again.'));
 		// }
 		// return $this->redirect(array('action' => 'index'));
+		$options = array('conditions' => array('Site.' . $this->Site->primaryKey => $id));
+		$this->set('site', $this->Site->find('first', $options));
 		$this->set('site_id', $id);
 	}
 
@@ -342,7 +344,16 @@ class SitesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function admin_descarga($id = null) {
+	public function admin_descarga() {
+		$infoToPlugin = array();
+		if ($this->request->is('post')) {
+			$infoToPlugin['id'] 	= $id = $this->request->data['Site']['site_id'];
+			$infoToPlugin['unq'] 	= $this->request->data['Site']['unq'];
+			$infoToPlugin['sync'] = $this->request->data['Site']['sync'];
+		} else {
+			throw new NotFoundException(__('Invalid request'));
+		}
+
 		$this->Site->id = $id;
 		if (!$this->Site->exists()) {
 			throw new NotFoundException(__('Invalid site'));
@@ -449,6 +460,7 @@ class SitesController extends AppController {
 	}
 
 	private function createZipPlugin($info) {
+		var_dump($infoToPlugin); die();
 		if ($info) {
 			$head_ads_all = $insert_ads_all = '';
 			foreach ($info as $keyad => $ad) {

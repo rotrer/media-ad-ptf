@@ -26,7 +26,7 @@ class PagesController extends AppController {
 	 * @var array
 	 */
 		public $components = array(
-	        'MathCaptcha' => array('timer' => 3, 'tabsafe' => true),
+	        // 'MathCaptcha' => array('timer' => 3, 'tabsafe' => true),
 	    );
 /**
  * This controller does not use a model
@@ -62,8 +62,8 @@ class PagesController extends AppController {
 			$title_for_layout = Inflector::humanize($path[$count - 1]);
 		}
 		$this->set(compact('page', 'subpage', 'title_for_layout'));
-		$this->set('captcha', $this->MathCaptcha->getCaptcha());
-		$this->set('captcha_result', $this->MathCaptcha->getResult());
+		// $this->set('captcha', $this->MathCaptcha->getCaptcha());
+		// $this->set('captcha_result', $this->MathCaptcha->getResult());
 
 		try {
 			$this->render(implode('/', $path));
@@ -76,5 +76,9 @@ class PagesController extends AppController {
 	}
 
 	public function dashboard() {
+	}
+
+	public function admin_setnetwork() {
+		var_dump($this->request->data);
 	}
 }

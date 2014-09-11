@@ -1,8 +1,13 @@
 <div class="zonas form">
-	<h2><?php echo __('Descargar Plugin'); ?></h2>
-	<div class="actions">
-		<?php echo $this->Html->link('Descarga aquí', array('controller' => 'sites', 'action' => 'descarga', 'admin' => true, $site_id)); ?>
-	</div>
+	<?php echo $this->Form->create('Site', array('controller' => 'sites', 'action' => 'descarga', 'admin' => true)); ?>
+	<fieldset>
+		<h4>Descargar plugin para sitio: <?php echo $site['Site']['domain']; ?> </h4>
+		<legend><?php echo __('Plugin'); ?></legend>
+			<?php echo $this->Form->input('site_id', array('type' => 'hidden', 'value' => $site_id)); ?>
+			<?php echo $this->Form->input('unq', array('type' => 'checkbox', 'value' => 1, 'label' => 'Habilitar solicitud única')); ?>
+			<?php echo $this->Form->input('sync', array('type' => 'checkbox', 'value' => 1, 'label' => 'Habilitar la solicitud síncronica')); ?>
+	<fieldset>
+	<?php echo $this->Form->end(__('Descargar aquí')); ?>
 </div>
 <div class="actions">
 	<h3><?php echo __('Acciones'); ?></h3>

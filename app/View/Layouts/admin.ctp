@@ -38,6 +38,20 @@ $cakeDescription = __d('cake_dev', 'Media AdServer');
 				<?php echo (isset($menuAdminAccess) && $menuAdminAccess['sites']) ? $this->Html->link(__('Sitios'), array('controller' => 'sites', 'action' => 'index')) : ''; ?>
 				<?php echo (isset($menuAdminAccess) && $menuAdminAccess['zonas']) ? $this->Html->link(__('Zonas'), array('controller' => 'zonas', 'action' => 'index')) : ''; ?>
 				<?php echo (isset($menuAdminAccess) && $menuAdminAccess['adunits']) ? $this->Html->link(__('Ad-units'), array('controller' => 'adunits', 'action' => 'index')) : ''; ?>
+				<?php if (isset($menuAdminAccess) && $menuAdminAccess['sites']) { ?>
+					<?php echo $this->Form->create('Pages', array('controller' => 'pages', 'action' => 'setnetwork', 'admin' => true, 'name' => 'changenetwork')); ?>
+						<?php
+							echo $this->Form->input('network', array(
+								'options' => $networksAds,
+								'empty' => 'Network',
+								'label' => false,
+								'div' => false,
+								'style' => 'float: right;',
+								'onchange' => 'javascript:document.changenetwork.submit();'
+							));
+						?>
+					<?php echo $this->Form->end(); ?>
+				<?php } ?>
 			</div>
 		</div>
 		<div id="content">

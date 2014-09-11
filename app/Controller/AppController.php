@@ -25,71 +25,72 @@ App::import('Vendor', 'DateTimeUtils', array('file' => 'googleads-php-lib'.DS.'s
 class AppController extends Controller {
 	public $uses = array('Sessions');
 
-    public function beforeFilter() {
-        if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
-            $this->layout = 'admin';
-        } 
-    }
-    public function beforeRender() {
-        if ($this->request->params['controller'] != 'installs') {
-            $this->loadModel('User');
-            $usuarioAdmin = $this->User->find('first', array(
-                    'conditions' => array('User.role = ' => 'admin')
-                ));
-            if (!$usuarioAdmin) {
-                $this->redirect(array('controller' => 'installs', 'action' => 'index', 'admin' => false));
-            }
-        }
-    }
+		public function beforeFilter() {
+				if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
+						$this->layout = 'admin';
+				} 
+		}
+		public function beforeRender() {
+				if ($this->request->params['controller'] != 'installs') {
+						$this->loadModel('User');
+						$usuarioAdmin = $this->User->find('first', array(
+										'conditions' => array('User.role = ' => 'admin')
+								));
+						if (!$usuarioAdmin) {
+								$this->redirect(array('controller' => 'installs', 'action' => 'index', 'admin' => false));
+						}
+				}
+				$this->set('networksAds', $this->Session->read('networksAds'));
+		}
 
 	public function isAuthorized($user) {
-        if ($user['state'] === 'activo') {
-            if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
-                switch ($user['role']) {
-                    case 'user':
-                        $menuAdminAccess = array(
-                                'users' => 0,
-                                'sites' => 1,
-                                'zonas' => 1,
-                                'adunits' => 1
-                            );
-                        break;
-                    case 'client':
-                        $menuAdminAccess = array();
-                        break;
-                    default:
-                        // Admin can access every action
-                        $menuAdminAccess = array(
-                                'users' => 1,
-                                'sites' => 1,
-                                'zonas' => 1,
-                                'adunits' => 1
-                            );
-                        break;
-                }
-                $this->set('menuAdminAccess',$menuAdminAccess);
-            }
-            return true;
-        }
+				if ($user['state'] === 'activo') {
+						if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
+								switch ($user['role']) {
+										case 'user':
+												$menuAdminAccess = array(
+																'users' => 0,
+																'sites' => 1,
+																'zonas' => 1,
+																'adunits' => 1
+														);
+												break;
+										case 'client':
+												$menuAdminAccess = array();
+												break;
+										default:
+												// Admin can access every action
+												$menuAdminAccess = array(
+																'users' => 1,
+																'sites' => 1,
+																'zonas' => 1,
+																'adunits' => 1
+														);
+												break;
+								}
+								$this->set('menuAdminAccess',$menuAdminAccess);
+						}
+						return true;
+				}
 
-        // Default deny
-        $this->Session->setFlash(__('Acceso no autorizado'));
-        $this->Auth->logout();
-        if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
-            $this->redirect(array('controller' => 'users', 'action' => 'login', 'admin' => true));
-        } else {
-            $this->redirect(array('controller' => 'pages', 'action' => 'display', 'home'));
-        }
-        return false;
-    }
+				// Default deny
+				$this->Session->setFlash(__('Acceso no autorizado'));
+				$this->Auth->logout();
+				if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
+						$this->redirect(array('controller' => 'users', 'action' => 'login', 'admin' => true));
+				} else {
+						$this->redirect(array('controller' => 'pages', 'action' => 'display', 'home'));
+				}
+				return false;
+		}
 
-    public function instanceDfp() {
-        if ($this->Session->check('dataUser')) {
-            $dataUser = $this->Session->read('dataUser');
-            $dataUser = $dataUser['google'];
-        } else {
-            $dataUser = NULL;
-        }
-        return new DfpUser(NULL, NULL, NULL, NULL, NULL, NULL, NULL, $dataUser);
-    }
+		public function instanceDfp() {
+				if ($this->Session->check('dataUser')) {
+						$dataUser = $this->Session->read('dataUser');
+						$dataUser = $dataUser['google'];
+				} else {
+						$dataUser = NULL;
+				}
+				return new DfpUser(NULL, NULL, NULL, NULL, NULL, NULL, NULL, $dataUser);
+		}
 }
