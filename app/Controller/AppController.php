@@ -93,7 +93,9 @@ class AppController extends Controller {
 						$dataUser = NULL;
 				}
 
+				// mediatrend-ads-dfp-cl-2
+				$pathAuthIni = APP . WEBROOT_DIR . DS . 'auth_dfp.ini';
 				$networksSelected =  ($this->Session->check('networksAdsSelected')) ? $this->Session->read('networksAdsSelected') : NULL;
-				return new DfpUser(NULL, NULL, NULL, NULL, $networksSelected, NULL, NULL, $dataUser);
+				return new DfpUser($pathAuthIni, NULL, NULL, NULL, $networksSelected, NULL, NULL, $dataUser);
 		}
 }
