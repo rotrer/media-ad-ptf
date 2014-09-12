@@ -92,6 +92,8 @@ class AppController extends Controller {
 				} else {
 						$dataUser = NULL;
 				}
-				return new DfpUser(NULL, NULL, NULL, NULL, NULL, NULL, NULL, $dataUser);
+
+				$networksSelected =  ($this->Session->check('networksAdsSelected')) ? $this->Session->read('networksAdsSelected') : NULL;
+				return new DfpUser(NULL, NULL, NULL, NULL, $networksSelected, NULL, NULL, $dataUser);
 		}
 }

@@ -460,7 +460,7 @@ class SitesController extends AppController {
 	}
 
 	private function createZipPlugin($info) {
-		var_dump($infoToPlugin); die();
+		// var_dump($info); die();
 		if ($info) {
 			$head_ads_all = $insert_ads_all = '';
 			foreach ($info as $keyad => $ad) {
@@ -492,14 +492,26 @@ class SitesController extends AppController {
 				}
 			}
 
+			// read sync or async option
+			$sync_request = ($info['sync'] == 1) ? 'sync.txt' : 'async.txt';
+			$sync_file = WWW_ROOT . 'template' .DS . $sync_request;
+			$sync_file_content = file_get_contents($sync_file);
+
+			// replace adunits
+			$sync_file_content = str_replace("{head_ads}", $head_ads_all, $sync_file_content);
+			// replace single request option googletag.pubads().enableSingleRequest();
+			$single_request = ($info['unq'] == 1) ? 'googletag.pubads().enableSingleRequest();' : '';
+			$sync_file_content = str_replace("{single_request}", $single_request, $sync_file_content);
+
 			// read base file plugin
 			$base_plugin = WWW_ROOT . 'template' .DS . 'base.txt';
 			$base_plugin_content = file_get_contents($base_plugin);
 			
 			// reaplace tags on base content
 			$base_plugin_content = str_replace("{domain}", $domain_plugin, $base_plugin_content);
-			$base_plugin_content = str_replace("{head_ads}", $head_ads_all, $base_plugin_content);
 			$base_plugin_content = str_replace("{insert_ads}", $insert_ads_all, $base_plugin_content);
+			// replace sync and single request options
+			$base_plugin_content = str_replace("{sync_request}", $sync_file_content, $base_plugin_content);
 
 			// create dir plugin
 			$base_path = WWW_ROOT . "plugins";
