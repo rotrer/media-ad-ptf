@@ -33,7 +33,12 @@ Configuración de credenciales en Google Developers
 
 Configuración de credenciales en Montana(obtenidas en Google Developers)
 
+_Mantener comillas a las varibles._
+
+
 * Editar archivo `auth_dfp.ini` ubicado en `app/webroot/`
 * Agregar valor a la variable `applicationName`, el valor a agregar es el ID de Proyecto entregado anteriormente
 * Agregar valor a la variable `client_id`
 * Agregar valor a la variable `client_secret`
+
+Voilà, es todo.
