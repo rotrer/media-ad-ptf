@@ -20,30 +20,30 @@ class UsersController extends AppController {
  * @var array
  */
 	public $components = array(
-				'Paginator',
-				'Password',
-				// 'MathCaptcha' => array('timer' => 3, 'tabsafe' => true),
-				'Auth' => array(
-						'authenticate' => array('Form' => array('userModel' => 'User',
-																										'fields' => array(
-																																'username' => 'email',
-																																'password' => 'password'
-																														)
-																										)
-																		),
-						'loginRedirect' => "",
-						'logoutRedirect' => "",
-						#'logoutRedirect' => array('controller' => 'users', 'action' => 'login', 'admin' => true),
-						'authorize' => array('Controller')
-				)
-		);
+			'Paginator',
+			'Password',
+			// 'MathCaptcha' => array('timer' => 3, 'tabsafe' => true),
+			'Auth' => array(
+					'authenticate' => array('Form' => array('userModel' => 'User',
+																									'fields' => array(
+																															'username' => 'email',
+																															'password' => 'password'
+																													)
+																									)
+																	),
+					'loginRedirect' => "",
+					'logoutRedirect' => "",
+					#'logoutRedirect' => array('controller' => 'users', 'action' => 'login', 'admin' => true),
+					'authorize' => array('Controller')
+			)
+	);
 
-		public function beforeFilter(){
-			parent::beforeFilter();
-			$this->redirectUri = Configure::read('redirectUri');
-			$this->Auth->allow(array('oauth2callback'));
-			#$this->Auth->allow('*');
-		}
+	public function beforeFilter(){
+		parent::beforeFilter();
+		$this->redirectUri = Router::url(array('controller' => 'users', 'action' => 'oauth2callback', 'admin' => false), true);
+		$this->Auth->allow(array('oauth2callback'));
+		#$this->Auth->allow('*');
+	}
 
 /**
  * admin_index method
@@ -238,7 +238,7 @@ class UsersController extends AppController {
 			/*
 			*DFP
 			*/
-			$user = new DfpUser();
+			$user = new DfpUser(Configure::read('pathAuthIni'));
 			$OAuth2Handler = $user->GetOAuth2Handler();
 			$user->SetOAuth2Info( $OAuth2Handler->GetAccessToken($user->GetOAuth2Info(), $code, $this->redirectUri) );
 			$dataUser = array(
@@ -356,7 +356,7 @@ class UsersController extends AppController {
 		/*
 		*DFP
 		*/
-		$user = new DfpUser();
+		$user = new DfpUser(Configure::read('pathAuthIni'));
 			$offline = TRUE;
 		$OAuth2Handler = $user->GetOAuth2Handler();
 		$authorizationUrl = $OAuth2Handler->GetAuthorizationUrl(

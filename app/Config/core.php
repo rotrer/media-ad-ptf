@@ -365,4 +365,5 @@ Cache::config('_cake_model_', array(
 	'duration' => $duration
 ));
 
-Configure::write('redirectUri', 'http://media-adserver.media.cl/oauth2callback');
+$pathAuthIni = APP . WEBROOT_DIR . DS . 'auth_dfp.ini';
+Configure::write('pathAuthIni', $pathAuthIni);

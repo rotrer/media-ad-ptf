@@ -29,6 +29,8 @@
  * @author     Eric Koleda
  * @author     Vincent Tsao
  */
+$path = dirname(__FILE__) . '/../../../../../';
+set_include_path(get_include_path() . PATH_SEPARATOR . $path);
 require_once 'Google/Api/Ads/Common/Lib/AdsUser.php';
 require_once 'Google/Api/Ads/Common/Util/ApiPropertiesUtils.php';
 require_once 'Google/Api/Ads/Common/Util/AuthToken.php';
