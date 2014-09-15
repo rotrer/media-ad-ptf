@@ -4,7 +4,6 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('name', 'Nombre'); ?></th>
-			<th><?php echo $this->Paginator->sort('status', 'Estado'); ?></th>
 			<th><?php echo $this->Paginator->sort('created', 'Fecha Registro'); ?></th>
 			<th class="actions"><?php echo __('Acciones'); ?></th>
 	</tr>
@@ -12,7 +11,6 @@
 	<tr>
 		<td><?php echo h($adUnit['AdUnit']['id']); ?>&nbsp;</td>
 		<td><?php echo h($adUnit['AdUnit']['name']); ?>&nbsp;</td>
-		<td><?php echo h($adUnit['AdUnit']['status']); ?>&nbsp;</td>
 		<td><?php echo date('d-m-Y', strtotime($adUnit['AdUnit']['created'])); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('Ver'), array('action' => 'view', $adUnit['AdUnit']['id'])); ?>

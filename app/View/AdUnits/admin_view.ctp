@@ -11,11 +11,6 @@
 			<?php echo h($adUnit['AdUnit']['name']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Status'); ?></dt>
-		<dd>
-			<?php echo h($adUnit['AdUnit']['status']); ?>
-			&nbsp;
-		</dd>
 		<dt><?php echo __('Created'); ?></dt>
 		<dd>
 			<?php echo h($adUnit['AdUnit']['created']); ?>
