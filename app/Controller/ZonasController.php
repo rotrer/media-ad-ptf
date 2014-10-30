@@ -36,6 +36,11 @@ class ZonasController extends AppController {
         )
     );
 
+	public function beforeRender(){
+		parent::beforeRender();
+		$this->set('activeZonasMenu', true);
+	}
+
 /**
  * admin_index method
  *

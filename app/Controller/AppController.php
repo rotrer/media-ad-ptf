@@ -56,9 +56,9 @@ class AppController extends Controller {
 																'adunits' => 1
 														);
 												break;
-										case 'client':
-												$menuAdminAccess = array();
-												break;
+										// case 'client':
+										// 		$menuAdminAccess = array();
+										// 		break;
 										default:
 												// Admin can access every action
 												$menuAdminAccess = array(
@@ -86,14 +86,14 @@ class AppController extends Controller {
 		}
 
 		public function instanceDfp() {
-				if ($this->Session->check('dataUser')) {
-						$dataUser = $this->Session->read('dataUser');
-						$dataUser = $dataUser['google'];
-				} else {
-						$dataUser = NULL;
-				}
+				// if ($this->Session->check('dataUser')) {
+				// 		$dataUser = $this->Session->read('dataUser');
+				// 		$dataUser = $dataUser['google'];
+				// } else {
+				// 		$dataUser = NULL;
+				// }
 
 				$networksSelected =  ($this->Session->check('networksAdsSelected')) ? $this->Session->read('networksAdsSelected') : NULL;
-				return new DfpUser(Configure::read('pathAuthIni'), NULL, NULL, NULL, $networksSelected, NULL, NULL, $dataUser);
+				return new DfpUser(Configure::read('pathAuthIni'), NULL, NULL, NULL, $networksSelected, NULL, NULL, NULL);
 		}
 }

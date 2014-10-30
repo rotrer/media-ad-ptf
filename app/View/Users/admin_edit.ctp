@@ -9,7 +9,7 @@
 		echo $this->Form->input('password', array('value' => '', 'required' => false, 'label' => 'Contraseña'));
 		echo $this->Form->input('email', array('label' => 'Email', 'class' => 'checkemail'));
 		echo $this->Form->input('role',array(
-				'options' => array('user' => 'Usuario', 'client' => 'Cliente', 'admin' => 'Administrador'),
+				'options' => array('user' => 'Usuario', 'admin' => 'Administrador'),
 				'label' => 'Rol'
 			));
 		echo $this->Form->input('state', array(

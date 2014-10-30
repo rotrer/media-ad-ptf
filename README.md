@@ -24,9 +24,9 @@ Configuración de credenciales en Google Developers
 * Crear un proyecto, guardar el ID de proyecto entreado
 * Ir a API's & Auth -> Credentials
 * Crear un nuevo cliente, "Create New Client ID"
-* Seleccionar tipo aplicación: Web application
-* Agregar url de dominio en "AUTHORIZED JAVASCRIPT ORIGINS", ej: http://tudominio.com/
-* Agregar url de dominio en "AUTHORIZED REDIRECT URI", ej: http://tudominio.com/callback
+* Seleccionar tipo aplicación: Installed application -> Other
+* Obtener refresh_token
+* Más información en: [** Authentication **](https://developers.google.com/doubleclick-publishers/docs/authentication?hl=es)
 
 
 ####Segunda parte
@@ -40,5 +40,6 @@ _Mantener comillas a las varibles._
 * Agregar valor a la variable `applicationName`, el valor a agregar es el ID de Proyecto entregado anteriormente
 * Agregar valor a la variable `client_id`
 * Agregar valor a la variable `client_secret`
+* Agregar valor a la variable `refresh_token`
 
 Voilà, es todo.

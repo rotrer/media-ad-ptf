@@ -37,6 +37,11 @@ class SitesController extends AppController {
         )
     );
 
+	public function beforeRender(){
+		parent::beforeRender();
+		$this->set('activeSitesMenu', true);
+	}
+
 /**
  * admin_index method
  *
@@ -44,7 +49,7 @@ class SitesController extends AppController {
  */
 	public function admin_index() {
 		$this->Site->recursive = 0;
-		$this->set('sites', $this->Paginator->paginate());
+		$this->set('sites', $this->Paginator->paginate());		
 	}
 
 /**

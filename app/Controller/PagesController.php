@@ -78,9 +78,15 @@ class PagesController extends AppController {
 	public function dashboard() {
 	}
 
-	public function admin_setnetwork() {
-		$this->Session->write('networksAdsSelected', $this->request->data['Pages']['network']);
-		$this->redirect(array('controller' => 'sites', 'action' => 'index', 'admin' => true));
+	public function admin_setnetwork($network_id = null) {
+		if ($network_id !== null) {
+			$this->Session->setFlash("Network seleccionada correctamente.");
+			$this->Session->write('networksAdsSelected', $network_id);
+			$this->redirect(array('controller' => 'sites', 'action' => 'index', 'admin' => true));
+		} else {
+			$this->redirect(array('controller' => 'users', 'action' => 'login', 'admin' => true));
+		}
+		
 		exit();
 	}
 }

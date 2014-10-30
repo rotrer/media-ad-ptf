@@ -9,7 +9,7 @@
 	<div class="check_email" style="display:none;"></div>
 	<?php
 		echo $this->Form->input('role',array(
-				'options' => array('user' => 'Usuario', 'client' => 'Cliente', 'admin' => 'Administrador'),
+				'options' => array('user' => 'Usuario', 'admin' => 'Administrador'),
 				'label' => 'Rol'
 			));
 		echo $this->Form->input('state', array(

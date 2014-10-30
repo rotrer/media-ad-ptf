@@ -30,6 +30,9 @@ class AdUnitsController extends AppController {
         )
     );
 
+	public function beforeRender(){
+		$this->set('activeAdunitsMenu', true);
+	}
 /**
  * admin_index method
  *

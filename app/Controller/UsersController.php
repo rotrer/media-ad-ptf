@@ -40,9 +40,14 @@ class UsersController extends AppController {
 
 	public function beforeFilter(){
 		parent::beforeFilter();
-		$this->redirectUri = Router::url(array('controller' => 'users', 'action' => 'oauth2callback', 'admin' => false), true);
-		$this->Auth->allow(array('oauth2callback'));
+		// $this->redirectUri = Router::url(array('controller' => 'users', 'action' => 'oauth2callback', 'admin' => false), true);
+		// $this->Auth->allow(array('oauth2callback'));
 		#$this->Auth->allow('*');
+	}
+
+	public function beforeRender(){
+		parent::beforeRender();
+		$this->set('activeUsersMenu', true);
 	}
 
 /**
@@ -162,29 +167,29 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_login() {
-			if ($this->request->is('post')) {
-					if ($this->Auth->login()) {
-						$userData = $this->User->find('first', 
-							array(
-								'conditions' => array('User.id' => $this->Auth->user('id')),
-								'fields' => array('first_login')
-						));
-						
-						if ($userData['User']['first_login'] == true) {
-							$this->redirect(array('action' => 'changepassword'));
-						}
-							$this->call_oauth();
-					} else {
-							$this->Session->setFlash(__('Usuario o contraseña inválido, favor intentar nuevamente.'));
-					}
-			}
-
+		if ($this->request->is('post')) {
 			if ($this->Auth->login()) {
-				$this->redirect(array('controller' => 'users', 'action' => 'index', 'admin' => true));
+				$userData = $this->User->find('first', 
+					array(
+						'conditions' => array('User.id' => $this->Auth->user('id')),
+						'fields' => array('first_login')
+					)
+				);
+				
+				if ($userData['User']['first_login'] == true) {
+					$this->redirect(array('action' => 'changepassword'));
+				}
+			} else {
+					$this->Session->setFlash(__('Usuario o contraseña inválido, favor intentar nuevamente.'));
 			}
-			// $this->set('captcha', $this->MathCaptcha->getCaptcha());
-			// $this->set('captcha_result', $this->MathCaptcha->getResult());
 		}
+
+		if ($this->Auth->login()) {
+			$this->redirect(array('controller' => 'users', 'action' => 'index', 'admin' => true));
+		}
+		// $this->set('captcha', $this->MathCaptcha->getCaptcha());
+		// $this->set('captcha_result', $this->MathCaptcha->getResult());
+	}
 
 /**
  * admin_changepassword method
@@ -193,23 +198,22 @@ class UsersController extends AppController {
  * @param none
  * @return void
  */
-		public function admin_changepassword() {
-			if ($this->request->is('post')) {
-				if ($this->request->data['User']['nueva_pass'] == $this->request->data['User']['nueva_pass_r']) {
-					$this->User->id = $this->Auth->user('id');
+	public function admin_changepassword() {
+		if ($this->request->is('post')) {
+			if ($this->request->data['User']['nueva_pass'] == $this->request->data['User']['nueva_pass_r']) {
+				$this->User->id = $this->Auth->user('id');
 				$dataPass = array('password' => AuthComponent::password($this->request->data['User']['nueva_pass']), 'first_login' => 0);
 				if ($this->User->save($dataPass, false)) {
 					$this->Session->setFlash(__('Contraseña actualizada correctamente..'));
 					$this->Auth->logout();
-							$this->redirect(array('controller' => 'users', 'action' => 'login', 'admin' => true));
+					$this->redirect(array('controller' => 'users', 'action' => 'login', 'admin' => true));
 				} else {
 					$this->Session->setFlash(__('La contraseña no ha sido actualizada, favor intentar nuevamente.'));
 				}
-				
-				} else {
-					$this->Session->setFlash(__('Las contraseñas no coinciden, favor intentar nuevamente.'));
-				}
+			} else {
+				$this->Session->setFlash(__('Las contraseñas no coinciden, favor intentar nuevamente.'));
 			}
+		}
 	}
 
 /**
@@ -224,69 +228,6 @@ class UsersController extends AppController {
 				$this->redirect(array('controller' => 'users', 'action' => 'login', 'admin' => true));
 		}
 
-/**
- * auth callback method
- *
- * @throws ForbiddenException
- * @param none
- * @return void
- */
-	public function oauth2callback() {
-		$this->layout = 'ajax';
-		if ($this->params->query['code']) {
-			$code = $this->params->query['code'];
-			/*
-			*DFP
-			*/
-			$user = new DfpUser(Configure::read('pathAuthIni'));
-			$OAuth2Handler = $user->GetOAuth2Handler();
-			$user->SetOAuth2Info( $OAuth2Handler->GetAccessToken($user->GetOAuth2Info(), $code, $this->redirectUri) );
-			$dataUser = array(
-					'google' => $user->GetOAuth2Info(),
-					'id' => $this->Auth->user('id')
-				);
-			$this->Session->write('dataUser', $dataUser);
-			if ($this->Session->check('redirect_url')) {
-				$redirect_url = $this->Session->read('redirect_url');
-				$this->Session->write('redirect_url', '');
-				$this->redirect($redirect_url);
-				exit();
-			}
-
-			/*
-			*
-			* Obtener networks de cliente logeado
-			*/
-			/*
-			*DFP
-			*/
-			// Log SOAP XML request and response.
-			$this->instanceDfp()->LogDefaults();
-
-			// Get the NetworkService.
-			$networkService = $this->instanceDfp()->GetService('NetworkService', 'v201403');
-
-			// Get all networks that you have access to with the current login
-			// credentials.
-			$networks = $networkService->getAllNetworks();
-			if (isset($networks)) {
-					$networksArr = array();
-					foreach ($networks as $network) {
-						$networksArr[$network->networkCode] = $network->displayName;
-					}
-			}
-			$this->Session->write('networksAds', $networksArr);
-
-			if ($this->Auth->user('role') == 'admin' || $this->Auth->user('role') == 'user') {
-				$this->redirect(array('controller' => 'users', 'action' => 'index', 'admin' => true));
-			} else {
-				$this->redirect('/dashboard');
-			}
-		} else {
-			throw new ForbiddenException(__('Sin código autorización'));
-		}
-		
-	}
 
 /**
  * login method
@@ -308,8 +249,36 @@ class UsersController extends AppController {
 				if ($userData['User']['first_login'] == true) {
 					$this->redirect(array('action' => 'changepassword'));
 				}
-				
-				$this->call_oauth();
+
+				/*
+				*
+				* Obtener networks de cliente logeado
+				*/
+				/*
+				*DFP
+				*/
+				// Log SOAP XML request and response.
+				$this->instanceDfp()->LogDefaults();
+
+				// Get the NetworkService.
+				$networkService = $this->instanceDfp()->GetService('NetworkService', 'v201403');
+
+				// Get all networks that you have access to with the current login
+				// credentials.
+				$networks = $networkService->getAllNetworks();
+				if (isset($networks)) {
+						$networksArr = array();
+						foreach ($networks as $network) {
+							$networksArr[$network->networkCode] = $network->displayName;
+						}
+				}
+				$this->Session->write('networksAds', $networksArr);
+
+				if ($this->Auth->user('role') == 'admin' || $this->Auth->user('role') == 'user') {
+					$this->redirect(array('controller' => 'users', 'action' => 'index', 'admin' => true));
+				} else {
+					$this->redirect('/dashboard');
+				}
 			} else {
 				$this->Session->setFlash(__('Usuario o contraseña inválido, favor intentar nuevamente.'));
 				$this->redirect('/');
@@ -346,24 +315,88 @@ class UsersController extends AppController {
 	}
 
 /**
- * call_oauth method
+ * call_oauth method [DEPRECATED], se reemplaza metodo de autenticacion
  *
  * @throws NotFoundException
  * @param none
  * @return void
  */
-	public function call_oauth(){
-		/*
-		*DFP
-		*/
-		$user = new DfpUser(Configure::read('pathAuthIni'));
-			$offline = TRUE;
-		$OAuth2Handler = $user->GetOAuth2Handler();
-		$authorizationUrl = $OAuth2Handler->GetAuthorizationUrl(
-			$user->GetOAuth2Info(), $this->redirectUri, $offline);
-		header("Location: $authorizationUrl");
-		exit();
-	}
+	// public function call_oauth(){
+	// 	/*
+	// 	*DFP
+	// 	*/
+	// 	$user = new DfpUser(Configure::read('pathAuthIni'));
+	// 		$offline = TRUE;
+	// 	$OAuth2Handler = $user->GetOAuth2Handler();
+	// 	$authorizationUrl = $OAuth2Handler->GetAuthorizationUrl(
+	// 		$user->GetOAuth2Info(), $this->redirectUri, $offline);
+	// 	header("Location: $authorizationUrl");
+	// 	exit();
+	// }
+
+/**
+ * auth callback method [DEPRECATED], se reemplaza metodo de autenticacion
+ *
+ * @throws ForbiddenException
+ * @param none
+ * @return void
+ */
+	// public function oauth2callback() {
+	// 	$this->layout = 'ajax';
+	// 	if ($this->params->query['code']) {
+	// 		$code = $this->params->query['code'];
+	// 		/*
+	// 		*DFP
+	// 		*/
+	// 		$user = new DfpUser(Configure::read('pathAuthIni'));
+	// 		$OAuth2Handler = $user->GetOAuth2Handler();
+	// 		$user->SetOAuth2Info( $OAuth2Handler->GetAccessToken($user->GetOAuth2Info(), $code, $this->redirectUri) );
+	// 		$dataUser = array(
+	// 				'google' => $user->GetOAuth2Info(),
+	// 				'id' => $this->Auth->user('id')
+	// 			);
+	// 		$this->Session->write('dataUser', $dataUser);
+	// 		if ($this->Session->check('redirect_url')) {
+	// 			$redirect_url = $this->Session->read('redirect_url');
+	// 			$this->Session->write('redirect_url', '');
+	// 			$this->redirect($redirect_url);
+	// 			exit();
+	// 		}
+
+	// 		/*
+	// 		*
+	// 		* Obtener networks de cliente logeado
+	// 		*/
+	// 		/*
+	// 		*DFP
+	// 		*/
+	// 		// Log SOAP XML request and response.
+	// 		$this->instanceDfp()->LogDefaults();
+
+	// 		// Get the NetworkService.
+	// 		$networkService = $this->instanceDfp()->GetService('NetworkService', 'v201403');
+
+	// 		// Get all networks that you have access to with the current login
+	// 		// credentials.
+	// 		$networks = $networkService->getAllNetworks();
+	// 		if (isset($networks)) {
+	// 				$networksArr = array();
+	// 				foreach ($networks as $network) {
+	// 					$networksArr[$network->networkCode] = $network->displayName;
+	// 				}
+	// 		}
+	// 		$this->Session->write('networksAds', $networksArr);
+
+	// 		if ($this->Auth->user('role') == 'admin' || $this->Auth->user('role') == 'user') {
+	// 			$this->redirect(array('controller' => 'users', 'action' => 'index', 'admin' => true));
+	// 		} else {
+	// 			$this->redirect('/dashboard');
+	// 		}
+	// 	} else {
+	// 		throw new ForbiddenException(__('Sin código autorización'));
+	// 	}
+		
+	// }
 
 /**
  * admin_checkemail method
