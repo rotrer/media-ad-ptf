@@ -31,17 +31,17 @@ class AppController extends Controller {
 				} 
 		}
 		public function beforeRender() {
-				if ($this->request->params['controller'] != 'installs') {
-						$this->loadModel('User');
-						$usuarioAdmin = $this->User->find('first', array(
-										'conditions' => array('User.role = ' => 'admin')
-								));
-						if (!$usuarioAdmin) {
-								$this->redirect(array('controller' => 'installs', 'action' => 'index', 'admin' => false));
-						}
-				}
-				$this->set('networksAds', $this->Session->read('networksAds'));
-				$this->set('networksAdsSelected', $this->Session->read('networksAdsSelected'));
+			if ($this->request->params['controller'] != 'installs') {
+					$this->loadModel('User');
+					$usuarioAdmin = $this->User->find('first', array(
+									'conditions' => array('User.role = ' => 'admin')
+							));
+					if (!$usuarioAdmin) {
+							$this->redirect(array('controller' => 'installs', 'action' => 'index', 'admin' => false));
+					}
+			}
+			$this->set('networksAds', $this->Session->read('networksAds'));
+			$this->set('networksAdsSelected', $this->Session->read('networksAdsSelected'));
 		}
 
 	public function isAuthorized($user) {

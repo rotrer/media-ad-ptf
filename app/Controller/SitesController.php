@@ -80,10 +80,10 @@ class SitesController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Site->create();
 			if ($this->Site->save($this->request->data)) {
-				$this->Session->setFlash(__('Sitio guardado correctamente, ahora seleccione pedidos y líneas de pedidos para continuar.'));
+				$this->Session->setFlash(__('Sitio guardado correctamente, ahora seleccione pedidos y líneas de pedidos para continuar.'), 'default', array('class' => 'alert alert-success'));
 				return $this->redirect(array('action' => 'dfporders', $this->Site->id));
 			} else {
-				$this->Session->setFlash(__('Sitio no ha sido guardado, favor intentar nuevamente.'));
+				$this->Session->setFlash(__('Sitio no ha sido guardado, favor intentar nuevamente.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		}
 		#Generar token
@@ -191,7 +191,7 @@ class SitesController extends AppController {
 		}
 		if (!$this->Site->exists($id_site)) {
 			#throw new NotFoundException(__('Sitio no válido'));
-			$this->Session->setFlash(__('Antes de seleccionar pedidos y sus lineas de pedido, debe generar un sitio.'));
+			$this->Session->setFlash(__('Antes de seleccionar pedidos y sus lineas de pedido, debe generar un sitio.'), 'default', array('class' => 'alert alert-warning'));
 			return $this->redirect(array('controller' => 'sites', 'action' => 'add'));
 		}
 

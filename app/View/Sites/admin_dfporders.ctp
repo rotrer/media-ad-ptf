@@ -58,7 +58,7 @@
 		<?php echo $this->Form->end('Continuar'); ?>
 	</dl>
 </div>
-<div class="actions">
+<!-- <div class="actions">
 	<h3><?php echo __('Acciones'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('Editar Sitio'), array('action' => 'edit', $site['Site']['id'])); ?> </li>
@@ -69,3 +69,4 @@
 		<li><?php echo $this->Html->link(__('Nuevo Usuario'), array('controller' => 'users', 'action' => 'add')); ?> </li>
 	</ul>
 </div>
+ -->

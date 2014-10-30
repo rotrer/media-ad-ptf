@@ -59,10 +59,36 @@ $networksAdsSelected
 			<div class="row">
 				<div class="col-sm-3 col-md-2 sidebar">
 					<ul class="nav nav-sidebar">
-						<li class="<?php echo ((isset($activeUsersMenu)) && $activeUsersMenu === true) ? 'active' : ''; ?>"><?php echo (isset($menuAdminAccess) && $menuAdminAccess['users']) ? $this->Html->link(__('Usuarios'), array('controller' => 'users', 'action' => 'index')) : ''; ?></li>
-						<li class="<?php echo ((isset($activeSitesMenu)) && $activeSitesMenu === true) ? 'active' : ''; ?>"><?php echo (isset($menuAdminAccess) && $menuAdminAccess['sites']) ? $this->Html->link(__('Sitios'), array('controller' => 'sites', 'action' => 'index')) : ''; ?></li>
-						<li class="<?php echo ((isset($activeZonasMenu)) && $activeZonasMenu === true) ? 'active' : ''; ?>"><?php echo (isset($menuAdminAccess) && $menuAdminAccess['zonas']) ? $this->Html->link(__('Zonas'), array('controller' => 'zonas', 'action' => 'index')) : ''; ?></li>
-						<li class="<?php echo ((isset($activeAdunitsMenu)) && $activeAdunitsMenu === true) ? 'active' : ''; ?>"><?php echo (isset($menuAdminAccess) && $menuAdminAccess['adunits']) ? $this->Html->link(__('Ad-units'), array('controller' => 'adUnits', 'action' => 'index')) : ''; ?></li>
+						<?php if (isset($menuAdminAccess) && $menuAdminAccess['users']) { ?>
+						<li class="<?php echo ((isset($activeUsersMenu)) && $activeUsersMenu === true) ? 'active' : ''; ?>">
+							<?php echo $this->Html->link(__('Usuarios'), array('controller' => 'users', 'action' => 'index')); ?>
+						</li>
+						<?php } ?>
+
+						<?php if (isset($menuAdminAccess) && $menuAdminAccess['sites']) { ?>
+						<li class="<?php echo ((isset($activeSitesMenu)) && $activeSitesMenu === true) ? 'active' : ''; ?>">
+							<?php echo $this->Html->link(__('Sitios'), array('controller' => 'sites', 'action' => 'index')); ?>
+							<?php if ((isset($activeSitesMenu)) && $activeSitesMenu === true) { ?>
+							<ul>
+								<li><?php echo $this->Html->link(__('Nuevo Sitio'), array('action' => 'add')); ?></li>
+								<li><?php echo $this->Html->link(__('Lista de Usuarios'), array('controller' => 'users', 'action' => 'index')); ?> </li>
+								<li><?php echo $this->Html->link(__('Nuevo Usuario'), array('controller' => 'users', 'action' => 'add')); ?> </li>
+							</ul>
+							<?php } ?>
+						</li>
+						<?php } ?>
+
+						<?php if (isset($menuAdminAccess) && $menuAdminAccess['zonas']) { ?>
+						<li class="<?php echo ((isset($activeZonasMenu)) && $activeZonasMenu === true) ? 'active' : ''; ?>">
+							<?php echo $this->Html->link(__('Zonas'), array('controller' => 'zonas', 'action' => 'index')); ?>
+						</li>
+						<?php } ?>
+
+						<?php if (isset($menuAdminAccess) && $menuAdminAccess['adunits']) { ?>
+						<li class="<?php echo ((isset($activeAdunitsMenu)) && $activeAdunitsMenu === true) ? 'active' : ''; ?>">
+							<?php echo $this->Html->link(__('Ad-units'), array('controller' => 'adUnits', 'action' => 'index')); ?>
+						</li>
+						<?php } ?>
 					</ul>
 				</div>
 				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
