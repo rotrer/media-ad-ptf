@@ -179,6 +179,7 @@ class SitesController extends AppController {
 				);
 			$responseSitesAdOrder = $this->SitesAdOrder->save($sitesadorderData);
 
+			$this->Session->setFlash(__('Datos guardados correctamente.'), 'default', array('class' => 'alert alert-success'));
 			$this->redirect(array(
 				'controller' => 'zonas',
 				'action' => 'addmulti',

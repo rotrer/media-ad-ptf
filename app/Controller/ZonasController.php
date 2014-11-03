@@ -234,7 +234,7 @@ class ZonasController extends AppController {
 					$responseLineItemsAdUnit = $this->LineItemsAdUnit->save($lineitemsadunitData);
 				}
 
-				$this->Session->setFlash(__('Proceso completado, descargue el plugin.'));
+				$this->Session->setFlash(__('Proceso completado, descargue el plugin.'), 'default', array('class' => 'alert alert-success'));
 				return $this->redirect($this->redirect(array(
 					'controller' => 'sites',
 					'action' => 'getplugin',
@@ -242,7 +242,7 @@ class ZonasController extends AppController {
 					$id_site
 				)));
 			} else {
-				$this->Session->setFlash(__('The zona could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('Error al guardar las zonas, favor intente nuevamente.'), 'default', array('class' => 'alert alert-warning'));
 			}
 		}
 		if ($id_site && $id_order && $id_linetiem) {

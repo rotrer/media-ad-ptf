@@ -80,7 +80,7 @@ class PagesController extends AppController {
 
 	public function admin_setnetwork($network_id = null) {
 		if ($network_id !== null) {
-			$this->Session->setFlash("Network seleccionada correctamente.");
+			$this->Session->setFlash(__('Network seleccionada correctamente.'), 'default', array('class' => 'alert alert-success'));
 			$this->Session->write('networksAdsSelected', $network_id);
 			$this->redirect(array('controller' => 'sites', 'action' => 'index', 'admin' => true));
 		} else {

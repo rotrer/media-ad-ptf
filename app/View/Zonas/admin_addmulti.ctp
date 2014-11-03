@@ -1,48 +1,67 @@
-<div class="zonas form">
-<?php echo $this->Form->create('Zona'); ?>
-	<?php #echo $this->Form->input('sites_id', array('type' => 'hidden', 'value' => $sites['Site']['id'])); ?>
-	<fieldset>
-		<legend><?php echo __('Agregar Zona a un Sitio'); ?></legend>
-		<dl>
-			<dt><?php echo __('Nombre'); ?></dt>
-			<dd>
-				<?php echo h($sites['Site']['name']); ?>
-				&nbsp;
-			</dd>
-			<dt><?php echo __('Url'); ?></dt>
-			<dd>
-				<?php echo h($sites['Site']['domain']); ?>
-				&nbsp;
-			</dd>
-		</dl>
-		<table>
+<?php echo $this->Form->create('Zona', array('class' => 'form-horizontal')); ?>
+<fieldset>
+
+<!-- Form Name -->
+<legend>Agregar Zona a un Sitio</legend>
+<dl>
+	<dt><?php echo __('Nombre'); ?></dt>
+	<dd>
+		<?php echo h($sites['Site']['name']); ?>
+		&nbsp;
+	</dd>
+	<dt><?php echo __('Url'); ?></dt>
+	<dd>
+		<?php echo h($sites['Site']['domain']); ?>
+		&nbsp;
+	</dd>
+</dl>
+<div class="table-responsive">
+	<table class="table table-striped">
+		<thead>
 			<tr>
-				<th>Zona nombre<span>*</span></th>
-				<th>Ad unit<span>*</span></th>
-				<th>ID Tag Template<span>*</span></th>
+				<th><label class="control-label">Zona Nombre</label></th>
+				<th><label class="control-label">Ad Unit</label></th>
+				<th><label class="control-label">ID Tag Template</label></th>
 			</tr>
+		</thead>
+		<tbody>
 			<?php for ($i=0; $i < $cantidad_zonas; $i++) { ?>
 			<tr>
-				<td><?php echo $this->Form->input('name'.$i, array('div' => false, 'label' => false, 'required')); ?></td>
 				<td>
-					<?php echo $this->Form->select('adunit'.$i, $adunits, array('div' => false, 'label' => false, 'required', 'empty' => 'Seleccione', 'class' => 'adunit_sel')); ?>
-					<?php echo $this->Form->input('adunit_name'.$i, array('type' => 'hidden')); ?>
+					<div class="form-group">
+					  <div class="col-md-6">
+					  	<?php echo $this->Form->input('name'.$i, array('div' => false, 'label' => false, 'required', 'class' => 'form-control input-md', 'placeholder' => 'Nombre Zona')); ?>
+					  </div>
+					</div>
 				</td>
-				<td><?php echo $this->Form->input('id_tag_template'.$i, array('div' => false, 'label' => false, 'required')); ?></td>
+				<td>
+					<div class="form-group">
+					  <div class="col-md-6">
+					  	<?php echo $this->Form->select('adunit'.$i, $adunits, array('div' => false, 'label' => false, 'required', 'empty' => 'Seleccione', 'class' => 'form-control adunit_sel')); ?>
+							<?php echo $this->Form->input('adunit_name'.$i, array('type' => 'hidden')); ?>
+					  </div>
+					</div>
+				</td>
+				<td>
+					<div class="form-group">
+					  <div class="col-md-6">
+					  	<?php echo $this->Form->input('id_tag_template'.$i, array('div' => false, 'label' => false, 'required', 'class' => 'form-control input-md', 'placeholder' => '#ID_TAG')); ?>
+					  </div>
+					</div>
+				</td>
 			</tr>
 			<?php } ?>
-		</table>
-	</fieldset>
-<?php echo $this->Form->end(__('Finalizar')); ?>
+		</tbody>
+	</table>
 </div>
-<div class="actions">
-	<h3><?php echo __('Acciones'); ?></h3>
-	<ul>
 
-		<li><?php echo $this->Html->link(__('Lista Zonas'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('Lista Sitios'), array('controller' => 'sites', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('Nuevo Sitio'), array('controller' => 'sites', 'action' => 'add')); ?> </li>
-		<!--<li><?php echo $this->Html->link(__('Lista Ad Units'), array('controller' => 'ad_units', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('Nuevo Ad Unit'), array('controller' => 'ad_units', 'action' => 'add')); ?> </li>-->
-	</ul>
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label pull-right" for="singlebutton"></label>
+  <div class="col-md-4">
+    <button id="singlebutton" name="singlebutton" class="btn btn-success">Finalizar</button>
+  </div>
 </div>
+
+</fieldset>
+<?php echo $this->Form->end(); ?>

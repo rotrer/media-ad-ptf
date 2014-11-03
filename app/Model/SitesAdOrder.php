@@ -15,6 +15,8 @@ class SitesAdOrder extends AppModel {
  */
 	public $primaryKey = 'sites_id';
 
+	public $displayField = 'sites_id';
+
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 

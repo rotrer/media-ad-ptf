@@ -36,16 +36,12 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Network <span class="caret"></span></a>
 		          <ul class="dropdown-menu" role="menu">
-		          	<?php foreach ($networksAds as $key => $net) { ?>
+		          	<?php foreach ($networksAds as $key => $net) { $selectedNet = ($key == $networksAdsSelected) ? '&nbsp<span class="glyphicon glyphicon-ok-sign"></span>' : ''; ?>
 		          	<li>
-		          		<?php echo $this->Html->link($net, array('controller' => 'pages', 'action' => 'setnetwork', $key)); ?>
+		          		<?php echo $this->Html->link($net . $selectedNet, array('controller' => 'pages', 'action' => 'setnetwork', $key), array('escape' => false)); ?>
 		          	</li>
 		          	<?php } ?>
 		          </ul>
-<!-- 
-$networksAds
-$networksAdsSelected
--->
 						</li>
 						<?php } ?>
 						<li>&nbsp;</li>
@@ -70,9 +66,8 @@ $networksAdsSelected
 							<?php echo $this->Html->link(__('Sitios'), array('controller' => 'sites', 'action' => 'index')); ?>
 							<?php if ((isset($activeSitesMenu)) && $activeSitesMenu === true) { ?>
 							<ul>
+								<li><?php echo $this->Html->link(__('Todos'), array('action' => 'index')); ?></li>
 								<li><?php echo $this->Html->link(__('Nuevo Sitio'), array('action' => 'add')); ?></li>
-								<li><?php echo $this->Html->link(__('Lista de Usuarios'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-								<li><?php echo $this->Html->link(__('Nuevo Usuario'), array('controller' => 'users', 'action' => 'add')); ?> </li>
 							</ul>
 							<?php } ?>
 						</li>
