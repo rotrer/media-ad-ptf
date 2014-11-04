@@ -20,10 +20,12 @@
 				<td><?php echo h($site['Site']['state']); ?>&nbsp;</td>
 				<td><?php echo date('d-m-Y', strtotime($site['Site']['created'])); ?>&nbsp;</td>
 				<td>
-					<?php echo $this->Html->link(__('Get Plugin'), array('action' => 'getplugin', $site['Site']['id']), array('class' => 'btn btn-default', 'role' => 'button')); ?>
-					<?php echo $this->Html->link(__('Ver'), array('action' => 'view', $site['Site']['id']), array('class' => 'btn btn-default', 'role' => 'button')); ?>
-					<?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $site['Site']['id']), array('class' => 'btn btn-default', 'role' => 'button')); ?>
-					<?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $site['Site']['id']), array('class' => 'btn btn-default', 'role' => 'button'), __('Seguro desea eliminar %s?', $site['Site']['name'])); ?>
+					<div class="btn-group">
+						<?php echo $this->Html->link(__('Get Plugin'), array('action' => 'getplugin', $site['Site']['id']), array('class' => 'btn btn-default', 'role' => 'button')); ?>
+						<?php echo $this->Html->link(__('Ver'), array('action' => 'view', $site['Site']['id']), array('class' => 'btn btn-default', 'role' => 'button')); ?>
+						<?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $site['Site']['id']), array('class' => 'btn btn-default', 'role' => 'button')); ?>
+						<?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $site['Site']['id']), array('class' => 'btn btn-danger', 'role' => 'button'), __('Seguro desea eliminar %s?', $site['Site']['name'])); ?>
+					</div>
 				</td>
 			</tr>
 			<?php endforeach; ?>

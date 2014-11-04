@@ -1,4 +1,4 @@
-<?php echo $this->Form->create('User', array('controller' => 'users', 'action' => 'login', 'class' => 'form-horizontal')); ?>
+<?php echo $this->Form->create(null, array('url' => '/admin', 'class' => 'form-horizontal')); ?>
 	<fieldset>
 
 	<!-- Form Name -->

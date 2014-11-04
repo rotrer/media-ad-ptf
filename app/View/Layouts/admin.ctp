@@ -58,6 +58,12 @@
 						<?php if (isset($menuAdminAccess) && $menuAdminAccess['users']) { ?>
 						<li class="<?php echo ((isset($activeUsersMenu)) && $activeUsersMenu === true) ? 'active' : ''; ?>">
 							<?php echo $this->Html->link(__('Usuarios'), array('controller' => 'users', 'action' => 'index')); ?>
+							<?php if ((isset($activeUsersMenu)) && $activeUsersMenu === true) { ?>
+							<ul>
+								<li><?php echo $this->Html->link(__('Todos'), array('action' => 'index')); ?></li>
+								<li><?php echo $this->Html->link(__('Nuevo Sitio'), array('action' => 'add')); ?></li>
+							</ul>
+							<?php } ?>
 						</li>
 						<?php } ?>
 

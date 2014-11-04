@@ -180,34 +180,11 @@ class UsersController extends AppController {
 					$this->redirect(array('action' => 'changepassword'));
 				}
 
-				/*
-				*
-				* Obtener networks de cliente logeado
-				*/
-				/*
-				*DFP
-				*/
-				// Log SOAP XML request and response.
-				$this->instanceDfp()->LogDefaults();
-
-				// Get the NetworkService.
-				$networkService = $this->instanceDfp()->GetService('NetworkService', 'v201403');
-
-				// Get all networks that you have access to with the current login
-				// credentials.
-				$networks = $networkService->getAllNetworks();
-				if (isset($networks)) {
-						$networksArr = array();
-						foreach ($networks as $network) {
-							$networksArr[$network->networkCode] = $network->displayName;
-						}
-				}
-				$this->Session->write('networksAds', $networksArr);
-
 				if ($this->Auth->user('role') == 'admin' || $this->Auth->user('role') == 'user') {
-					$this->redirect(array('controller' => 'users', 'action' => 'index', 'admin' => true));
+					$this->redirect(array('controller' => 'users', 'action' => 'network', 'admin' => true));
 				} else {
-					$this->redirect('/dashboard');
+					$this->Session->setFlash(__('Acceso denegado.'), 'default', array('class' => 'alert alert-danger'));
+					$this->redirect(array('controller' => 'users', 'action' => 'login', 'admin' => true));
 				}
 			} else {
 					$this->Session->setFlash(__('Usuario o contraseña inválido, favor intentar nuevamente.'), 'default', array('class' => 'alert alert-danger'));
@@ -253,10 +230,44 @@ class UsersController extends AppController {
  * @param none
  * @return void
  */
-		public function admin_logout() {
-				$this->Auth->logout();
-				$this->redirect(array('controller' => 'users', 'action' => 'login', 'admin' => true));
+	public function admin_logout() {
+			$this->Auth->logout();
+			$this->redirect(array('controller' => 'users', 'action' => 'login', 'admin' => true));
+	}
+
+	/**
+ * admin logout method
+ *
+ * @throws none
+ * @param none
+ * @return void
+ */
+	public function admin_network() {
+		/*
+		*
+		* Obtener networks de cliente logeado
+		*/
+		/*
+		*DFP
+		*/
+		// Log SOAP XML request and response.
+		$this->instanceDfp()->LogDefaults();
+
+		// Get the NetworkService.
+		$networkService = $this->instanceDfp()->GetService('NetworkService', 'v201403');
+
+		// Get all networks that you have access to with the current login
+		// credentials.
+		$networks = $networkService->getAllNetworks();
+		if (isset($networks)) {
+				$networksArr = array();
+				foreach ($networks as $network) {
+					$networksArr[$network->networkCode] = $network->displayName;
+				}
 		}
+		$this->Session->write('networksAds', $networksArr);
+		$this->set('networks', $networks);
+	}
 
 
 /**
