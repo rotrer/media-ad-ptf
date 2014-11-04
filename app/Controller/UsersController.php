@@ -100,10 +100,10 @@ class UsersController extends AppController {
 				$Email->subject('Acceso Media Ads');
 				$Email->send('<h2>Bienvenido a Mediatrends Ads</h2><h4>Tu acceso es:</h4><p>Sitio: '.Router::url('/', true).' </br>Usuario: ' . $this->request->data['User']['email'] . ' </br>Contraseña: ' . $new_pass . ' </br></p><p>Recuerda que la primera vez que entres te pedira cambiar tu contraseña.</p>');
 				
-				$this->Session->setFlash(__('Usuario guardado.'));
+				$this->Session->setFlash(__('Usuario guardado correctamente.'), 'default', array('class' => 'alert alert-success'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('Usuario no guardado, favor intentar nuevamente.'));
+				$this->Session->setFlash(__('Usuario no guardado, favor intentar nuevamente.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		}
 	}
@@ -123,14 +123,18 @@ class UsersController extends AppController {
 			if ( empty($this->request->data['User']['password']) ) {
 				unset($this->request->data['User']['password']);
 			}
+			unset($this->request->data['enviar']);
+			var_dump($this->request->data);
 
+			$this->User->id = $id;
 			$saveState = $this->User->save($this->request->data);
-			#debug($saveState, $showHtml = null, $showFrom = true); die();
+			$log = $this->User->getDataSource()->getLog(false, false);
+			debug($log); die();
 			if ($saveState) {
-				$this->Session->setFlash(__('The user has been saved.'));
+				$this->Session->setFlash(__('Usuario editado correctamente.'), 'default', array('class' => 'alert alert-success'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('Usuario no editado, favor intentar nuevamente.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		} else {
 			$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
@@ -152,9 +156,9 @@ class UsersController extends AppController {
 		}
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->User->delete()) {
-			$this->Session->setFlash(__('The user has been deleted.'));
+			$this->Session->setFlash(__('Usuario eliminado correctamente.'), 'default', array('class' => 'alert alert-success'));
 		} else {
-			$this->Session->setFlash(__('The user could not be deleted. Please, try again.'));
+			$this->Session->setFlash(__('Usuario no eliminado, favor intentar nuevamente.'), 'default', array('class' => 'alert alert-danger'));
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
@@ -211,14 +215,14 @@ class UsersController extends AppController {
 				$this->User->id = $this->Auth->user('id');
 				$dataPass = array('password' => AuthComponent::password($this->request->data['User']['nueva_pass']), 'first_login' => 0);
 				if ($this->User->save($dataPass, false)) {
-					$this->Session->setFlash(__('Contraseña actualizada correctamente..'));
+					$this->Session->setFlash(__('Contraseña actualizada correctamente.'), 'default', array('class' => 'alert alert-success'));
 					$this->Auth->logout();
 					$this->redirect(array('controller' => 'users', 'action' => 'login', 'admin' => true));
 				} else {
-					$this->Session->setFlash(__('La contraseña no ha sido actualizada, favor intentar nuevamente.'));
+					$this->Session->setFlash(__('La contraseña no ha sido actualizada, favor intentar nuevamente.'), 'default', array('class' => 'alert alert-danger'));
 				}
 			} else {
-				$this->Session->setFlash(__('Las contraseñas no coinciden, favor intentar nuevamente.'));
+				$this->Session->setFlash(__('Las contraseñas no coinciden, favor intentar nuevamente.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		}
 	}
@@ -342,15 +346,15 @@ class UsersController extends AppController {
 					$this->User->id = $this->Auth->user('id');
 				$dataPass = array('password' => AuthComponent::password($this->request->data['User']['nueva_pass']), 'first_login' => 0);
 				if ($this->User->save($dataPass, false)) {
-					$this->Session->setFlash(__('Contraseña actualizada correctamente..'));
+					$this->Session->setFlash(__('Contraseña actualizada correctamente.'), 'default', array('class' => 'alert alert-success'));
 					$this->Auth->logout();
 							$this->redirect('/');
 				} else {
-					$this->Session->setFlash(__('La contraseña no ha sido actualizada, favor intentar nuevamente.'));
+					$this->Session->setFlash(__('La contraseña no ha sido actualizada, favor intentar nuevamente.'), 'default', array('class' => 'alert alert-danger'));
 				}
 				
 				} else {
-					$this->Session->setFlash(__('Las contraseñas no coinciden, favor intentar nuevamente.'));
+					$this->Session->setFlash(__('Las contraseñas no coinciden, favor intentar nuevamente.'), 'default', array('class' => 'alert alert-danger'));
 				}
 			}
 	}

@@ -1,30 +1,65 @@
-<div class="users form">
-<?php echo $this->Form->create('User'); ?>
-	<fieldset>
-		<legend><?php echo __('Editar Usuario'); ?></legend>
-	<?php
-		echo $this->Form->input('id');
-		echo $this->Form->input('name', array('label' => 'Nombre'));
+<?php 
+		echo $this->Form->create('User', array('class' => 'form-horizontal', 'inputDefaults' => array(
+        'label' => false,
+        'div' => false
+  	))); 
 		echo $this->Form->input('username', array('type' => 'hidden'));
-		echo $this->Form->input('password', array('value' => '', 'required' => false, 'label' => 'Contraseña'));
-		echo $this->Form->input('email', array('label' => 'Email', 'class' => 'checkemail'));
-		echo $this->Form->input('role',array(
-				'options' => array('user' => 'Usuario', 'admin' => 'Administrador'),
-				'label' => 'Rol'
-			));
-		echo $this->Form->input('state', array(
-				'options' => array('activo' => 'Activo', 'inactivo' => 'Inactivo'),
-				'label' => 'Estado'
-			));
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Guardar')); ?>
-</div>
-<div class="actions">
-	<h3><?php echo __('Acciones'); ?></h3>
-	<ul>
+?>
+	<fieldset>
 
-		<li><?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $this->Form->value('User.id')), null, __('Seguro desea eliminar a %s?', $this->Form->value('User.name'))); ?></li>
-		<li><?php echo $this->Html->link(__('Lista de usuarios'), array('action' => 'index')); ?></li>
-	</ul>
-</div>
+	<!-- Form Name -->
+	<legend>Nuevo Sitio</legend>
+
+	<!-- Text input-->
+	<div class="form-group">
+	  <label class="col-md-4 control-label" for="name">Nombre</label>  
+	  <div class="col-md-6">
+	  <?php echo $this->Form->input('name', array('placeholder' => "Nombre usuario", 'class' => "form-control input-md", 'required' => "required")); ?>
+	    
+	  </div>
+	</div>
+	<!-- Text input-->
+	<div class="form-group">
+	  <label class="col-md-4 control-label" for="name">Contraseña</label>  
+	  <div class="col-md-6">
+		<?php echo $this->Form->input('password', array('value' => '', 'required' => false, 'class' => "form-control input-md")); ?>
+	  </div>
+	</div>
+
+	<!-- Text input-->
+	<div class="form-group">
+	  <label class="col-md-4 control-label" for="email">Email</label>  
+	  <div class="col-md-6">
+	  <?php echo $this->Form->input('email', array('placeholder' => "email@dominio.cl", 'class' => "form-control input-md checkemail", 'required' => "required")); ?>
+	  </div>
+	  <div class="check_email" style="display:none;"></div>
+	</div>
+
+	<!-- Select Basic -->
+	<div class="form-group">
+	  <label class="col-md-4 control-label" for="role">Rol</label>
+	  <div class="col-md-6">
+	  	<?php echo $this->Form->input('role', array(
+				'options' => array('user' => 'Usuario', 'admin' => 'Administrador'), 'empty' => 'Seleccione', 'class'=> 'form-control', 'required' => "required"
+			)); ?>
+	  </div>
+	</div>
+
+	<!-- Select Multiple -->
+	<div class="form-group">
+	  <label class="col-md-4 control-label" for="state">Estado</label>
+	  <div class="col-md-6">
+	    <?php echo $this->Form->input('state', array('class'=> 'form-control', 'options' => array('activo' => 'Activo', 'inactivo' => 'Inactivo'))); ?>
+	  </div>
+	</div>
+
+	<!-- Button -->
+	<div class="form-group">
+	  <label class="col-md-4 control-label" for="enviar"></label>
+	  <div class="col-md-4">
+	    <button id="enviar" name="enviar" class="btn btn-primary">Guardar</button>
+	  </div>
+	</div>
+
+	</fieldset>
+<?php echo $this->Form->end(); ?>
