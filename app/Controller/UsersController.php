@@ -123,13 +123,11 @@ class UsersController extends AppController {
 			if ( empty($this->request->data['User']['password']) ) {
 				unset($this->request->data['User']['password']);
 			}
-			unset($this->request->data['enviar']);
-			var_dump($this->request->data);
+			if (isset($this->request->data['enviar'])) unset($this->request->data['enviar']);
 
-			$this->User->id = $id;
 			$saveState = $this->User->save($this->request->data);
-			$log = $this->User->getDataSource()->getLog(false, false);
-			debug($log); die();
+			// $log = $this->User->getDataSource()->getLog(false, false);
+			// debug($log); die();
 			if ($saveState) {
 				$this->Session->setFlash(__('Usuario editado correctamente.'), 'default', array('class' => 'alert alert-success'));
 				return $this->redirect(array('action' => 'index'));

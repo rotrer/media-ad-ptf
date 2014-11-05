@@ -3,12 +3,13 @@
         'label' => false,
         'div' => false
   	))); 
+		echo $this->Form->input('id');
 		echo $this->Form->input('username', array('type' => 'hidden'));
 ?>
 	<fieldset>
 
 	<!-- Form Name -->
-	<legend>Nuevo Sitio</legend>
+	<legend>Editar Usuario</legend>
 
 	<!-- Text input-->
 	<div class="form-group">
@@ -58,6 +59,7 @@
 	  <label class="col-md-4 control-label" for="enviar"></label>
 	  <div class="col-md-4">
 	    <button id="enviar" name="enviar" class="btn btn-primary">Guardar</button>
+	    <input type="submit" value="Guardar">
 	  </div>
 	</div>
 

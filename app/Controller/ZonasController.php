@@ -123,10 +123,10 @@ class ZonasController extends AppController {
 			}
 
 			if ($responseZona && $responseAdUnit) {
-				$this->Session->setFlash(__('La zona ha sido guardad.'));
+				$this->Session->setFlash(__('La zona ha sido guardada.'), 'default', array('class' => 'alert alert-success'));
 				$this->redirect(array('controller' => 'zonas', 'action' => 'index', 'admin' => true));
 			} else {
-				$this->Session->setFlash(__('The zona could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('La zona no ha sido guardada.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		} else {
 			try {
@@ -322,11 +322,58 @@ class ZonasController extends AppController {
 			}
 		} else {
 			$options = array('conditions' => array('Zona.' . $this->Zona->primaryKey => $id));
-			$this->request->data = $this->Zona->find('first', $options);
+			$zonaInfo = $this->request->data = $this->Zona->find('first', $options);
+
+			try {
+				// Get the InventoryService.
+				$inventoryService = $this->instanceDfp()->GetService('InventoryService', 'v201403');
+
+				// Set defaults for page and statement.
+				$page = new AdUnitPage();
+				$filterStatement = new Statement();
+				$offset = 0;
+				$adunitsArr = array();
+
+				do {
+					// Create a statement to get all ad units.
+					$filterStatement->query = "WHERE status = 'ACTIVE' LIMIT 500 OFFSET " . $offset;
+
+					// Get creatives by statement.
+					$page = $inventoryService->getAdUnitsByStatement($filterStatement);
+
+					// Display results.
+					if (isset($page->results)) {
+						$i = $page->startIndex;
+						foreach ($page->results as $adUnit) {
+							if ($adUnit->status != 'ARCHIVED') {
+								$adunitsArr[$adUnit->id] = $adUnit->name . '[' . $adUnit->status . ']';
+								// pr( $i . ') Ad unit with ID "' . $adUnit->id
+								// 	. '", name "' . $adUnit->name
+								// 	. '", and status "' . $adUnit->status . "\" was found." );
+								// $i++;	
+							}
+						}
+					}
+
+					$offset += 500;
+				} while ($offset < $page->totalResultSetSize);
+			} catch (OAuth2Exception $e) {
+				$this->Session->write('redirect_url', $this->request->url);
+				$this->redirect(array('controller' => 'users', 'action' => 'call_oauth', 'admin' => false));
+
+			} catch (ValidationException $e) {
+				#ExampleUtils::CheckForOAuth2Errors($e);
+			} catch (Exception $e) {
+				print $e->getMessage() . "\n";
+			}
+
+
+
+			$sites = $this->Site->find('list');
+			$this->set('adunits', $adunitsArr);
 		}
 		$sites = $this->Site->find('list');
-		$adUnits = $this->Zona->AdUnit->find('list');
-		$this->set(compact('sites', 'adUnits'));
+		$this->set(compact('sites', 'zonaInfo'));
 	}
 
 /**

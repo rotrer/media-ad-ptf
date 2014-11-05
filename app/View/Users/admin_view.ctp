@@ -1,54 +1,33 @@
-<div class="users view">
-<h2><?php echo __('Usuario'); ?></h2>
-	<dl>
-		<dt><?php echo __('Id'); ?></dt>
+<div>
+	<legend><?php echo __('Usuario'); ?></legend>
+	<dl class="dl-horizontal">
+		<dt><p><?php echo __('Nombre'); ?></p></dt>
 		<dd>
-			<?php echo h($user['User']['id']); ?>
-			&nbsp;
+			<p><?php echo h($user['User']['name']); ?></p>
 		</dd>
-		<dt><?php echo __('Nombre'); ?></dt>
+		<dt><p><?php echo __('Contraseña'); ?></p></dt>
 		<dd>
-			<?php echo h($user['User']['name']); ?>
-			&nbsp;
+			<p>-----------</p>
 		</dd>
-		<dt><?php echo __('Contraseña'); ?></dt>
+		<dt><p><?php echo __('Email'); ?></p></dt>
 		<dd>
-			-----------
-			&nbsp;
+			<p><?php echo h($user['User']['email']); ?></p>
 		</dd>
-		<dt><?php echo __('Email'); ?></dt>
+		<dt><p><?php echo __('Rol'); ?></p></dt>
 		<dd>
-			<?php echo h($user['User']['email']); ?>
-			&nbsp;
+			<p><?php echo h($user['User']['role']); ?></p>
 		</dd>
-		<dt><?php echo __('Rol'); ?></dt>
+		<dt><p><?php echo __('Estado'); ?></p></dt>
 		<dd>
-			<?php echo h($user['User']['role']); ?>
-			&nbsp;
+			<p><?php echo h($user['User']['state']); ?></p>
 		</dd>
-		<dt><?php echo __('Estado'); ?></dt>
+		<dt><p><?php echo __('Primer login'); ?></p></dt>
 		<dd>
-			<?php echo h($user['User']['state']); ?>
-			&nbsp;
+			<p><?php echo ($user['User']['first_login']) ? 'SÍ' : 'NO'; ?></p>
 		</dd>
-		<dt><?php echo __('Primer login'); ?></dt>
+		<dt><p><?php echo __('Fecha Registro'); ?></p></dt>
 		<dd>
-			<?php echo ($user['User']['first_login']) ? 'SÍ' : 'NO'; ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Fecha Registro'); ?></dt>
-		<dd>
-			<?php echo h($user['User']['created']); ?>
-			&nbsp;
+			<p><?php echo h($user['User']['created']); ?></p>
 		</dd>
 	</dl>
-</div>
-<div class="actions">
-	<h3><?php echo __('Acciones'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('Editar Usuario'), array('action' => 'edit', $user['User']['id'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Eliminar Usuario'), array('action' => 'delete', $user['User']['id']), null, __('Seguro desea eliminar a %s?', $user['User']['name'])); ?> </li>
-		<li><?php echo $this->Html->link(__('Lista Usuarios'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('Nuevo Usuario'), array('action' => 'add')); ?> </li>
-	</ul>
 </div>

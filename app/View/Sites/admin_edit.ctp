@@ -1,27 +1,58 @@
-<div class="sites form">
-<?php echo $this->Form->create('Site'); ?>
+<?php echo $this->Form->create('Site', array('class' => 'form-horizontal', 'inputDefaults' => array(
+        'label' => false,
+        'div' => false
+  	))); ?>
+  <?php echo $this->Form->input('id'); ?>
 	<fieldset>
-		<legend><?php echo __('Editar Sitio'); ?></legend>
-	<?php
-		echo $this->Form->input('name', array('label'=> 'Nombre'));
-		echo $this->Form->input('domain', array('label'=> 'Dominio'));
-		echo $this->Form->input('public_key', array('readonly', 'label'=> 'Llave Pública'));
-		echo $this->Form->input('state', array(
-				'options' => array('activo' => 'Activo', 'inactivo' => 'Inactivo'),
-				'label'=> 'Estado'
-			));
-		echo $this->Form->input('User', array('label' => 'Usuarios asociados'));
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Enviar')); ?>
-</div>
-<div class="actions">
-	<h3><?php echo __('Acciones'); ?></h3>
-	<ul>
 
-		<li><?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $this->Form->value('Site.id')), null, __('Seguro desea elminar %s?', $this->Form->value('Site.name'))); ?></li>
-		<li><?php echo $this->Html->link(__('Lista Sitios'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('Lista Usuarios'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('Nuevo Usuario'), array('controller' => 'users', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
+	<!-- Form Name -->
+	<legend>Nuevo Sitio</legend>
+
+	<!-- Text input-->
+	<div class="form-group">
+	  <label class="col-md-4 control-label" for="name">Nombre</label>  
+	  <div class="col-md-6">
+	  <?php echo $this->Form->input('name', array('placeholder' => "Nombre sitio", 'class' => "form-control input-md", 'required' => "required")); ?>
+	    
+	  </div>
+	</div>
+
+	<!-- Text input-->
+	<div class="form-group">
+	  <label class="col-md-4 control-label" for="domain">Dominio</label>  
+	  <div class="col-md-6">
+	  <?php echo $this->Form->input('domain', array('placeholder' => "dominio.cl", 'class' => "form-control input-md", 'required' => "required")); ?>
+	    
+	  </div>
+	</div>
+
+	<?php echo $this->Form->input('public_key', array('type' => 'hidden')); ?>
+
+	<!-- Select Basic -->
+	<div class="form-group">
+	  <label class="col-md-4 control-label" for="state">Estado</label>
+	  <div class="col-md-6">
+	  	<?php echo $this->Form->input('state', array(
+				'options' => array('activo' => 'Activo', 'inactivo' => 'Inactivo'), 'class'=> 'form-control', 'required' => "required"
+			)); ?>
+	  </div>
+	</div>
+
+	<!-- Select Multiple -->
+	<div class="form-group">
+	  <label class="col-md-4 control-label" for="User">Usuarios asociados</label>
+	  <div class="col-md-6">
+	    <?php echo $this->Form->input('User', array('class'=> 'form-control', 'multiple' => 'multiple')); ?>
+	  </div>
+	</div>
+
+	<!-- Button -->
+	<div class="form-group">
+	  <label class="col-md-4 control-label" for="enviar"></label>
+	  <div class="col-md-4">
+	    <button id="enviar" name="enviar" class="btn btn-primary">Guardar</button>
+	  </div>
+	</div>
+
+	</fieldset>
+<?php echo $this->Form->end(); ?>
