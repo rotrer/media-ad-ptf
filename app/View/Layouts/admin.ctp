@@ -92,9 +92,9 @@
 						<?php } ?>
 
 						<?php if (isset($menuAdminAccess) && $menuAdminAccess['adunits']) { ?>
-						<li class="<?php echo ((isset($activeAdunitsMenu)) && $activeAdunitsMenu === true) ? 'active' : ''; ?>">
+						<!-- <li class="<?php echo ((isset($activeAdunitsMenu)) && $activeAdunitsMenu === true) ? 'active' : ''; ?>">
 							<?php echo $this->Html->link(__('Ad-units'), array('controller' => 'adUnits', 'action' => 'index')); ?>
-						</li>
+						</li> -->
 						<?php } ?>
 					</ul>
 				</div>
