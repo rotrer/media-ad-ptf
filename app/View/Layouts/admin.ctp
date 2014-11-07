@@ -55,6 +55,18 @@
 			<div class="row">
 				<div class="col-sm-3 col-md-2 sidebar">
 					<ul class="nav nav-sidebar">
+						<?php if (isset($menuAdminAccess) && $menuAdminAccess['plugin']) { ?>
+						<li class="<?php echo ((isset($activePluginsMenu)) && $activePluginsMenu === true) ? 'active' : ''; ?>">
+							<?php echo $this->Html->link(__('Plugins'), array('controller' => 'plugins', 'action' => 'index')); ?>
+							<?php if ((isset($activePluginsMenu)) && $activePluginsMenu === true) { ?>
+							<ul>
+								<li><?php echo $this->Html->link(__('Todos'), array('action' => 'index')); ?></li>
+								<li><?php echo $this->Html->link(__('Nuevo Plugin'), array('action' => 'add')); ?></li>
+							</ul>
+							<?php } ?>
+						</li>
+						<?php } ?>
+
 						<?php if (isset($menuAdminAccess) && $menuAdminAccess['users']) { ?>
 						<li class="<?php echo ((isset($activeUsersMenu)) && $activeUsersMenu === true) ? 'active' : ''; ?>">
 							<?php echo $this->Html->link(__('Usuarios'), array('controller' => 'users', 'action' => 'index')); ?>
@@ -91,11 +103,6 @@
 						</li>
 						<?php } ?>
 
-						<?php if (isset($menuAdminAccess) && $menuAdminAccess['adunits']) { ?>
-						<!-- <li class="<?php echo ((isset($activeAdunitsMenu)) && $activeAdunitsMenu === true) ? 'active' : ''; ?>">
-							<?php echo $this->Html->link(__('Ad-units'), array('controller' => 'adUnits', 'action' => 'index')); ?>
-						</li> -->
-						<?php } ?>
 					</ul>
 				</div>
 				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">

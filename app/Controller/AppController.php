@@ -53,7 +53,8 @@ class AppController extends Controller {
 																'users' => 0,
 																'sites' => 1,
 																'zonas' => 1,
-																'adunits' => 1
+																'adunits' => 1,
+																'plugin' => 1
 														);
 												break;
 										// case 'client':
@@ -65,7 +66,8 @@ class AppController extends Controller {
 																'users' => 1,
 																'sites' => 1,
 																'zonas' => 1,
-																'adunits' => 1
+																'adunits' => 1,
+																'plugin' => 1
 														);
 												break;
 								}
