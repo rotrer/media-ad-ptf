@@ -1,21 +1,19 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * SitesAdOrder Model
+ * PluginsAdOrder Model
  *
- * @property Sites $Sites
+ * @property Plugins $Plugins
  * @property AdOrders $AdOrders
  */
-class SitesAdOrder extends AppModel {
+class PluginsAdOrder extends AppModel {
 
 /**
- * Primary key field
+ * Display field
  *
  * @var string
  */
-	public $primaryKey = 'sites_id';
-
-	public $displayField = 'sites_id';
+	public $displayField = 'id';
 
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -26,9 +24,9 @@ class SitesAdOrder extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Sites' => array(
-			'className' => 'Sites',
-			'foreignKey' => 'sites_id',
+		'Plugins' => array(
+			'className' => 'Plugins',
+			'foreignKey' => 'plugins_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

@@ -15,7 +15,7 @@ class SitesController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Site', 'User', 'AdOrder', 'LineItem', 'SitesAdOrder', 'Zona');
+	public $uses = array('Site', 'User', 'AdOrder', 'LineItem', 'Zona', 'Plugin');
  /**
  * Components
  *
@@ -66,9 +66,9 @@ class SitesController extends AppController {
 		$options = array('conditions' => array('Site.' . $this->Site->primaryKey => $id));
 		$this->set('site', $this->Site->find('first', $options));
 
-		// Zonas y Adunits por sitios
-		$zonasAll = $this->Zona->find('all', array('conditions' => array('Zona.sites_id' => $id)));
-		$this->set('zonasAll', $zonasAll);
+		// Plugins asociados
+		$pluginsAll = $this->Plugin->find('all', array('conditions' => array('Plugin.sites_id' => $id)));
+		$this->set('pluginsAll', $pluginsAll);
 	}
 
 /**
@@ -81,7 +81,8 @@ class SitesController extends AppController {
 			$this->Site->create();
 			if ($this->Site->save($this->request->data)) {
 				$this->Session->setFlash(__('Sitio guardado correctamente, ahora seleccione pedidos y líneas de pedidos para continuar.'), 'default', array('class' => 'alert alert-success'));
-				return $this->redirect(array('action' => 'dfporders', $this->Site->id));
+				return $this->redirect(array('action' => 'index'));
+				// return $this->redirect(array('action' => 'dfporders', $this->Site->id));
 			} else {
 				$this->Session->setFlash(__('Sitio no ha sido guardado, favor intentar nuevamente.'), 'default', array('class' => 'alert alert-danger'));
 			}

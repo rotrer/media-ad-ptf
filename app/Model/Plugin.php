@@ -1,11 +1,12 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * Site Model
+ * Plugin Model
  *
- * @property User $User
+ * @property Sites $Sites
+ * @property AdOrder $AdOrder
  */
-class Site extends AppModel {
+class Plugin extends AppModel {
 
 /**
  * Display field
@@ -30,9 +31,9 @@ class Site extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'public_key' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+		'sites_id' => array(
+			'numeric' => array(
+				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -45,16 +46,31 @@ class Site extends AppModel {
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**
+ * belongsTo associations
+ *
+ * @var array
+ */
+	public $belongsTo = array(
+		'Sites' => array(
+			'className' => 'Sites',
+			'foreignKey' => 'sites_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		)
+	);
+
+/**
  * hasAndBelongsToMany associations
  *
  * @var array
  */
 	public $hasAndBelongsToMany = array(
-		'User' => array(
-			'className' => 'User',
-			'joinTable' => 'users_sites',
-			'foreignKey' => 'sites_id',
-			'associationForeignKey' => 'users_id',
+		'AdOrder' => array(
+			'className' => 'AdOrder',
+			'joinTable' => 'plugins_ad_orders',
+			'foreignKey' => 'plugin_id',
+			'associationForeignKey' => 'ad_order_id',
 			'unique' => 'keepExisting',
 			'conditions' => '',
 			'fields' => '',
