@@ -267,6 +267,14 @@ class UsersController extends AppController {
 					$networksArr[$network->networkCode] = $network->displayName;
 				}
 		}
+		$menuAdminAccess = array(
+												'users' => 0,
+												'sites' => 0,
+												'zonas' => 0,
+												'adunits' => 0,
+												'plugin' => 0
+										);
+		$this->set('menuAdminAccess',$menuAdminAccess);
 		$this->Session->write('networksAds', $networksArr);
 		$this->set('networks', $networks);
 	}
