@@ -60,25 +60,4 @@ class Plugin extends AppModel {
 		)
 	);
 
-/**
- * hasAndBelongsToMany associations
- *
- * @var array
- */
-	public $hasAndBelongsToMany = array(
-		'AdOrder' => array(
-			'className' => 'AdOrder',
-			'joinTable' => 'plugins_ad_orders',
-			'foreignKey' => 'plugin_id',
-			'associationForeignKey' => 'ad_order_id',
-			'unique' => 'keepExisting',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-		)
-	);
-
 }

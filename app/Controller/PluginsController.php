@@ -14,7 +14,7 @@ class PluginsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Plugin', 'PluginsAdOrder', 'Site', 'User', 'AdOrder', 'LineItem', 'Zona');
+	public $uses = array('Plugin', 'Site', 'User', 'AdOrder', 'LineItem', 'Zona');
  /**
  * Components
  *
@@ -81,9 +81,8 @@ class PluginsController extends AppController {
 				$this->Session->setFlash(__('The plugin could not be saved. Please, try again.'));
 			}
 		}
-		$sites = $this->Plugin->Site->find('list');
-		$adOrders = $this->Plugin->AdOrder->find('list');
-		$this->set(compact('sites', 'adOrders'));
+		$sites = $this->Site->find('list');
+		$this->set(compact('sites'));
 	}
 
 /**
