@@ -122,6 +122,8 @@ class UsersController extends AppController {
 		if ($this->request->is(array('post', 'put'))) {
 			if ( empty($this->request->data['User']['password']) ) {
 				unset($this->request->data['User']['password']);
+			} else {
+				$this->request->data['User']['password'] = AuthComponent::password($this->request->data['User']['password']);
 			}
 			if (isset($this->request->data['enviar'])) unset($this->request->data['enviar']);
 
