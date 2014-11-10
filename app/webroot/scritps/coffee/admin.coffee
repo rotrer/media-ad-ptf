@@ -50,6 +50,33 @@ window.main =
 						$('input[type="submit"]').removeAttr('disabled').css('opacity', '1');
 					else
 						$('.check_email').empty().html("El correo ingresado ya se encuentra utilizado.").show()
+
+		$("#newZona").click () ->
+			$.ajax
+				url: APP_JQ + "/admin/plugins/addzona"
+				type: "GET"
+				data: ""
+				beforeSend: ->
+
+				success: (results) ->
+					$('.addZona').append results;
+			return false
+
+		$(document).on "change", ".selectedLine", ->
+			adunits = $(this)
+			selectTarget = adunits.parent().parent().next().find('select')
+			$.ajax
+				url: APP_JQ + "/admin/plugins/getadunits"
+				type: "POST"
+				data: "adunits=" + adunits.val()
+				beforeSend: ->
+					
+				success: (results) ->
+					console.log results;
+					unless results is ""
+						selectTarget.empty().html(results)
+					else
+						alert "error al obtener lineas de pedido"
 					
 
 $('document').ready ->

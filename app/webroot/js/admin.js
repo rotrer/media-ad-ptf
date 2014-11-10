@@ -41,7 +41,7 @@
       $('#line_items').change(function() {
         return $('#name_lineitem').val($("#line_items option:selected").text());
       });
-      return $('.checkemail').change(function() {
+      $('.checkemail').change(function() {
         var email;
         email = $(this).val();
         if (email === "") {
@@ -61,6 +61,37 @@
               return $('input[type="submit"]').removeAttr('disabled').css('opacity', '1');
             } else {
               return $('.check_email').empty().html("El correo ingresado ya se encuentra utilizado.").show();
+            }
+          }
+        });
+      });
+      $("#newZona").click(function() {
+        $.ajax({
+          url: APP_JQ + "/admin/plugins/addzona",
+          type: "GET",
+          data: "",
+          beforeSend: function() {},
+          success: function(results) {
+            return $('.addZona').append(results);
+          }
+        });
+        return false;
+      });
+      return $(document).on("change", ".selectedLine", function() {
+        var adunits, selectTarget;
+        adunits = $(this);
+        selectTarget = adunits.parent().parent().next().find('select');
+        return $.ajax({
+          url: APP_JQ + "/admin/plugins/getadunits",
+          type: "POST",
+          data: "adunits=" + adunits.val(),
+          beforeSend: function() {},
+          success: function(results) {
+            console.log(results);
+            if (results !== "") {
+              return selectTarget.empty().html(results);
+            } else {
+              return alert("error al obtener lineas de pedido");
             }
           }
         });
