@@ -3,8 +3,8 @@ App::uses('AppModel', 'Model');
 /**
  * Zona Model
  *
- * @property Sites $Sites
- * @property AdUnit $AdUnit
+ * @property Plugins $Plugins
+ * @property AdUnits $AdUnits
  */
 class Zona extends AppModel {
 
@@ -15,6 +15,53 @@ class Zona extends AppModel {
  */
 	public $displayField = 'name';
 
+/**
+ * Validation rules
+ *
+ * @var array
+ */
+	public $validate = array(
+		'name' => array(
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+		'id_tag_template' => array(
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+		'plugins_id' => array(
+			'numeric' => array(
+				'rule' => array('numeric'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+		'ad_units_id' => array(
+			'numeric' => array(
+				'rule' => array('numeric'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -24,34 +71,19 @@ class Zona extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Sites' => array(
-			'className' => 'Sites',
-			'foreignKey' => 'sites_id',
+		'Plugins' => array(
+			'className' => 'Plugins',
+			'foreignKey' => 'plugins_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
+		'AdUnits' => array(
+			'className' => 'AdUnits',
+			'foreignKey' => 'ad_units_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		)
 	);
-
-/**
- * hasAndBelongsToMany associations
- *
- * @var array
- */
-	public $hasAndBelongsToMany = array(
-		'AdUnit' => array(
-			'className' => 'AdUnit',
-			'joinTable' => 'zonas_ad_units',
-			'foreignKey' => 'zonas_id',
-			'associationForeignKey' => 'ad_units_id',
-			'unique' => 'keepExisting',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-		)
-	);
-
 }

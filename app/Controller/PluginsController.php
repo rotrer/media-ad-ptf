@@ -14,7 +14,7 @@ class PluginsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Plugin', 'Site', 'User', 'LineItem', 'LineItemsAdUnit', 'AdUnit', 'ZonasAdUnit', 'Zona');
+	public $uses = array('Plugin', 'Site', 'User', 'LineItem', 'LineItemsAdUnit', 'AdUnit', 'Zona');
  /**
  * Components
  *
@@ -63,7 +63,7 @@ class PluginsController extends AppController {
 			throw new NotFoundException(__('Invalid plugin'));
 		}
 		$options = array('conditions' => array('Plugin.' . $this->Plugin->primaryKey => $id));
-		$this->set('plugin', $this->Plugin->find('first', $options));
+		$this->set('plugin', $this->Plugin->find('first', $options)); var_dump($this->Plugin->find('first', $options)); die();
 	}
 
 /**
@@ -139,25 +139,13 @@ class PluginsController extends AppController {
 								'name' => $data['zona_name'][$i],
 								'id_tag_template' => $id_tag_template,
 								'plugins_id' => $idPlugin,
+								'ad_units_id' => $idAdunit
 							);
 						$this->Zona->create();
 						$savedZona = $this->Zona->save($toSaveZona);
 						$idZona = $savedZona['Zona']['id'];
 					}
 
-					/*
-					Guardar Asociacion Adunits - Zonas
-					 */
-					if ($idAdunit && $idZona) {
-						$existsZonaAdUnit = $this->ZonasAdUnit->find('first', array('conditions' => array('ZonasAdUnit.zonas_id' => $idZona, 'ZonasAdUnit.ad_units_id' => $idAdunit)));
-						if (!$existsZonaAdUnit) {
-							$this->ZonasAdUnit->create();
-							$this->ZonasAdUnit->save(array(
-									'zonas_id' => $idZona,
-									'ad_units_id' => $idAdunit
-								));
-						}
-					}
 				}
 				$this->Session->setFlash(__('Plugin ha sido guardado correctamente.'), 'default', array('class' => 'alert alert-success'));
 				return $this->redirect(array('action' => 'index'));

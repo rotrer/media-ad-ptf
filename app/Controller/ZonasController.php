@@ -14,7 +14,7 @@ class ZonasController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Zona', 'Site', 'ZonasAdUnit', 'AdUnit', 'LineItemsAdUnit', 'LineItem');
+	public $uses = array('Zona', 'Site', 'Plugin', 'AdUnit', 'LineItemsAdUnit', 'LineItem');
 /**
  * Components
  *
@@ -63,7 +63,12 @@ class ZonasController extends AppController {
 			throw new NotFoundException(__('Invalid zona'));
 		}
 		$options = array('conditions' => array('Zona.' . $this->Zona->primaryKey => $id));
-		$this->set('zona', $this->Zona->find('first', $options));
+		$zonaInfo = $this->Zona->find('first', $options);
+
+		$lineItemInfo = $this->LineItemsAdUnit->find('first', array('LineItemsAdUnit.ad_units_id' => $zonaInfo['AdUnits']['id']));
+
+		$this->set('zona', $zonaInfo);
+		$this->set('lineItemInfo', $lineItemInfo);
 	}
 
 /**
@@ -73,113 +78,127 @@ class ZonasController extends AppController {
  */
 	public function admin_add() {
 		if ($this->request->is('post')) {
-			#debug($this->request->data);
-			
-			$dataZonas = $this->request->data['Zona'];
+			$data = $this->request->data;
 
-			#Get indo site/adordres, line items
-			$site = $this->Site->findById($dataZonas['site']);
-			$lineItem = $this->LineItem->findByAd_orders_id($site['AdOrder'][0]['id']);
-
-			##Guardar Zonas
-			$zonaData = array(
-					'name' => $dataZonas['name'],
-					'id_tag_template' => $dataZonas['id_tag_template'],
-					'sites_id' => $dataZonas['site']
-				);
-			$this->Zona->create();
-			$responseZona = $this->Zona->save($zonaData);
-
-			##Guardar AdUnit
-			$name_adunit_compuesto = $dataZonas['adunit_name'];
-				$name_adunit_compuesto = explode('[', str_replace("]", "", $name_adunit_compuesto));
-			$adunitData = array(
-					'id' => $dataZonas['adunit'],
-					'name' => $name_adunit_compuesto[0],
-					'status' => $name_adunit_compuesto[1],
-					'created' => date('Y-m-d H:i:s')
-				);
-			$this->AdUnit->create();
-			$responseAdUnit = $this->AdUnit->save($adunitData);
-
-			##Guardar/Asociar ZonasAdUnit
-			$zonasadunitData = array(
-					'zonas_id' => $responseZona['Zona']['id'],
-					'ad_units_id' => $responseAdUnit['AdUnit']['id'],
-					'created' => date('Y-m-d H:i:s')
-				);
-			$this->ZonasAdUnit->create();
-			$responseZonasAdUnit = $this->ZonasAdUnit->save($zonasadunitData);
-
-			##Guardar/Asociar LineItemsAdUnit
-			if (!$this->LineItemsAdUnit->find('count', array('LineItemsAdUnit.line_items_id' => $lineItem['LineItem']['id'], 'LineItemsAdUnit.ad_units_id' => $responseAdUnit['AdUnit']['id']))) {
-				$lineitemsadunitData = array(
-						'line_items_id' => $lineItem['LineItem']['id'],
-						'ad_units_id' => $responseAdUnit['AdUnit']['id'],
-						'created' => date('Y-m-d H:i:s')
+			/*
+			Line Item Save
+			 */
+			$dataLineItem = $data['line_item'];
+			$tmpArrLineItem = explode(',', $dataLineItem);
+			$existsLine = $this->LineItem->find('first', array('conditions' => array('LineItem.line_id_dfp' => $tmpArrLineItem[1])));
+			if (!$existsLine) {
+				$toSaveLine = array(
+						'name' => $tmpArrLineItem[0],
+						'line_id_dfp' => $tmpArrLineItem[1]
 					);
-				$this->LineItemsAdUnit->create();
-				$responseLineItemsAdUnit = $this->LineItemsAdUnit->save($lineitemsadunitData);
+				$this->LineItem->create();
+				$savedLine = $this->LineItem->save($toSaveLine);
+				$idLineItem = $savedLine['LineItem']['id'];
+			} else {
+				$idLineItem = $existsLine['LineItem']['id'];
+			}
+			
+			/*
+			Ad Units Save
+			 */
+			$dataAdUnit = $data['ad_unit'];
+			$tmpArrAdUnit = explode('|', $dataAdUnit);
+			$existsAdUnit = $this->AdUnit->find('first', array('conditions' => array('AdUnit.adunit_id_dfp' => $tmpArrAdUnit[1])));
+			if (!$existsAdUnit) {
+				$toSaveAdunit = array(
+						'name' => $tmpArrAdUnit[0],
+						'adunit_id_dfp' => $tmpArrAdUnit[1]
+					);
+				$this->AdUnit->create();
+				$savedAdunit = $this->AdUnit->save($toSaveAdunit);
+				$idAdunit = $savedAdunit['AdUnit']['id'];
+			} else {
+				$idAdunit = $existsAdUnit['AdUnit']['id'];
 			}
 
-			if ($responseZona && $responseAdUnit) {
+			/*
+			Guardar Asociacion Adunits - LinItems
+			 */
+			if ($idLineItem && $idAdunit) {
+				$existsLineAdUnit = $this->LineItemsAdUnit->find('first', array('conditions' => array('LineItemsAdUnit.line_items_id' => $idLineItem, 'LineItemsAdUnit.ad_units_id' => $idAdunit)));
+				if (!$existsLineAdUnit) {
+					$this->LineItemsAdUnit->create();
+					$this->LineItemsAdUnit->save(array(
+							'line_items_id' => $idLineItem,
+							'ad_units_id' => $idAdunit
+						));
+				}
+			}
+
+			/*
+			Guardar datos Zona
+			 */
+			if ($data['plugins_id']) {
+				#Verificar id_tag_template
+				$id_tag_template = (substr($data['Zona']['id_tag_template'], 0, 1) === "#")  ? $data['Zona']['id_tag_template'] : '#' . $data['Zona']['id_tag_template'];
+				$toSaveZona = array(
+						'name' => $data['Zona']['name'],
+						'id_tag_template' => $id_tag_template,
+						'plugins_id' => $data['plugins_id'],
+						'ad_units_id' => $idAdunit
+					);
+				$this->Zona->create();
+				$savedZona = $this->Zona->save($toSaveZona);
+				$idZona = $savedZona['Zona']['id'];
+			}
+
+			if ($idZona) {
 				$this->Session->setFlash(__('La zona ha sido guardada.'), 'default', array('class' => 'alert alert-success'));
 				$this->redirect(array('controller' => 'zonas', 'action' => 'index', 'admin' => true));
 			} else {
 				$this->Session->setFlash(__('La zona no ha sido guardada.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		} else {
-			try {
-				// Get the InventoryService.
-				$inventoryService = $this->instanceDfp()->GetService('InventoryService', 'v201403');
+			//Line items
+			// Log SOAP XML request and response.
+			$this->instanceDfp()->LogDefaults();
 
-				// Set defaults for page and statement.
-				$page = new AdUnitPage();
-				$filterStatement = new Statement();
-				$offset = 0;
-				$adunitsArr = array();
+			// Get the LineItemService.
+			$lineItemService = $this->instanceDfp()->GetService('LineItemService', 'v201403');
+			// Set defaults for page and statement.
+			$page = new LineItemPage();
+			$filterStatement = new Statement();
+			$offset = 0;
 
-				do {
-					// Create a statement to get all ad units.
-					$filterStatement->query = "WHERE status = 'ACTIVE' LIMIT 500 OFFSET " . $offset;
+			do {
+				// Create a statement to get all line items.
+				$filterStatement->query = "WHERE status = 'DELIVERING' OR status = 'DELIVERY_EXTENDED' OR status = 'READY' LIMIT 500 OFFSET " . $offset;
+		
+				// Get line items by statement.
+				$page = $lineItemService->getLineItemsByStatement($filterStatement);
 
-					// Get creatives by statement.
-					$page = $inventoryService->getAdUnitsByStatement($filterStatement);
-
-					// Display results.
-					if (isset($page->results)) {
-						$i = $page->startIndex;
-						foreach ($page->results as $adUnit) {
-							if ($adUnit->status != 'ARCHIVED') {
-								$adunitsArr[$adUnit->id] = $adUnit->name . '[' . $adUnit->status . ']';
-								// pr( $i . ') Ad unit with ID "' . $adUnit->id
-								// 	. '", name "' . $adUnit->name
-								// 	. '", and status "' . $adUnit->status . "\" was found." );
-								// $i++;	
+				// Display results.
+				if (isset($page->results)) {
+					foreach ($page->results as $lineItem) {
+						$linesAll[$lineItem->id]['name'] = $lineItem->name;
+						if (count($lineItem->targeting->inventoryTargeting->targetedAdUnits) > 0) {
+							foreach ($lineItem->targeting->inventoryTargeting->targetedAdUnits as $key => $target) { 
+								$linesAll[$lineItem->id]['adunits'][] = $target->adUnitId;
 							}
 						}
 					}
+				}
 
-					$offset += 500;
-				} while ($offset < $page->totalResultSetSize);
-			} catch (OAuth2Exception $e) {
-				$this->Session->write('redirect_url', $this->request->url);
-				$this->redirect(array('controller' => 'users', 'action' => 'call_oauth', 'admin' => false));
-
-			} catch (ValidationException $e) {
-				#ExampleUtils::CheckForOAuth2Errors($e);
-			} catch (Exception $e) {
-				print $e->getMessage() . "\n";
+				$offset += 500;
+			} while ($offset < $page->totalResultSetSize);
+			
+			if ($linesAll) {
+				foreach ($linesAll as $key => $line) {
+					$adunitsPieces = implode(',', $line['adunits']);
+					$lineList[$line['name'] . ',' . $key . ',' . $adunitsPieces] = $line['name'];
+				}
+			} else {
+				$lineList = array();
 			}
-
-
-
-			$sites = $this->Site->find('list');
-			$this->set('adunits', $adunitsArr);
 		}
 		
-		#$adUnits = $this->Zona->AdUnit->find('list');
-		$this->set(compact('sites', 'adUnits', 'cantidad_zonas'));
+		$plugins_id = $this->Plugin->find('list');
+		$this->set(compact('plugins_id', 'lineList'));
 	}
 
 /**
@@ -313,67 +332,129 @@ class ZonasController extends AppController {
 		if (!$this->Zona->exists($id)) {
 			throw new NotFoundException(__('Invalid zona'));
 		}
-		if ($this->request->is(array('post', 'put'))) {
-			if ($this->Zona->save($this->request->data)) {
-				$this->Session->setFlash(__('The zona has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+		if ($this->request->is(array('post', 'put'))) {	
+			$data = $this->request->data;
+
+			/*
+			Line Item Save
+			 */
+			$dataLineItem = $data['line_item'];
+			$tmpArrLineItem = explode(',', $dataLineItem);
+			$existsLine = $this->LineItem->find('first', array('conditions' => array('LineItem.line_id_dfp' => $tmpArrLineItem[1])));
+			if (!$existsLine) {
+				$toSaveLine = array(
+						'name' => $tmpArrLineItem[0],
+						'line_id_dfp' => $tmpArrLineItem[1]
+					);
+				$this->LineItem->create();
+				$savedLine = $this->LineItem->save($toSaveLine);
+				$idLineItem = $savedLine['LineItem']['id'];
 			} else {
-				$this->Session->setFlash(__('The zona could not be saved. Please, try again.'));
+				$idLineItem = $existsLine['LineItem']['id'];
+			}
+			
+			/*
+			Ad Units Save
+			 */
+			$dataAdUnit = $data['ad_unit'];
+			$tmpArrAdUnit = explode('|', $dataAdUnit);
+			$existsAdUnit = $this->AdUnit->find('first', array('conditions' => array('AdUnit.adunit_id_dfp' => $tmpArrAdUnit[1])));
+			if (!$existsAdUnit) {
+				$toSaveAdunit = array(
+						'name' => $tmpArrAdUnit[0],
+						'adunit_id_dfp' => $tmpArrAdUnit[1]
+					);
+				$this->AdUnit->create();
+				$savedAdunit = $this->AdUnit->save($toSaveAdunit);
+				$idAdunit = $savedAdunit['AdUnit']['id'];
+			} else {
+				$idAdunit = $existsAdUnit['AdUnit']['id'];
+			}
+
+			/*
+			Guardar Asociacion Adunits - LinItems
+			 */
+			if ($idLineItem && $idAdunit) {
+				$existsLineAdUnit = $this->LineItemsAdUnit->find('first', array('conditions' => array('LineItemsAdUnit.line_items_id' => $idLineItem, 'LineItemsAdUnit.ad_units_id' => $idAdunit)));
+				if (!$existsLineAdUnit) {
+					$this->LineItemsAdUnit->create();
+					$this->LineItemsAdUnit->save(array(
+							'line_items_id' => $idLineItem,
+							'ad_units_id' => $idAdunit
+						));
+				}
+			}
+
+			/*
+			Guardar datos Zona
+			 */
+			if ($data['plugins_id']) {
+				#Verificar id_tag_template
+				$id_tag_template = (substr($data['Zona']['id_tag_template'], 0, 1) === "#")  ? $data['Zona']['id_tag_template'] : '#' . $data['Zona']['id_tag_template'];
+				$toSaveZona = array(
+						'name' => $data['Zona']['name'],
+						'id_tag_template' => $id_tag_template,
+						'plugins_id' => $data['plugins_id'],
+						'ad_units_id' => $idAdunit
+					);
+				$this->Zona->id = $id;
+				$savedZona = $this->Zona->save($toSaveZona);
+			}
+
+			if ($savedZona) {
+				$this->Session->setFlash(__('La zona ha sido actualizada.'), 'default', array('class' => 'alert alert-success'));
+				$this->redirect(array('controller' => 'zonas', 'action' => 'index', 'admin' => true));
+			} else {
+				$this->Session->setFlash(__('La zona no ha sido actualizada.'), 'default', array('class' => 'alert alert-danger'));
 			}
 		} else {
 			$options = array('conditions' => array('Zona.' . $this->Zona->primaryKey => $id));
 			$zonaInfo = $this->request->data = $this->Zona->find('first', $options);
 
-			try {
-				// Get the InventoryService.
-				$inventoryService = $this->instanceDfp()->GetService('InventoryService', 'v201403');
+			//Line items
+			// Log SOAP XML request and response.
+			$this->instanceDfp()->LogDefaults();
 
-				// Set defaults for page and statement.
-				$page = new AdUnitPage();
-				$filterStatement = new Statement();
-				$offset = 0;
-				$adunitsArr = array();
+			// Get the LineItemService.
+			$lineItemService = $this->instanceDfp()->GetService('LineItemService', 'v201403');
+			// Set defaults for page and statement.
+			$page = new LineItemPage();
+			$filterStatement = new Statement();
+			$offset = 0;
 
-				do {
-					// Create a statement to get all ad units.
-					$filterStatement->query = "WHERE status = 'ACTIVE' LIMIT 500 OFFSET " . $offset;
+			do {
+				// Create a statement to get all line items.
+				$filterStatement->query = "WHERE status = 'DELIVERING' OR status = 'DELIVERY_EXTENDED' OR status = 'READY' LIMIT 500 OFFSET " . $offset;
+		
+				// Get line items by statement.
+				$page = $lineItemService->getLineItemsByStatement($filterStatement);
 
-					// Get creatives by statement.
-					$page = $inventoryService->getAdUnitsByStatement($filterStatement);
-
-					// Display results.
-					if (isset($page->results)) {
-						$i = $page->startIndex;
-						foreach ($page->results as $adUnit) {
-							if ($adUnit->status != 'ARCHIVED') {
-								$adunitsArr[$adUnit->id] = $adUnit->name . '[' . $adUnit->status . ']';
-								// pr( $i . ') Ad unit with ID "' . $adUnit->id
-								// 	. '", name "' . $adUnit->name
-								// 	. '", and status "' . $adUnit->status . "\" was found." );
-								// $i++;	
+				// Display results.
+				if (isset($page->results)) {
+					foreach ($page->results as $lineItem) {
+						$linesAll[$lineItem->id]['name'] = $lineItem->name;
+						if (count($lineItem->targeting->inventoryTargeting->targetedAdUnits) > 0) {
+							foreach ($lineItem->targeting->inventoryTargeting->targetedAdUnits as $key => $target) { 
+								$linesAll[$lineItem->id]['adunits'][] = $target->adUnitId;
 							}
 						}
 					}
+				}
 
-					$offset += 500;
-				} while ($offset < $page->totalResultSetSize);
-			} catch (OAuth2Exception $e) {
-				$this->Session->write('redirect_url', $this->request->url);
-				$this->redirect(array('controller' => 'users', 'action' => 'call_oauth', 'admin' => false));
-
-			} catch (ValidationException $e) {
-				#ExampleUtils::CheckForOAuth2Errors($e);
-			} catch (Exception $e) {
-				print $e->getMessage() . "\n";
+				$offset += 500;
+			} while ($offset < $page->totalResultSetSize);
+			
+			if ($linesAll) {
+				foreach ($linesAll as $key => $line) {
+					$adunitsPieces = implode(',', $line['adunits']);
+					$lineList[$line['name'] . ',' . $key . ',' . $adunitsPieces] = $line['name'];
+				}
+			} else {
+				$lineList = array();
 			}
-
-
-
-			$sites = $this->Site->find('list');
-			$this->set('adunits', $adunitsArr);
 		}
-		$sites = $this->Site->find('list');
-		$this->set(compact('sites', 'zonaInfo'));
+		$plugins_id = $this->Plugin->find('list');
+		$this->set(compact('plugins_id', 'lineList', 'zonaInfo'));
 	}
 
 /**
@@ -390,9 +471,9 @@ class ZonasController extends AppController {
 		}
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->Zona->delete()) {
-			$this->Session->setFlash(__('The zona has been deleted.'));
+			$this->Session->setFlash(__('La zona ha sido eliminada.'), 'default', array('class' => 'alert alert-success'));
 		} else {
-			$this->Session->setFlash(__('The zona could not be deleted. Please, try again.'));
+			$this->Session->setFlash(__('La zona no ha sido eliminada.'), 'default', array('class' => 'alert alert-danger'));
 		}
 		return $this->redirect(array('action' => 'index'));
 	}

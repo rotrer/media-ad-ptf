@@ -28,18 +28,28 @@
 
 <!-- Select Basic -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="adunit">AdUnit</label>
+  <label class="col-md-4 control-label" for="adunit">Línea Pedido</label>
   <div class="col-md-6">
-  	<?php echo $this->Form->input('adunit', array('empty' => 'Seleccione', 'selected' => $zonaInfo['AdUnit'][0]['id'], 'class' => "form-control adunit_sel_single", 'required' => "required")); ?>
-  	<?php echo $this->Form->input('adunit_name', array('type' => 'hidden')); ?>
+    <?php echo $this->Form->input(null, array('name' => 'line_item', 'options' => $lineList, 'type' => 'select' ,'empty' => 'Seleccione', 'class' => "form-control selectedLine", 'required' => "required")); ?>
   </div>
 </div>
 
 <!-- Select Basic -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="site">Sitio</label>
+  <label class="col-md-4 control-label" for="adunit">AdUnit</label>
   <div class="col-md-6">
-    <?php echo $this->Form->input('site', array('empty' => 'Seleccione', 'selected' => $zonaInfo['Sites']['id'], 'class' => "form-control", 'required' => "required")); ?>
+  	<div class="wait-select" style="float:left; display:none;">
+      <?php echo $this->Html->image('spinner.gif', array('alt' => 'Wait')); ?>
+    </div>
+    <?php echo $this->Form->input(null, array('name' => 'ad_unit', 'options' => '', 'type' => 'select', 'empty' => 'Seleccione', 'class' => "form-control", 'required' => "required")); ?>
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="site">Plugin</label>
+  <div class="col-md-6">
+    <?php echo $this->Form->input('plugins_id', array('options' => $plugins_id, 'selected' => $zonaInfo['Zona']['plugins_id'], 'empty' => 'Seleccione', 'class' => "form-control", 'required' => "required")); ?>
   </div>
 </div>
 

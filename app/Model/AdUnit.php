@@ -4,7 +4,6 @@ App::uses('AppModel', 'Model');
  * AdUnit Model
  *
  * @property LineItem $LineItem
- * @property Zona $Zona
  */
 class AdUnit extends AppModel {
 
@@ -31,9 +30,9 @@ class AdUnit extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'created' => array(
-			'datetime' => array(
-				'rule' => array('datetime'),
+		'adunit_id_dfp' => array(
+			'numeric' => array(
+				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -56,19 +55,6 @@ class AdUnit extends AppModel {
 			'joinTable' => 'line_items_ad_units',
 			'foreignKey' => 'ad_units_id',
 			'associationForeignKey' => 'line_items_id',
-			'unique' => 'keepExisting',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-		),
-		'Zona' => array(
-			'className' => 'Zona',
-			'joinTable' => 'zonas_ad_units',
-			'foreignKey' => 'ad_units_id',
-			'associationForeignKey' => 'zonas_id',
 			'unique' => 'keepExisting',
 			'conditions' => '',
 			'fields' => '',
