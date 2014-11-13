@@ -63,7 +63,16 @@ class PluginsController extends AppController {
 			throw new NotFoundException(__('Invalid plugin'));
 		}
 		$options = array('conditions' => array('Plugin.' . $this->Plugin->primaryKey => $id));
-		$this->set('plugin', $this->Plugin->find('first', $options)); var_dump($this->Plugin->find('first', $options)); die();
+		$plugin = $this->Plugin->find('first', $options);
+
+		$zonasInfo = $this->Zona->find('all', array('conditions' => array('Zona.plugins_id' => $id)));
+
+		if($zonasInfo) foreach ($zonasInfo as $key => $zona) {
+			$lineItemInfo = $this->LineItemsAdUnit->find('first', array('conditions' => array('LineItemsAdUnit.ad_units_id' => $zona['AdUnits']['id'])));
+			$zonasLineInfo[] = array_merge($zona, $lineItemInfo);
+		}
+
+		$this->set(compact('plugin', 'zonasLineInfo'));
 	}
 
 /**
@@ -293,8 +302,8 @@ class PluginsController extends AppController {
 						<div class="form-group">
 
   						<select name="line_item[]" class="form-control selectedLine" required="required" id="PluginSitesId">
-<option value="">Seleccione</option>' . $listLines . '
-</select>						</div>
+								<option value="">Seleccione</option>' . $listLines . '
+							</select>						</div>
 					</div>
 					<div class="col-md-3">
 						<div class="wait-select" style="float: left; display: none;">
@@ -302,8 +311,8 @@ class PluginsController extends AppController {
 			  		</div>
 						<div class="form-group">
   						<select name="ad_unit[]" class="form-control" required="required" id="PluginSitesId">
-<option value="">Seleccione</option>
-</select>						</div>
+								<option value="">Seleccione</option>
+							</select>						</div>
 					</div>
 					<div class="col-md-3">
 						<div class="form-group">
