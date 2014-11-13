@@ -14,7 +14,7 @@ class PluginsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Plugin', 'Site', 'User', 'AdOrder', 'LineItem', 'Zona');
+	public $uses = array('Plugin', 'Site', 'User', 'LineItem', 'LineItemsAdUnit', 'AdUnit', 'ZonasAdUnit', 'Zona');
  /**
  * Components
  *
@@ -73,13 +73,69 @@ class PluginsController extends AppController {
  */
 	public function admin_add() {
 		if ($this->request->is('post')) {
+			var_dump($this->request->data);
 			$this->Plugin->create();
-			if ($this->Plugin->save($this->request->data)) {
+			$savedPlugin = $this->Plugin->save($this->request->data);
+			if ($savedPlugin) {
+				// var_dump($savedPlugin);
+				$data = $this->request->data;
+				for ($i=0; $i < count($data['line_item']); $i++) { 
+					/*
+					Line Item Save
+					 */
+					$dataLineItem = $data['line_item'][$i];
+					$tmpArrLineItem = explode(',', $dataLineItem);
+					$existsLine = $this->LineItem->find('first', array('conditions' => array('LineItem.line_id_dfp' => $tmpArrLineItem[1])));
+					if (!$existsLine) {
+						$toSaveLine = array(
+								'name' => $tmpArrLineItem[0],
+								'line_id_dfp' => $tmpArrLineItem[1]
+							);
+						$this->LineItem->create();
+						$savedLine = $this->LineItem->save($toSaveLine);
+						$idLineItem = $savedLine['LineItem']['id'];
+					} else {
+						$idLineItem = $existsLine['LineItem']['id'];
+					}
+					
+					/*
+					Ad Units Save
+					 */
+					$dataAdUnit = $data['ad_unit'][$i];
+					$tmpArrAdUnit = explode('|', $dataAdUnit);
+					$existsAdUnit = $this->AdUnit->find('first', array('conditions' => array('AdUnit.adunit_id_dfp' => $tmpArrAdUnit[1])));
+					if (!$existsAdUnit) {
+						$toSaveAdunit = array(
+								'name' => $tmpArrAdUnit[0],
+								'adunit_id_dfp' => $tmpArrAdUnit[1]
+							);
+						$this->AdUnit->create();
+						$savedAdunit = $this->AdUnit->save($toSaveAdunit);
+						$idAdunit = $savedAdunit['AdUnit']['id'];
+					} else {
+						$idAdunit = $existsAdUnit['AdUnit']['id'];
+					}
+
+					/*
+					Guardar Asociacion Adunits - LinItems
+					 */
+					if ($idLineItem && $idAdunit) {
+						$existsLineAdUnit = $this->LineItemsAdUnit->find('first', array('conditions' => array('LineItemsAdUnit.line_items_id' => $idLineItem, 'LineItemsAdUnit.ad_units_id' => $idAdunit)));
+						if (!$existsLineAdUnit) {
+							$this->LineItemsAdUnit->create();
+							$this->LineItemsAdUnit->save(array(
+									'line_items_id' => $idLineItem,
+									'ad_units_id' => $idAdunit
+								));
+						}
+					}
+				}
 				$this->Session->setFlash(__('The plugin has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				// return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The plugin could not be saved. Please, try again.'));
 			}
+			die();
 		}
 
 		//Line items
@@ -118,7 +174,7 @@ class PluginsController extends AppController {
 		if ($linesAll) {
 			foreach ($linesAll as $key => $line) {
 				$adunitsPieces = implode(',', $line['adunits']);
-				$lineList[$key . ',' . $adunitsPieces] = $line['name'];
+				$lineList[$line['name'] . ',' . $key . ',' . $adunitsPieces] = $line['name'];
 			}
 		} else {
 			$lineList = array();
@@ -200,8 +256,8 @@ class PluginsController extends AppController {
 			// Display results.
 			if (isset($page->results)) {
 				$listLines = '';
-				$adunitsLine = array();
 				foreach ($page->results as $lineItem) {
+					$adunitsLine = array();
 					if (count($lineItem->targeting->inventoryTargeting->targetedAdUnits) > 0) {
 						foreach ($lineItem->targeting->inventoryTargeting->targetedAdUnits as $key => $target) { 
 							$adunitsLine[] = $target->adUnitId;
@@ -209,7 +265,7 @@ class PluginsController extends AppController {
 
 						$adunitsPieces = implode(',', $adunitsLine);
 					}
-					$listLines .= '<option value="' . $lineItem->id . ',' . $adunitsPieces . '">' . $lineItem->name . '</option>';
+					$listLines .= '<option value="' . $lineItem->name . ',' . $lineItem->id . ',' . $adunitsPieces . '">' . $lineItem->name . '</option>';
 				}
 			}
 
@@ -225,6 +281,9 @@ class PluginsController extends AppController {
 </select>						</div>
 					</div>
 					<div class="col-md-3">
+						<div class="wait-select" style="float: left; display: none;">
+				  		<img src="/img/spinner.gif" alt="Wait">
+			  		</div>
 						<div class="form-group">
   						<select name="ad_unit[]" class="form-control" required="required" id="PluginSitesId">
 <option value="">Seleccione</option>
@@ -249,8 +308,12 @@ class PluginsController extends AppController {
 	public function admin_getadunits(){
 		$this->layout = 'ajax';
 		if ($this->request->is(array('post', 'get'))) {
-			$adunitsArr = $this->request->data['adunits'];
-			// $adunitsArr = '92828173,92827693,92827933,92827813';
+			$adunitsArr = $this->request->data['adunits']; 
+			$tmpAdUnits = explode(',', $adunitsArr);
+			#Remover Nombre y ID Line Item, solo dejar adunits
+			unset($tmpAdUnits[0]);
+			unset($tmpAdUnits[1]);
+			$adunitsArr = (count($tmpAdUnits) > 0) ? implode(',', $tmpAdUnits) : '';
 			if (!empty($adunitsArr)) {
 				// Log SOAP XML request and response.
 				$this->instanceDfp()->LogDefaults();
@@ -278,7 +341,7 @@ class PluginsController extends AppController {
 				if (isset($page->results)) {
 					foreach ($page->results as $adUnit) {
 						if ($adUnit->status != 'ARCHIVED') {
-							$adunitsList .= '<option value="'. $adUnit->id .'">' . $adUnit->name . '[' . $adUnit->status . ']' . '</option>';
+							$adunitsList .= '<option value="'. $adUnit->name . '|' . $adUnit->id .'">' . $adUnit->name . '[' . $adUnit->status . ']' . '</option>';
 						}
 					}
 				}

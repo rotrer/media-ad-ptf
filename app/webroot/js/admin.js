@@ -66,28 +66,44 @@
         });
       });
       $("#newZona").click(function() {
+        var self;
+        self = $(this);
         $.ajax({
           url: APP_JQ + "/admin/plugins/addzona",
           type: "GET",
           data: "",
-          beforeSend: function() {},
+          beforeSend: function() {
+            $('.wait-agregar').show();
+            return self.prop('disabled', true);
+          },
           success: function(results) {
-            return $('.addZona').append(results);
+            $('.addZona').append(results);
+            $('.wait-agregar').hide();
+            return self.prop('disabled', false);
+          },
+          fail: function() {
+            self.prop('disabled', false);
+            return alert('Error, favor intentar nuevamente');
           }
         });
         return false;
       });
       return $(document).on("change", ".selectedLine", function() {
-        var adunits, selectTarget;
+        var adunits, selectTarget, waitSelected;
         adunits = $(this);
         selectTarget = adunits.parent().parent().next().find('select');
+        waitSelected = adunits.parent().parent().next().find('.wait-select');
         return $.ajax({
           url: APP_JQ + "/admin/plugins/getadunits",
           type: "POST",
           data: "adunits=" + adunits.val(),
-          beforeSend: function() {},
+          beforeSend: function() {
+            waitSelected.show();
+            return selectTarget.hide();
+          },
           success: function(results) {
-            console.log(results);
+            waitSelected.hide();
+            selectTarget.show();
             if (results !== "") {
               return selectTarget.empty().html(results);
             } else {

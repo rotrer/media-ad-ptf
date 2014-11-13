@@ -52,27 +52,37 @@ window.main =
 						$('.check_email').empty().html("El correo ingresado ya se encuentra utilizado.").show()
 
 		$("#newZona").click () ->
+			self = $(this)
 			$.ajax
 				url: APP_JQ + "/admin/plugins/addzona"
 				type: "GET"
 				data: ""
 				beforeSend: ->
-
+					$('.wait-agregar').show()
+					self.prop('disabled', true)
 				success: (results) ->
 					$('.addZona').append results;
+					$('.wait-agregar').hide()
+					self.prop('disabled', false)
+				fail: ->
+					self.prop('disabled', false)
+					alert	'Error, favor intentar nuevamente'
 			return false
 
 		$(document).on "change", ".selectedLine", ->
 			adunits = $(this)
 			selectTarget = adunits.parent().parent().next().find('select')
+			waitSelected = adunits.parent().parent().next().find('.wait-select')
 			$.ajax
 				url: APP_JQ + "/admin/plugins/getadunits"
 				type: "POST"
 				data: "adunits=" + adunits.val()
 				beforeSend: ->
-					
+					waitSelected.show()
+					selectTarget.hide()
 				success: (results) ->
-					console.log results;
+					waitSelected.hide()
+					selectTarget.show()
 					unless results is ""
 						selectTarget.empty().html(results)
 					else

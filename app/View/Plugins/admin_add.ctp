@@ -39,10 +39,10 @@
 					<div class="col-md-3">
 						<!-- Button -->
 						<div class="form-group pull-right">
-						  <label class="col-md-4 control-label" for="enviar"></label>
-						  <div class="col-md-4">
-						    <button id="newZona" name="enviar" class="btn btn-info btn-xs">Agregar</button>
-						  </div>
+					  	<div class="wait-agregar" style="float:left; display:none;">
+					  		<?php echo $this->Html->image('spinner.gif', array('alt' => 'Wait')); ?>
+					  	</div>
+					    <button id="newZona" name="enviar" class="btn btn-info btn-xs">Agregar</button>
 						</div>
 					</div>
 				</div>
@@ -61,6 +61,9 @@
 						</div>
 					</div>
 					<div class="col-md-3">
+						<div class="wait-select" style="float:left; display:none;">
+				  		<?php echo $this->Html->image('spinner.gif', array('alt' => 'Wait')); ?>
+				  	</div>
 						<div class="form-group">
   						<?php echo $this->Form->input(null, array('name' => 'ad_unit[]', 'options' => '', 'type' => 'select', 'empty' => 'Seleccione', 'class' => "form-control", 'required' => "required")); ?>
 						</div>
@@ -94,7 +97,7 @@
 				<div class="form-group pull-right">
 				  <label class="col-md-4 control-label" for="enviar"></label>
 				  <div class="col-md-4">
-				    <button id="enviar" name="enviar" class="btn btn-primary">Continuar</button>
+				    <button id="enviar" name="enviar" class="btn btn-primary">Guardar</button>
 				  </div>
 				</div>
 			</div>
