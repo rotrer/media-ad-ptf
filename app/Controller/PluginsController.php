@@ -73,11 +73,10 @@ class PluginsController extends AppController {
  */
 	public function admin_add() {
 		if ($this->request->is('post')) {
-			var_dump($this->request->data);
 			$this->Plugin->create();
 			$savedPlugin = $this->Plugin->save($this->request->data);
 			if ($savedPlugin) {
-				// var_dump($savedPlugin);
+				$idPlugin = $savedPlugin['Plugin']['id'];
 				$data = $this->request->data;
 				for ($i=0; $i < count($data['line_item']); $i++) { 
 					/*
@@ -129,13 +128,42 @@ class PluginsController extends AppController {
 								));
 						}
 					}
+
+					/*
+					Guardar datos Zona
+					 */
+					if ($idPlugin) {
+						#Verificar id_tag_template
+						$id_tag_template = (substr($data['id_tag_template'][$i], 0, 1) === "#")  ? $data['id_tag_template'][$i] : '#' . $data['id_tag_template'][$i];
+						$toSaveZona = array(
+								'name' => $data['zona_name'][$i],
+								'id_tag_template' => $id_tag_template,
+								'plugins_id' => $idPlugin,
+							);
+						$this->Zona->create();
+						$savedZona = $this->Zona->save($toSaveZona);
+						$idZona = $savedZona['Zona']['id'];
+					}
+
+					/*
+					Guardar Asociacion Adunits - Zonas
+					 */
+					if ($idAdunit && $idZona) {
+						$existsZonaAdUnit = $this->ZonasAdUnit->find('first', array('conditions' => array('ZonasAdUnit.zonas_id' => $idZona, 'ZonasAdUnit.ad_units_id' => $idAdunit)));
+						if (!$existsZonaAdUnit) {
+							$this->ZonasAdUnit->create();
+							$this->ZonasAdUnit->save(array(
+									'zonas_id' => $idZona,
+									'ad_units_id' => $idAdunit
+								));
+						}
+					}
 				}
-				$this->Session->setFlash(__('The plugin has been saved.'));
-				// return $this->redirect(array('action' => 'index'));
+				$this->Session->setFlash(__('Plugin ha sido guardado correctamente.'), 'default', array('class' => 'alert alert-success'));
+				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The plugin could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('Plugin no ha sido guardado, favor intentar nuevamente.'), 'default', array('class' => 'alert alert-danger'));
 			}
-			die();
 		}
 
 		//Line items

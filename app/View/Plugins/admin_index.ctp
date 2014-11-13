@@ -1,52 +1,46 @@
-<div class="plugins index">
-	<h2><?php echo __('Plugins'); ?></h2>
-	<table cellpadding="0" cellspacing="0">
-	<thead>
-	<tr>
-			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('sites_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('created'); ?></th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
-	</tr>
-	</thead>
-	<tbody>
-	<?php foreach ($plugins as $plugin): ?>
-	<tr>
-		<td><?php echo h($plugin['Plugin']['id']); ?>&nbsp;</td>
-		<td>
-			<?php echo $this->Html->link($plugin['Sites']['name'], array('controller' => 'sites', 'action' => 'view', $plugin['Sites']['id'])); ?>
-		</td>
-		<td><?php echo h($plugin['Plugin']['created']); ?>&nbsp;</td>
-		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $plugin['Plugin']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $plugin['Plugin']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $plugin['Plugin']['id']), array(), __('Are you sure you want to delete # %s?', $plugin['Plugin']['id'])); ?>
-		</td>
-	</tr>
-<?php endforeach; ?>
-	</tbody>
+<h2 class="sub-header"><?php echo __('Plugins'); ?></h2>
+<div class="table-responsive">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th><?php echo $this->Paginator->sort('name', 'Nombre'); ?></th>
+				<th><?php echo $this->Paginator->sort('sites_id', 'Sitio Asociado'); ?></th>
+				<th><?php echo $this->Paginator->sort('created', 'Fecha registro'); ?></th>
+				<th class="actions"><?php echo __('Acciones'); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ($plugins as $plugin): ?>
+			<tr>
+				<td><?php echo h($plugin['Plugin']['name']); ?>&nbsp;</td>
+				<td><?php echo $this->Html->link($plugin['Sites']['name'], array('controller' => 'sites', 'action' => 'view', $plugin['Sites']['id'])); ?>&nbsp;</td>
+				<td><?php echo date('d-m-Y', strtotime($plugin['Plugin']['created'])); ?>&nbsp;</td>
+				<td>
+					<div class="btn-group">
+						<?php echo $this->Html->link(__('Descargar'), array('controller' => 'plugins', 'action' => 'download', $plugin['Plugin']['id']), array('class' => 'btn btn-default', 'role' => 'button')); ?>
+						<?php echo $this->Html->link(__('Ver'), array('action' => 'view', $plugin['Plugin']['id']), array('class' => 'btn btn-default', 'role' => 'button')); ?>
+						<?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $plugin['Plugin']['id']), array('class' => 'btn btn-default', 'role' => 'button')); ?>
+						<?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $plugin['Plugin']['id']), array('class' => 'btn btn-danger', 'role' => 'button'), __('Seguro desea eliminar %s?', $plugin['Plugin']['name'])); ?>
+					</div>
+				</td>
+			</tr>
+			<?php endforeach; ?>
+		</tbody>
 	</table>
-	<p>
+	<!-- <p>
 	<?php
 	echo $this->Paginator->counter(array(
-	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
+	'format' => __('Página {:page} de {:pages}, mostrando {:current} registro de {:count} total, empieza con {:start}, finaliza con {:end}')
 	));
-	?>	</p>
+	?>	</p> -->
+	<nav>
+	  <ul class="pager">
+	    <li><?php echo $this->Paginator->prev('< ' . __('Anterior'), array(), null, array('class' => 'prev disabled')); ?></li>
+	    <!-- <li><?php #echo $this->Paginator->numbers(array('separator' => '')); ?></li> -->
+	    <li><?php echo $this->Paginator->next(__('Siguiente') . ' >', array(), null, array('class' => 'next disabled')); ?></li>
+	  </ul>
+	</nav>
 	<div class="paging">
-	<?php
-		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
-	?>
+	
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Plugin'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Sites'), array('controller' => 'sites', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Sites'), array('controller' => 'sites', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Ad Orders'), array('controller' => 'ad_orders', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Ad Order'), array('controller' => 'ad_orders', 'action' => 'add')); ?> </li>
-	</ul>
 </div>
