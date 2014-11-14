@@ -69,6 +69,23 @@ window.main =
 					alert	'Error, favor intentar nuevamente'
 			return false
 
+		$(document).on "click", ".removeRow", ->
+			$(this).parent().parent().remove()
+
+		$(document).on "click", ".zonaDelete", ->
+			zona = $(this)
+			$.ajax
+				url: APP_JQ + "/admin/zonas/delete_async/" + zona.attr('data-zona')
+				type: "POST"
+				data: ""
+				beforeSend: ->
+
+				success: (results) ->
+					unless results.response is "1"
+						zona.parent().parent().remove()
+					else
+						alert "error al eliminar zona"
+		
 		$(document).on "change", ".selectedLine", ->
 			adunits = $(this)
 			selectTarget = adunits.parent().parent().next().find('select')

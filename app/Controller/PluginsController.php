@@ -221,19 +221,146 @@ class PluginsController extends AppController {
 			throw new NotFoundException(__('Invalid plugin'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
-			if ($this->Plugin->save($this->request->data)) {
-				$this->Session->setFlash(__('The plugin has been saved.'));
+			
+			$this->Plugin->id = $id;
+			$savedPlugin = $this->Plugin->save($this->request->data);
+			if ($savedPlugin) {
+				$idPlugin = $id;
+				$data = $this->request->data;
+				for ($i=0; $i < count($data['line_item']); $i++) { 
+					/*
+					Line Item Save
+					 */
+					$dataLineItem = $data['line_item'][$i];
+					$tmpArrLineItem = explode(',', $dataLineItem);
+					$existsLine = $this->LineItem->find('first', array('conditions' => array('LineItem.line_id_dfp' => $tmpArrLineItem[1])));
+					if (!$existsLine) {
+						$toSaveLine = array(
+								'name' => $tmpArrLineItem[0],
+								'line_id_dfp' => $tmpArrLineItem[1]
+							);
+						$this->LineItem->create();
+						$savedLine = $this->LineItem->save($toSaveLine);
+						$idLineItem = $savedLine['LineItem']['id'];
+					} else {
+						$idLineItem = $existsLine['LineItem']['id'];
+					}
+					
+					/*
+					Ad Units Save
+					 */
+					$dataAdUnit = $data['ad_unit'][$i];
+					$tmpArrAdUnit = explode('|', $dataAdUnit);
+					$existsAdUnit = $this->AdUnit->find('first', array('conditions' => array('AdUnit.adunit_id_dfp' => $tmpArrAdUnit[1])));
+					if (!$existsAdUnit) {
+						$toSaveAdunit = array(
+								'name' => $tmpArrAdUnit[0],
+								'adunit_id_dfp' => $tmpArrAdUnit[1]
+							);
+						$this->AdUnit->create();
+						$savedAdunit = $this->AdUnit->save($toSaveAdunit);
+						$idAdunit = $savedAdunit['AdUnit']['id'];
+					} else {
+						$idAdunit = $existsAdUnit['AdUnit']['id'];
+					}
+
+					/*
+					Guardar Asociacion Adunits - LinItems
+					 */
+					if ($idLineItem && $idAdunit) {
+						$existsLineAdUnit = $this->LineItemsAdUnit->find('first', array('conditions' => array('LineItemsAdUnit.line_items_id' => $idLineItem, 'LineItemsAdUnit.ad_units_id' => $idAdunit)));
+						if (!$existsLineAdUnit) {
+							$this->LineItemsAdUnit->create();
+							$this->LineItemsAdUnit->save(array(
+									'line_items_id' => $idLineItem,
+									'ad_units_id' => $idAdunit
+								));
+						}
+					}
+
+					/*
+					Guardar datos Zona
+					 */
+					if ($idPlugin) {
+						#Verificar id_tag_template
+						$id_tag_template = (substr($data['id_tag_template'][$i], 0, 1) === "#")  ? $data['id_tag_template'][$i] : '#' . $data['id_tag_template'][$i];
+						$toSaveZona = array(
+								'name' => $data['zona_name'][$i],
+								'id_tag_template' => $id_tag_template,
+								'plugins_id' => $idPlugin,
+								'ad_units_id' => $idAdunit
+							);
+						if (isset($data['zona_id'][$i]) && !empty($data['zona_id'][$i])) {
+							$this->Zona->id = $data['zona_id'][$i];
+						} else {
+							$this->Zona->create();
+						}
+						$savedZona = $this->Zona->save($toSaveZona);
+					}
+
+				}
+				$this->Session->setFlash(__('Plugin ha sido actualizado correctamente.'), 'default', array('class' => 'alert alert-success'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The plugin could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('Plugin no ha sido actualizado, favor intentar nuevamente.'), 'default', array('class' => 'alert alert-danger'));
+			}
+		}
+
+		$options = array('conditions' => array('Plugin.' . $this->Plugin->primaryKey => $id));
+		$plugin = $this->Plugin->find('first', $options);
+
+		$zonasInfo = $this->Zona->find('all', array('conditions' => array('Zona.plugins_id' => $id)));
+
+		if($zonasInfo) foreach ($zonasInfo as $key => $zona) {
+			$lineItemInfo = $this->LineItemsAdUnit->find('first', array('conditions' => array('LineItemsAdUnit.ad_units_id' => $zona['AdUnits']['id'])));
+			$zonasLineInfo[] = array_merge($zona, $lineItemInfo);
+		}
+
+		//Line items
+		// Log SOAP XML request and response.
+		$this->instanceDfp()->LogDefaults();
+
+		// Get the LineItemService.
+		$lineItemService = $this->instanceDfp()->GetService('LineItemService', 'v201403');
+		// Set defaults for page and statement.
+		$page = new LineItemPage();
+		$filterStatement = new Statement();
+		$offset = 0;
+
+		do {
+			// Create a statement to get all line items.
+			$filterStatement->query = "WHERE status = 'DELIVERING' OR status = 'DELIVERY_EXTENDED' OR status = 'READY' LIMIT 500 OFFSET " . $offset;
+	
+			// Get line items by statement.
+			$page = $lineItemService->getLineItemsByStatement($filterStatement);
+
+			// Display results.
+			if (isset($page->results)) {
+				foreach ($page->results as $lineItem) {
+					$linesAll[$lineItem->id]['name'] = $lineItem->name;
+					if (count($lineItem->targeting->inventoryTargeting->targetedAdUnits) > 0) {
+						foreach ($lineItem->targeting->inventoryTargeting->targetedAdUnits as $key => $target) { 
+							$linesAll[$lineItem->id]['adunits'][] = $target->adUnitId;
+						}
+					}
+				}
+			}
+
+			$offset += 500;
+		} while ($offset < $page->totalResultSetSize);
+		
+		if ($linesAll) {
+			foreach ($linesAll as $key => $line) {
+				$adunitsPieces = implode(',', $line['adunits']);
+				$lineList[$line['name'] . ',' . $key . ',' . $adunitsPieces] = $line['name'];
 			}
 		} else {
-			$options = array('conditions' => array('Plugin.' . $this->Plugin->primaryKey => $id));
-			$this->request->data = $this->Plugin->find('first', $options);
+			$lineList = array();
 		}
-		$sites = $this->Plugin->Zona->find('list');
-		$adOrders = $this->Plugin->AdOrder->find('list');
-		$this->set(compact('sites', 'adOrders'));
+
+		$sites = $this->Site->find('list');
+
+		$this->set(compact('plugin', 'zonasLineInfo', 'sites', 'lineList'));
 	}
 
 /**
@@ -321,7 +448,7 @@ class PluginsController extends AppController {
 					<div class="col-md-3">
 						<div class="form-group">
   						<input name="id_tag_template[]" class="form-control" required="required" type="text" id="PluginSitesId">						</div>
-						<button type="button" class="btn btn-danger  pull-right">
+						<button type="button" class="btn btn-danger pull-right removeRow">
 							<span class="glyphicon glyphicon-remove"></span>
 						</button>
 					</div>
@@ -378,5 +505,255 @@ class PluginsController extends AppController {
 		}
 
 		exit();
+	}
+
+	public function admin_download($id = null){
+		if (!$this->Plugin->exists($id)) {
+			throw new NotFoundException(__('Invalid plugin'));
+		}
+
+		if ($this->request->is('post')) {
+			$infoToPlugin = array();
+			$infoToPlugin['id'] 	= $id;
+			$infoToPlugin['unq'] 	= $this->request->data['Plugin']['unq'];
+			$infoToPlugin['sync'] = $this->request->data['Plugin']['sync'];
+
+			if ($infoToPlugin) {
+				try {
+					// Get adunits
+					$zonasAll = $this->Zona->find('all', array('conditions' => array('Zona.plugins_id' => $id)));
+					$plugin = $this->Plugin->find('first', array('conditions' => array('Plugin.' . $this->Plugin->primaryKey => $id))); var_dump($plugin);
+					debug($zonasAll); die();
+					if ($zonasAll) {
+						foreach ($zonasAll as $key => $la_zona) {
+							$infoToPlugin[$la_zona['AdUnit'][0]['id']] = array(
+									'site' => array(
+											'domain' => $la_zona['Sites']['domain'],
+											'public_key' => $la_zona['Sites']['public_key'],
+										),
+									'zona' => array(
+											'name' => $la_zona['Zona']['name'],
+											'id_tag_template' => $la_zona['Zona']['id_tag_template'],
+										),
+									'adunit' => array(
+										)
+								);
+							$adunits_ids_arr[] = $la_zona['AdUnit'][0]['id'];
+						}
+					} else {
+						//Sin zonas...
+					}
+					$adunits_ids = implode(",", $adunits_ids_arr);
+					/*
+					*DFP
+					*/
+					// Log SOAP XML request and response.
+					$this->instanceDfp()->LogDefaults();
+					// Get the InventoryService.
+					$inventoryService = $this->instanceDfp()->GetService('InventoryService', 'v201403');
+
+					// Get the NetworkService.
+	  				$networkService = $this->instanceDfp()->GetService('NetworkService', 'v201403');
+
+					// Get the effective root ad unit's ID.
+					$network = $networkService->getCurrentNetwork();
+					$effectiveRootAdUnitId = $network->effectiveRootAdUnitId;
+
+					//Save network code for plugin WP
+					$infoToPlugin['networkcode'] = $network->networkCode;
+
+					// Create a statement to select the children of the effective root ad unit.
+					$filterStatement =
+						new Statement("WHERE parentId = :id AND status = 'ACTIVE' AND id  IN ($adunits_ids) LIMIT 500",
+										MapUtils::GetMapEntries(array(
+																		'id' => new NumberValue($effectiveRootAdUnitId)
+																	)
+																)
+									);
+
+					// Get ad units by statement.
+					$page = $inventoryService->getAdUnitsByStatement($filterStatement);
+
+					// Display results.
+					if (isset($page->results)) {
+						$i = $page->startIndex;
+						foreach ($page->results as $adUnit) {
+							$sizes_to_unit = array();
+							foreach ($adUnit->adUnitSizes as $key => $sizes) {
+								$sizes_to_unit[] = array(
+										'width' => $sizes->size->width,
+										'height' => $sizes->size->height,
+									);
+							}
+							// Get unit code and unit size
+							$infoToPlugin[$adUnit->id]['adunit'] = array(
+									'adunitcode' => $adUnit->adUnitCode,
+									'sizes' => $sizes_to_unit,
+								);
+						}
+					}
+					
+					//All ok to create zip plugin
+					$fileInfo = $this->createZipPlugin($infoToPlugin);
+					if ($fileInfo) {
+						$filename = basename($fileInfo);
+						header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
+						header("Content-Type: application/zip");
+						header("Content-Transfer-Encoding: Binary");
+						header("Content-Length: ".filesize($fileInfo));
+						header("Content-Disposition: attachment; filename=\"".$filename."\"");
+						@readfile($fileInfo);
+					}
+
+				} catch (OAuth2Exception $e) {
+					$this->Session->write('redirect_url', $this->request->url);
+					$this->redirect(array('controller' => 'users', 'action' => 'call_oauth', 'admin' => false));
+
+				} catch (ValidationException $e) {
+					#ExampleUtils::CheckForOAuth2Errors($e);
+				} catch (Exception $e) {
+					print $e->getMessage() . "\n";
+				}
+				die();
+
+			}//End if ($infoToPlugin) {
+		}
+
+		$options = array('conditions' => array('Plugin.' . $this->Plugin->primaryKey => $id));
+		$plugin = $this->Plugin->find('first', $options);
+
+		$zonasInfo = $this->Zona->find('all', array('conditions' => array('Zona.plugins_id' => $id)));
+
+		if($zonasInfo) foreach ($zonasInfo as $key => $zona) {
+			$lineItemInfo = $this->LineItemsAdUnit->find('first', array('conditions' => array('LineItemsAdUnit.ad_units_id' => $zona['AdUnits']['id'])));
+			$zonasLineInfo[] = array_merge($zona, $lineItemInfo);
+		}
+
+		$this->set(compact('plugin', 'zonasLineInfo'));
+	}
+
+	private function createZipPlugin($info) {
+		// var_dump($info); die();
+		if ($info) {
+			$head_ads_all = $insert_ads_all = '';
+			foreach ($info as $keyad => $ad) {
+				if (isset($ad['adunit']) && is_array($ad['adunit']) && !empty($ad['adunit'])) {
+					$width =  $ad['adunit']['sizes'][0]['width'];
+					$height =  $ad['adunit']['sizes'][0]['height'];
+
+					//read head ads template
+					$adunit_code = $ad['adunit']['adunitcode'];
+					$adunit_size = $width . ',' . $height;
+					$head_ads = WWW_ROOT . 'template' .DS . 'head_ads.txt';
+					$head_ads_content = file_get_contents($head_ads);
+						$find 		= array('{network_code}', '{adunit_code}', '{adunit_size}', '{adunit_id}');
+						$replace 	= array($info['networkcode'], $adunit_code, $adunit_size, $keyad);
+
+					$head_ads_all .= str_replace($find, $replace, $head_ads_content);
+
+					//read inserts ads template
+					$adunit_tag_id = $ad['zona']['id_tag_template'];
+					$insert_ads = WWW_ROOT . 'template' .DS . 'insert_ads.txt';
+					$insert_ads_content = file_get_contents($insert_ads);
+						$find 		= array('{adunit_id}', '{width}', '{height}', '{adunit_tag_id}');
+						$replace 	= array($keyad, $width, $height, $adunit_tag_id);
+
+					$insert_ads_all .= str_replace($find, $replace, $insert_ads_content);
+
+					//domain plugin
+					$domain_plugin = $ad['site']['domain'];
+				}
+			}
+
+			// read sync or async option
+			$sync_request = ($info['sync'] == 1) ? 'sync.txt' : 'async.txt';
+			$sync_file = WWW_ROOT . 'template' .DS . $sync_request;
+			$sync_file_content = file_get_contents($sync_file);
+
+			// replace adunits
+			$sync_file_content = str_replace("{head_ads}", $head_ads_all, $sync_file_content);
+			// replace single request option googletag.pubads().enableSingleRequest();
+			$single_request = ($info['unq'] == 1) ? 'googletag.pubads().enableSingleRequest();' : '';
+			$sync_file_content = str_replace("{single_request}", $single_request, $sync_file_content);
+
+			// read base file plugin
+			$base_plugin = WWW_ROOT . 'template' .DS . 'base.txt';
+			$base_plugin_content = file_get_contents($base_plugin);
+			
+			// reaplace tags on base content
+			$base_plugin_content = str_replace("{domain}", $domain_plugin, $base_plugin_content);
+			$base_plugin_content = str_replace("{insert_ads}", $insert_ads_all, $base_plugin_content);
+			// replace sync and single request options
+			$base_plugin_content = str_replace("{sync_request}", $sync_file_content, $base_plugin_content);
+
+			// create dir plugin
+			$base_path = WWW_ROOT . "plugins";
+			$path_plugin = $base_path . DS . 'mt-' . $domain_plugin;
+
+			// check if dir exists
+			if (!is_dir($path_plugin)) {
+				mkdir($path_plugin);
+			}
+
+			// create file index.php plugin
+			$index_plugin = $path_plugin . DS . $domain_plugin . '.php';
+			if (file_exists($index_plugin)) {
+				unlink($index_plugin);
+			}
+			file_put_contents($index_plugin, $base_plugin_content);
+
+			$zipFile = $base_path . DS . 'mt-' . $domain_plugin . '.zip';
+			$endZip = $this->Zip($path_plugin, $zipFile);
+			if ($endZip) {
+				return $zipFile;
+			} else {
+				return false;
+			}
+			
+		}
+	}
+
+	public function Zip($source, $destination) {
+	    if (!extension_loaded('zip') || !file_exists($source)) {
+	        return false;
+	    }
+
+	    $zip = new ZipArchive();
+	    if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
+	        return false;
+	    }
+
+	    $source = str_replace('\\', '/', realpath($source));
+
+	    if (is_dir($source) === true)
+	    {
+	        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
+
+	        foreach ($files as $file)
+	        {
+	            $file = str_replace('\\', '/', $file);
+
+	            // Ignore "." and ".." folders
+	            if( in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) )
+	                continue;
+
+	            $file = realpath($file);
+
+	            if (is_dir($file) === true)
+	            {
+	                $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+	            }
+	            else if (is_file($file) === true)
+	            {
+	                $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+	            }
+	        }
+	    }
+	    else if (is_file($source) === true)
+	    {
+	        $zip->addFromString(basename($source), file_get_contents($source));
+	    }
+
+	    return $zip->close();
 	}
 }

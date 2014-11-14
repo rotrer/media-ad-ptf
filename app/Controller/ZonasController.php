@@ -477,4 +477,19 @@ class ZonasController extends AppController {
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
+
+	public function admin_delete_async($id = null) {
+		$this->layout = 'ajax';
+		$this->Zona->id = $id;
+		if (!$this->Zona->exists()) {
+			echo json_encode(array('response' => 999));
+		}
+		$this->request->onlyAllow('post', 'delete');
+		if ($this->Zona->delete()) {
+			echo json_encode(array('response' => 1));
+		} else {
+			echo json_encode(array('response' => 0));
+		}
+		exit();
+	}
 }

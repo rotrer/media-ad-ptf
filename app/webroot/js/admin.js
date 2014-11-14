@@ -88,6 +88,26 @@
         });
         return false;
       });
+      $(document).on("click", ".removeRow", function() {
+        return $(this).parent().parent().remove();
+      });
+      $(document).on("click", ".zonaDelete", function() {
+        var zona;
+        zona = $(this);
+        return $.ajax({
+          url: APP_JQ + "/admin/zonas/delete_async/" + zona.attr('data-zona'),
+          type: "POST",
+          data: "",
+          beforeSend: function() {},
+          success: function(results) {
+            if (results.response !== "1") {
+              return zona.parent().parent().remove();
+            } else {
+              return alert("error al eliminar zona");
+            }
+          }
+        });
+      });
       return $(document).on("change", ".selectedLine", function() {
         var adunits, selectTarget, waitSelected;
         adunits = $(this);

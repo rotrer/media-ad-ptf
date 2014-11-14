@@ -77,7 +77,7 @@
 						<div class="form-group">
   						<?php echo $this->Form->input(null, array('name' => 'id_tag_template[]', 'type' => 'text', 'class' => "form-control", 'required' => "required")); ?>
 						</div>
-						<button type="button" class="btn btn-danger  pull-right">
+						<button type="button" class="btn btn-danger pull-right removeRow">
 							<span class="glyphicon glyphicon-remove"></span>
 						</button>
 					</div>

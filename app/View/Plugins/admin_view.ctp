@@ -29,7 +29,7 @@
 			<th><?php echo __('Adunit Nombre'); ?></th>
 			<th><?php echo __('Línea Pedido Nombre'); ?></th>
 			<th><?php echo __('Fecha Registro'); ?></th>
-			<!-- <th class="actions"><?php echo __('Actions'); ?></th> -->
+			<th class="actions"><?php echo __('Acciones'); ?></th>
 		</tr>
 		<?php foreach ($zonasLineInfo as $info): ?>
 			<tr>
@@ -38,11 +38,13 @@
 				<td><?php echo $info['AdUnits']['name']; ?></td>
 				<td><?php echo $info['LineItems']['name']; ?></td>
 				<td><?php echo date('m-d-Y', strtotime($info['Zona']['created'])); ?></td>
-				<!-- <td class="actions">
-					<?php #echo $this->Html->link(__('View'), array('controller' => 'ad_orders', 'action' => 'view', $info['Zona']['id'])); ?>
-					<?php #echo $this->Html->link(__('Edit'), array('controller' => 'ad_orders', 'action' => 'edit', $info['Zona']['id'])); ?>
-					<?php #echo $this->Form->postLink(__('Delete'), array('controller' => 'ad_orders', 'action' => 'delete', $info['']['id']), array(), __('Are you sure you want to delete # %s?', $info['id'])); ?>
-				</td> -->
+				<td class="actions">
+					<div class="btn-group">
+						<?php echo $this->Html->link(__('Ver'), array('controller' => 'zonas', 'action' => 'view', $info['Zona']['id']), array('class' => 'btn btn-default', 'role' => 'button')); ?>
+						<?php echo $this->Html->link(__('Editar'), array('controller' => 'zonas', 'action' => 'edit', $info['Zona']['id']), array('class' => 'btn btn-default', 'role' => 'button')); ?>
+						<?php echo $this->Form->postLink(__('Eliminar'), array('controller' => 'zonas', 'action' => 'delete', $info['Zona']['id']), array('class' => 'btn btn-danger', 'role' => 'button'), __('Seguro desea eliminar %s?', $info['Zona']['name'])); ?>
+					</div>
+				</td>
 			</tr>
 		<?php endforeach; ?>
 		</table>
