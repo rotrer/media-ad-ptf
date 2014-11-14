@@ -231,7 +231,7 @@ class PluginsController extends AppController {
 			$options = array('conditions' => array('Plugin.' . $this->Plugin->primaryKey => $id));
 			$this->request->data = $this->Plugin->find('first', $options);
 		}
-		$sites = $this->Plugin->Site->find('list');
+		$sites = $this->Plugin->Zona->find('list');
 		$adOrders = $this->Plugin->AdOrder->find('list');
 		$this->set(compact('sites', 'adOrders'));
 	}
