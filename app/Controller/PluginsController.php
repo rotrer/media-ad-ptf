@@ -176,7 +176,7 @@ class PluginsController extends AppController {
 
 		do {
 			// Create a statement to get all line items.
-			$filterStatement->query = "WHERE status = 'DELIVERING' OR status = 'DELIVERY_EXTENDED' OR status = 'READY' LIMIT 500 OFFSET " . $offset;
+			$filterStatement->query = "LIMIT 500 OFFSET " . $offset;
 	
 			// Get line items by statement.
 			$page = $lineItemService->getLineItemsByStatement($filterStatement);
@@ -198,8 +198,10 @@ class PluginsController extends AppController {
 		
 		if ($linesAll) {
 			foreach ($linesAll as $key => $line) {
-				$adunitsPieces = implode(',', $line['adunits']);
-				$lineList[$line['name'] . ',' . $key . ',' . $adunitsPieces] = $line['name'];
+				if (!empty($line) && is_array($line) && isset($line['adunits'])) {
+					$adunitsPieces = implode(',', $line['adunits']);
+					$lineList[$line['name'] . ',' . $key . ',' . $adunitsPieces] = $line['name'];
+				}
 			}
 		} else {
 			$lineList = array();
@@ -329,7 +331,7 @@ class PluginsController extends AppController {
 
 		do {
 			// Create a statement to get all line items.
-			$filterStatement->query = "WHERE status = 'DELIVERING' OR status = 'DELIVERY_EXTENDED' OR status = 'READY' LIMIT 500 OFFSET " . $offset;
+			$filterStatement->query = "LIMIT 500 OFFSET " . $offset;
 	
 			// Get line items by statement.
 			$page = $lineItemService->getLineItemsByStatement($filterStatement);
@@ -351,13 +353,15 @@ class PluginsController extends AppController {
 		
 		if ($linesAll) {
 			foreach ($linesAll as $key => $line) {
-				$adunitsPieces = implode(',', $line['adunits']);
-				$lineList[$line['name'] . ',' . $key . ',' . $adunitsPieces] = $line['name'];
+				if (!empty($line) && is_array($line) && isset($line['adunits'])) {
+					$adunitsPieces = implode(',', $line['adunits']);
+					$lineList[$line['name'] . ',' . $key . ',' . $adunitsPieces] = $line['name'];
+				}
 			}
 		} else {
 			$lineList = array();
 		}
-
+		debug(count($lineList)); die();
 		$sites = $this->Site->find('list');
 
 		$this->set(compact('plugin', 'zonasLineInfo', 'sites', 'lineList'));
