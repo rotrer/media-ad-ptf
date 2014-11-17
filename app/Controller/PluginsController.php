@@ -361,7 +361,6 @@ class PluginsController extends AppController {
 		} else {
 			$lineList = array();
 		}
-		debug(count($lineList)); die();
 		$sites = $this->Site->find('list');
 
 		$this->set(compact('plugin', 'zonasLineInfo', 'sites', 'lineList'));
