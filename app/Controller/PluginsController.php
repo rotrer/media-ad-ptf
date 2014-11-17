@@ -176,7 +176,7 @@ class PluginsController extends AppController {
 
 		do {
 			// Create a statement to get all line items.
-			$filterStatement->query = "LIMIT 500 OFFSET " . $offset;
+			$filterStatement->query = "WHERE status = 'DELIVERING' OR status = 'DELIVERY_EXTENDED' OR status = 'READY' LIMIT 500 OFFSET " . $offset;
 	
 			// Get line items by statement.
 			$page = $lineItemService->getLineItemsByStatement($filterStatement);
@@ -331,7 +331,7 @@ class PluginsController extends AppController {
 
 		do {
 			// Create a statement to get all line items.
-			$filterStatement->query = "LIMIT 500 OFFSET " . $offset;
+			$filterStatement->query = "WHERE status = 'DELIVERING' OR status = 'DELIVERY_EXTENDED' OR status = 'READY' LIMIT 500 OFFSET " . $offset;
 	
 			// Get line items by statement.
 			$page = $lineItemService->getLineItemsByStatement($filterStatement);
@@ -361,6 +361,7 @@ class PluginsController extends AppController {
 		} else {
 			$lineList = array();
 		}
+
 		$sites = $this->Site->find('list');
 
 		$this->set(compact('plugin', 'zonasLineInfo', 'sites', 'lineList'));
