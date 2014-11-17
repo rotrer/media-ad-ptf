@@ -522,14 +522,16 @@ class PluginsController extends AppController {
 				try {
 					// Get adunits
 					$zonasAll = $this->Zona->find('all', array('conditions' => array('Zona.plugins_id' => $id)));
-					$plugin = $this->Plugin->find('first', array('conditions' => array('Plugin.' . $this->Plugin->primaryKey => $id))); var_dump($plugin);
-					debug($zonasAll); die();
+					$plugin = $this->Plugin->find('first', array('conditions' => array('Plugin.' . $this->Plugin->primaryKey => $id))); 
+					// debug($plugin);
+					// debug($zonasAll);
+					// die();
 					if ($zonasAll) {
 						foreach ($zonasAll as $key => $la_zona) {
-							$infoToPlugin[$la_zona['AdUnit'][0]['id']] = array(
+							$infoToPlugin[$la_zona['AdUnits']['adunit_id_dfp']] = array(
 									'site' => array(
-											'domain' => $la_zona['Sites']['domain'],
-											'public_key' => $la_zona['Sites']['public_key'],
+											'domain' => $plugin['Sites']['domain'],
+											'public_key' => $plugin['Sites']['public_key'],
 										),
 									'zona' => array(
 											'name' => $la_zona['Zona']['name'],
@@ -538,7 +540,7 @@ class PluginsController extends AppController {
 									'adunit' => array(
 										)
 								);
-							$adunits_ids_arr[] = $la_zona['AdUnit'][0]['id'];
+							$adunits_ids_arr[] = $la_zona['AdUnits']['adunit_id_dfp'];
 						}
 					} else {
 						//Sin zonas...
