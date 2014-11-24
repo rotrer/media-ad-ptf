@@ -529,10 +529,10 @@ class PluginsController extends AppController {
 			$infoToPlugin['id'] 	= $id;
 			$infoToPlugin['unq'] 	= $this->request->data['Plugin']['unq'];
 			$infoToPlugin['sync'] = $this->request->data['Plugin']['sync'];
-			$hasOop =  false;
 
 			if ($infoToPlugin) {
 				try {
+					$hasOop =  false;
 					// Get adunits
 					$zonasAll = $this->Zona->find('all', array('conditions' => array('Zona.plugins_id' => $id)));
 					$plugin = $this->Plugin->find('first', array('conditions' => array('Plugin.' . $this->Plugin->primaryKey => $id))); 
