@@ -532,7 +532,6 @@ class PluginsController extends AppController {
 
 			if ($infoToPlugin) {
 				try {
-					$hasOop =  false;
 					// Get adunits
 					$zonasAll = $this->Zona->find('all', array('conditions' => array('Zona.plugins_id' => $id)));
 					$plugin = $this->Plugin->find('first', array('conditions' => array('Plugin.' . $this->Plugin->primaryKey => $id))); 
@@ -641,6 +640,7 @@ class PluginsController extends AppController {
 
 		$zonasInfo = $this->Zona->find('all', array('conditions' => array('Zona.plugins_id' => $id)));
 
+		$hasOop =  false;
 		if($zonasInfo) foreach ($zonasInfo as $key => $zona) {
 			if (!empty($zona['Zona']['style']))
 				$hasOop =  true;
@@ -648,11 +648,8 @@ class PluginsController extends AppController {
 			$lineItemInfo = $this->LineItemsAdUnit->find('first', array('conditions' => array('LineItemsAdUnit.ad_units_id' => $zona['AdUnits']['id'])));
 			$zonasLineInfo[] = array_merge($zona, $lineItemInfo);
 		}
-		
-		if ($hasOop == true)
-			$this->set('hasOop', $hasOop);			
 
-		$this->set(compact('plugin', 'zonasLineInfo'));
+		$this->set(compact('plugin', 'zonasLineInfo', 'hasOop'));
 	}
 
 	private function createZipPlugin($info) {
