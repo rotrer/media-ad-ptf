@@ -10,3 +10,5 @@ app/webroot/plugins/*
 
 #Ignore .DS_Store
 **.DS_Store
+
+app/webroot/wp/
