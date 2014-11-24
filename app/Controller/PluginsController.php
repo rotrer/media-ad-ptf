@@ -642,7 +642,7 @@ class PluginsController extends AppController {
 
 		$hasOop =  false;
 		if($zonasInfo) foreach ($zonasInfo as $key => $zona) {
-			if (!empty(trim($zona['Zona']['style'])))
+			if (!empty($zona['Zona']['style']))
 				$hasOop =  true;
 
 			$lineItemInfo = $this->LineItemsAdUnit->find('first', array('conditions' => array('LineItemsAdUnit.ad_units_id' => $zona['AdUnits']['id'])));
