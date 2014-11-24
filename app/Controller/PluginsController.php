@@ -529,6 +529,7 @@ class PluginsController extends AppController {
 			$infoToPlugin['id'] 	= $id;
 			$infoToPlugin['unq'] 	= $this->request->data['Plugin']['unq'];
 			$infoToPlugin['sync'] = $this->request->data['Plugin']['sync'];
+			$hasOop =  false;
 
 			if ($infoToPlugin) {
 				try {
@@ -640,7 +641,6 @@ class PluginsController extends AppController {
 
 		$zonasInfo = $this->Zona->find('all', array('conditions' => array('Zona.plugins_id' => $id)));
 
-		$hasOop =  false;
 		if($zonasInfo) foreach ($zonasInfo as $key => $zona) {
 			if (!empty($zona['Zona']['style']))
 				$hasOop =  true;
