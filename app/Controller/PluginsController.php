@@ -291,7 +291,7 @@ class PluginsController extends AppController {
 						$toSaveZona = array(
 								'name' => $data['zona_name'][$i],
 								'id_tag_template' => $id_tag_template,
-								'out_of_page' => (isset($data['style'][$i]) && trim($data['style'][$i])) ? 1 : 0,
+								'out_of_page' => $data['out_of_page'][$i],
 								'style' => trim($data['style'][$i]),
 								'plugins_id' => $idPlugin,
 								'ad_units_id' => $idAdunit
@@ -457,7 +457,16 @@ class PluginsController extends AppController {
 						<div class="form-group">
   						<input name="id_tag_template[]" class="form-control" required="required" type="text" id="PluginSitesId">						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-1">
+						<div class="form-group">
+  						<select name="out_of_page[]" class="form-control" id="PluginSitesId">
+								<option value="">Seleccione</option>
+								<option value="1">SI</option>
+								<option value="0">NO</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3">
 						<div class="form-group">
   						<textarea name="style[]" class="form-control" cols="30" rows="6" id="PluginSitesId"></textarea>						</div>
 						<button type="button" class="btn btn-danger pull-right removeRow">
@@ -653,9 +662,8 @@ class PluginsController extends AppController {
 	}
 
 	private function createZipPlugin($info) {
-		// debug($info);
 		if ($info) {
-			$head_ads_all = $insert_ads_all = $styles_oop = '';
+			$head_ads_all = $insert_ads_all = $styles_adunits = '';
 			foreach ($info as $keyad => $ad) {
 				if (isset($ad['adunit']) && is_array($ad['adunit']) && !empty($ad['adunit'])) {
 					$adunit_code = $ad['adunit']['adunitcode'];
@@ -694,9 +702,11 @@ class PluginsController extends AppController {
 							$replace 	= array($keyad, $adunit_tag_id);
 
 						$insert_ads_all .= str_replace($find, $replace, $insert_ads_content);	
-
-						$styles_oop .= $ad['zona']['id_tag_template'] . '{' . $ad['zona']['style'] . '};';
 					}
+					
+					if (!empty($ad['zona']['style']))
+						$styles_adunits .= $ad['zona']['id_tag_template'] . '{' . $ad['zona']['style'] . '};';
+
 					$head_ads_all .= str_replace($findHead, $replaceHead, $head_ads_content);
 					//domain plugin
 					$domain_plugin = $ad['site']['domain'];
@@ -724,7 +734,7 @@ class PluginsController extends AppController {
 			// replace sync and single request options
 			$base_plugin_content = str_replace("{sync_request}", $sync_file_content, $base_plugin_content);
 			// replace styles oop
-			$base_plugin_content = str_replace("{styles_oop}", $styles_oop, $base_plugin_content);
+			$base_plugin_content = str_replace("{styles_oop}", $styles_adunits, $base_plugin_content);
 
 			// create dir plugin
 			$base_path = WWW_ROOT . "plugins";

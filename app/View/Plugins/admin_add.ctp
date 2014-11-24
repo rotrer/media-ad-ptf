@@ -51,7 +51,8 @@
 					<div class="col-md-2"><strong>Ad Unit</strong></div>
 					<div class="col-md-2"><strong>Nombre Zona</strong></div>
 					<div class="col-md-2"><strong>ID Tag Template</strong></div>
-					<div class="col-md-4"><strong>Out of page / Estilo</strong></div>
+					<div class="col-md-1"><strong>Out of page</strong></div>
+					<div class="col-md-3"><strong>Estilo</strong></div>
 				</div>
 				<p>&nbsp;</p>
 				<div class="row rowZonas">
@@ -79,7 +80,16 @@
   						<?php echo $this->Form->input(null, array('name' => 'id_tag_template[]', 'type' => 'text', 'class' => "form-control", 'required' => "required")); ?>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-1">
+						<div class="form-group">
+  						<select name="out_of_page[]" class="form-control" id="PluginSitesId">
+								<option value="">Seleccione</option>
+								<option value="1">SI</option>
+								<option value="0">NO</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3">
 						<div class="form-group">
   						<?php echo $this->Form->input(null, array('name' => 'style[]', 'type' => 'textarea', 'class' => "form-control")); ?>
 						</div>

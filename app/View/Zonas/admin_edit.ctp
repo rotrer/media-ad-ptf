@@ -27,7 +27,15 @@
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="style">Out of page / Estilo</label>  
+  <label class="col-md-4 control-label" for="out_of_page">Out of page</label>  
+  <div class="col-md-6">
+  <?php echo $this->Form->input('out_of_page', array('type' => "checkbox", 'class' => "form-control input-md")); ?>
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="style">Estilo</label>  
   <div class="col-md-6">
   <?php echo $this->Form->input('style', array('placeholder' => "", 'class' => "form-control input-md")); ?>
   </div>

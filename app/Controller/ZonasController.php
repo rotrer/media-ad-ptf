@@ -139,7 +139,7 @@ class ZonasController extends AppController {
 				$toSaveZona = array(
 						'name' => $data['Zona']['name'],
 						'id_tag_template' => $id_tag_template,
-						'out_of_page' => (isset($data['Zona']['style']) && trim($data['Zona']['style'])) ? 1 : 0,
+						'out_of_page' => $data['Zona']['out_of_page'],
 						'style' => trim($data['Zona']['style']),
 						'plugins_id' => $data['plugins_id'],
 						'ad_units_id' => $idAdunit
@@ -396,7 +396,7 @@ class ZonasController extends AppController {
 				$toSaveZona = array(
 						'name' => $data['Zona']['name'],
 						'id_tag_template' => $id_tag_template,
-						'out_of_page' => (isset($data['Zona']['style']) && trim($data['Zona']['style'])) ? 1 : 0,
+						'out_of_page' => $data['Zona']['out_of_page'],
 						'style' => trim($data['Zona']['style']),
 						'plugins_id' => $data['plugins_id'],
 						'ad_units_id' => $idAdunit
