@@ -47,16 +47,17 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-3"><strong>Línea Pedido</strong></div>
-					<div class="col-md-3"><strong>Ad Unit</strong></div>
-					<div class="col-md-3"><strong>Nombre Zona</strong></div>
-					<div class="col-md-3"><strong>ID Tag Template</strong></div>
+					<div class="col-md-2"><strong>Línea Pedido</strong></div>
+					<div class="col-md-2"><strong>Ad Unit</strong></div>
+					<div class="col-md-2"><strong>Nombre Zona</strong></div>
+					<div class="col-md-2"><strong>ID Tag Template</strong></div>
+					<div class="col-md-4"><strong>Out of page / Estilo</strong></div>
 				</div>
 				<p>&nbsp;</p>
 				<?php if($zonasLineInfo) foreach ($zonasLineInfo as $key => $zona) { ?>
 				<?php echo $this->Form->input(null, array('value' => $zona['Zona']['id'], 'name' => 'zona_id[]', 'type' => 'hidden')); ?>
 				<div class="row rowZonas">
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<div class="form-group">
   						<?php #echo $this->Form->input(null, array('name' => 'line_item[]', 'options' => $lineList, 'type' => 'select' ,'empty' => 'Seleccione', 'class' => "form-control selectedLine", 'required' => "required")); ?>
   						<select name="line_item[]" class="form-control selectedLine" required="required" id="PluginSitesId">
@@ -67,7 +68,7 @@
 							</select>
 						</div>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<div class="wait-select" style="float:left; display:none;">
 				  		<?php echo $this->Html->image('spinner.gif', array('alt' => 'Wait')); ?>
 				  	</div>
@@ -79,14 +80,19 @@
 							</select>
 						</div>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<div class="form-group">
   						<?php echo $this->Form->input(null, array('value' => $zona['Zona']['name'], 'name' => 'zona_name[]', 'type' => 'text', 'class' => "form-control", 'required' => "required")); ?>
 						</div>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<div class="form-group">
   						<?php echo $this->Form->input(null, array('value' => $zona['Zona']['id_tag_template'], 'name' => 'id_tag_template[]', 'type' => 'text', 'class' => "form-control", 'required' => "required")); ?>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+  						<?php echo $this->Form->input(null, array('value' => $zona['Zona']['style'], 'name' => 'style[]', 'type' => 'textarea', 'class' => "form-control")); ?>
 						</div>
 						<button type="button" class="btn btn-danger pull-right zonaDelete" data-zona="<?php echo $zona['Zona']['id']; ?>">
 							<span class="glyphicon glyphicon-remove"></span>

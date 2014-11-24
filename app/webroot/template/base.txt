@@ -59,5 +59,8 @@ function head_setup_mt() {
 		});
 	}
 	</script>
+	<style type="text/css">
+		{styles_oop}
+	</style>
 <?php
 }

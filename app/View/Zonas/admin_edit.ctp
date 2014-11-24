@@ -22,7 +22,14 @@
   <label class="col-md-4 control-label" for="id_tag_template">ID Tag Template</label>  
   <div class="col-md-6">
   <?php echo $this->Form->input('id_tag_template', array('placeholder' => "ej: #header", 'class' => "form-control input-md", 'required' => "required")); ?>
-    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="style">Out of page / Estilo</label>  
+  <div class="col-md-6">
+  <?php echo $this->Form->input('style', array('placeholder' => "", 'class' => "form-control input-md")); ?>
   </div>
 </div>
 

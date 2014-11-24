@@ -5,6 +5,7 @@
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('name', 'Nombre'); ?></th>
 			<th><?php echo $this->Paginator->sort('id_tag_template', 'ID Tag Template'); ?></th>
+			<th><?php echo $this->Paginator->sort('out_of_page', 'Out of Page'); ?></th>
 			<th><?php echo $this->Paginator->sort('plugins_id', 'Plugin'); ?></th>
 			<th><?php echo $this->Paginator->sort('created', 'Fecha Registro'); ?></th>
 			<th class="actions"><?php echo __('Acciones'); ?></th>
@@ -14,6 +15,7 @@
 		<td><?php echo h($zona['Zona']['id']); ?>&nbsp;</td>
 		<td><?php echo h($zona['Zona']['name']); ?>&nbsp;</td>
 		<td><?php echo h($zona['Zona']['id_tag_template']); ?>&nbsp;</td>
+		<td><?php echo ($zona['Zona']['out_of_page']) ? 'Sí' : 'No'; ?>&nbsp;</td>
 		<td>
 			<?php echo $this->Html->link($zona['Plugins']['name'], array('controller' => 'plugins', 'action' => 'view', $zona['Plugins']['id'])); ?>
 		</td>

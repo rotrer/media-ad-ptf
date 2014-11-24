@@ -1,0 +1,1 @@
+googletag.defineOutOfPageSlot('/{network_code}/{adunit_code}', 'zona-{adunit_id}-oop').addService(googletag.pubads());

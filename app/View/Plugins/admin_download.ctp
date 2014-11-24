@@ -40,7 +40,7 @@
   <label class="col-md-4 control-label" for="SiteSync">Habilitar la solicitud síncronica</label>
   <div class="col-md-4">
     <label class="checkbox-inline" for="SiteSync">
-      <?php echo $this->Form->input('sync', array('type' => 'checkbox', 'value' => 1, 'label' => false, 'div' => false)); ?>
+      <?php echo $this->Form->input('sync', array('type' => 'checkbox', 'checked' => $hasOop, 'value' => 1, 'label' => false, 'div' => false)); ?>
     </label>
   </div>
 </div>

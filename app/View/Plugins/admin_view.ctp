@@ -3,7 +3,7 @@
 	<dl class="dl-horizontal">
 		<dt><?php echo __('Nombre'); ?></dt>
 		<dd>
-			<?php echo h($plugin['Plugin']['name']); ?>
+			<?php echo h($plugin['Plugin']['name']); ?> <?php echo $this->Html->link(__('Editar'), array('controller' => 'plugins', 'action' => 'edit', $plugin['Plugin']['id']), array('class' => '', 'role' => 'button')); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Sites'); ?></dt>

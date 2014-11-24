@@ -147,6 +147,8 @@ class PluginsController extends AppController {
 						$toSaveZona = array(
 								'name' => $data['zona_name'][$i],
 								'id_tag_template' => $id_tag_template,
+								'out_of_page' => (isset($data['style'][$i]) && trim($data['style'][$i])) ? 1 : 0,
+								'style' => trim($data['style'][$i]),
 								'plugins_id' => $idPlugin,
 								'ad_units_id' => $idAdunit
 							);
@@ -289,6 +291,8 @@ class PluginsController extends AppController {
 						$toSaveZona = array(
 								'name' => $data['zona_name'][$i],
 								'id_tag_template' => $id_tag_template,
+								'out_of_page' => (isset($data['style'][$i]) && trim($data['style'][$i])) ? 1 : 0,
+								'style' => trim($data['style'][$i]),
 								'plugins_id' => $idPlugin,
 								'ad_units_id' => $idAdunit
 							);
@@ -429,14 +433,14 @@ class PluginsController extends AppController {
 		} while ($offset < $page->totalResultSetSize);
 
 		$html = '<div class="row rowZonas">
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<div class="form-group">
 
   						<select name="line_item[]" class="form-control selectedLine" required="required" id="PluginSitesId">
 								<option value="">Seleccione</option>' . $listLines . '
 							</select>						</div>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<div class="wait-select" style="float: left; display: none;">
 				  		<img src="/img/spinner.gif" alt="Wait">
 			  		</div>
@@ -445,13 +449,17 @@ class PluginsController extends AppController {
 								<option value="">Seleccione</option>
 							</select>						</div>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<div class="form-group">
   						<input name="zona_name[]" class="form-control" required="required" type="text" id="PluginSitesId">						</div>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<div class="form-group">
   						<input name="id_tag_template[]" class="form-control" required="required" type="text" id="PluginSitesId">						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+  						<textarea name="style[]" class="form-control" cols="30" rows="6" id="PluginSitesId"></textarea>						</div>
 						<button type="button" class="btn btn-danger pull-right removeRow">
 							<span class="glyphicon glyphicon-remove"></span>
 						</button>
@@ -540,6 +548,8 @@ class PluginsController extends AppController {
 									'zona' => array(
 											'name' => $la_zona['Zona']['name'],
 											'id_tag_template' => $la_zona['Zona']['id_tag_template'],
+											'out_of_page' => $la_zona['Zona']['out_of_page'],
+											'style' => $la_zona['Zona']['style'],
 										),
 									'adunit' => array(
 										)
@@ -630,42 +640,67 @@ class PluginsController extends AppController {
 
 		$zonasInfo = $this->Zona->find('all', array('conditions' => array('Zona.plugins_id' => $id)));
 
+		$hasOop =  false;
 		if($zonasInfo) foreach ($zonasInfo as $key => $zona) {
+			if (!empty(trim($zona['Zona']['style'])))
+				$hasOop =  true;
+
 			$lineItemInfo = $this->LineItemsAdUnit->find('first', array('conditions' => array('LineItemsAdUnit.ad_units_id' => $zona['AdUnits']['id'])));
 			$zonasLineInfo[] = array_merge($zona, $lineItemInfo);
 		}
+		
+		if ($hasOop == true)
+			$this->set('hasOop', $hasOop);			
 
 		$this->set(compact('plugin', 'zonasLineInfo'));
 	}
 
 	private function createZipPlugin($info) {
-		// var_dump($info); die();
+		// debug($info);
 		if ($info) {
-			$head_ads_all = $insert_ads_all = '';
+			$head_ads_all = $insert_ads_all = $styles_oop = '';
 			foreach ($info as $keyad => $ad) {
 				if (isset($ad['adunit']) && is_array($ad['adunit']) && !empty($ad['adunit'])) {
-					$width =  $ad['adunit']['sizes'][0]['width'];
-					$height =  $ad['adunit']['sizes'][0]['height'];
-
-					//read head ads template
 					$adunit_code = $ad['adunit']['adunitcode'];
-					$adunit_size = $width . ',' . $height;
-					$head_ads = WWW_ROOT . 'template' .DS . 'head_ads.txt';
-					$head_ads_content = file_get_contents($head_ads);
-						$find 		= array('{network_code}', '{adunit_code}', '{adunit_size}', '{adunit_id}');
-						$replace 	= array($info['networkcode'], $adunit_code, $adunit_size, $keyad);
+					if ($ad['zona']['out_of_page'] == 0) {
+						$width =  $ad['adunit']['sizes'][0]['width'];
+						$height =  $ad['adunit']['sizes'][0]['height'];
 
-					$head_ads_all .= str_replace($find, $replace, $head_ads_content);
+						//read head ads template
+						$adunit_size = $width . ',' . $height;
+						$head_ads = WWW_ROOT . 'template' .DS . 'head_ads.txt';
+						$head_ads_content = file_get_contents($head_ads);
+							$findHead 		= array('{network_code}', '{adunit_code}', '{adunit_size}', '{adunit_id}');
+							$replaceHead 	= array($info['networkcode'], $adunit_code, $adunit_size, $keyad);
 
-					//read inserts ads template
-					$adunit_tag_id = $ad['zona']['id_tag_template'];
-					$insert_ads = WWW_ROOT . 'template' .DS . 'insert_ads.txt';
-					$insert_ads_content = file_get_contents($insert_ads);
-						$find 		= array('{adunit_id}', '{width}', '{height}', '{adunit_tag_id}');
-						$replace 	= array($keyad, $width, $height, $adunit_tag_id);
+						//read inserts ads template
+						$adunit_tag_id = $ad['zona']['id_tag_template'];
+						$insert_ads = WWW_ROOT . 'template' .DS . 'insert_ads.txt';
+						$insert_ads_content = file_get_contents($insert_ads);
+							$find 		= array('{adunit_id}', '{width}', '{height}', '{adunit_tag_id}');
+							$replace 	= array($keyad, $width, $height, $adunit_tag_id);
 
-					$insert_ads_all .= str_replace($find, $replace, $insert_ads_content);
+						$insert_ads_all .= str_replace($find, $replace, $insert_ads_content);	
+					} else {
+						//read head ads template
+						$head_ads = WWW_ROOT . 'template' .DS . 'head_ads_oop.txt';
+						$head_ads_content = file_get_contents($head_ads);
 
+							$findHead 		= array('{network_code}', '{adunit_code}', '{adunit_id}');
+							$replaceHead 	= array($info['networkcode'], $adunit_code, $keyad);
+
+						//read inserts ads template
+						$adunit_tag_id = $ad['zona']['id_tag_template'];
+						$insert_ads = WWW_ROOT . 'template' .DS . 'insert_ads_oop.txt';
+						$insert_ads_content = file_get_contents($insert_ads);
+							$find 		= array('{adunit_id}', '{adunit_tag_id}');
+							$replace 	= array($keyad, $adunit_tag_id);
+
+						$insert_ads_all .= str_replace($find, $replace, $insert_ads_content);	
+
+						$styles_oop .= $ad['zona']['id_tag_template'] . '{' . $ad['zona']['style'] . '};';
+					}
+					$head_ads_all .= str_replace($findHead, $replaceHead, $head_ads_content);
 					//domain plugin
 					$domain_plugin = $ad['site']['domain'];
 				}
@@ -691,6 +726,8 @@ class PluginsController extends AppController {
 			$base_plugin_content = str_replace("{insert_ads}", $insert_ads_all, $base_plugin_content);
 			// replace sync and single request options
 			$base_plugin_content = str_replace("{sync_request}", $sync_file_content, $base_plugin_content);
+			// replace styles oop
+			$base_plugin_content = str_replace("{styles_oop}", $styles_oop, $base_plugin_content);
 
 			// create dir plugin
 			$base_path = WWW_ROOT . "plugins";

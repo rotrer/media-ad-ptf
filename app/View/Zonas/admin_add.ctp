@@ -25,6 +25,14 @@
   </div>
 </div>
 
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="style">Out of page / Estilo</label>  
+  <div class="col-md-6">
+  <?php echo $this->Form->input('style', array('placeholder' => "", 'class' => "form-control input-md")); ?>
+  </div>
+</div>
+
 <!-- Select Basic -->
 <div class="form-group">
   <label class="col-md-4 control-label" for="adunit">Línea Pedido</label>
