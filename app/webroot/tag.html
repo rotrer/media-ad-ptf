@@ -15,6 +15,7 @@ document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
 
 <script type='text/javascript'>
 googletag.defineSlot('/92947493/970x90_CR_ALL', [970, 90], 'div-gpt-ad-1416931753400-0').addService(googletag.pubads());
+googletag.defineSlot('/92947493/300x250_CR', [300, 250], 'div-gpt-ad-1408742889084-0').addService(googletag.pubads());
 googletag.defineOutOfPageSlot('/92947493/intersitial_CR_ALL', 'div-gpt-ad-1416931545144-0-oop').addService(googletag.pubads());
 googletag.pubads().enableSyncRendering();
 googletag.pubads().enableSingleRequest();
@@ -59,7 +60,8 @@ googletag.enableServices();
 		loadAds();
 	};
 	function loadAds() {
-		googletag.display('div-gpt-ad-1416931753400-0');
+		// googletag.display('div-gpt-ad-1416931753400-0');
+		googletag.display('div-gpt-ad-1408742889084-0');
 		setTimeout(function(){
 			googletag.display('div-gpt-ad-1416931545144-0-oop');
 		}, 1000);
@@ -74,13 +76,11 @@ googletag.enableServices();
 
 </head>
 <body>
-<!-- 970x90_CR_ALL -->
-<div id='div-gpt-ad-1416931753400-0' style='width:970px; height:90px;'>
-</div>
-<!-- intersitial_CR_ALL out-of-page -->
-<div id='div-gpt-ad-1416931545144-0-oop'>
 
-</div>
+<!-- <div id='div-gpt-ad-1416931753400-0' style='width:300px; height:250px;'></div> -->
+<div id='div-gpt-ad-1408742889084-0' style='width:970px; height:90px;'></div>
+<!-- intersitial_CR_ALL out-of-page -->
+<div id='div-gpt-ad-1416931545144-0-oop'></div>
 
 </body>
 </html>
