@@ -3,35 +3,84 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Tag</title>
-	<script type='text/javascript'>
-var googletag = googletag || {};
-googletag.cmd = googletag.cmd || [];
+
+<script type='text/javascript'>
 (function() {
-var gads = document.createElement('script');
-gads.async = true;
-gads.type = 'text/javascript';
 var useSSL = 'https:' == document.location.protocol;
-gads.src = (useSSL ? 'https:' : 'http:') + 
+var src = (useSSL ? 'https:' : 'http:') +
 '//www.googletagservices.com/tag/js/gpt.js';
-var node = document.getElementsByTagName('script')[0];
-node.parentNode.insertBefore(gads, node);
+document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
 })();
 </script>
 
 <script type='text/javascript'>
-googletag.cmd.push(function() {
-googletag.defineSlot('/92947493/160X600_CFD', [160, 600], 'div-gpt-ad-1416857097271-0').addService(googletag.pubads());
+googletag.defineSlot('/92947493/970x90_CR_ALL', [970, 90], 'div-gpt-ad-1416931753400-0').addService(googletag.pubads());
+googletag.defineOutOfPageSlot('/92947493/intersitial_CR_ALL', 'div-gpt-ad-1416931545144-0-oop').addService(googletag.pubads());
+googletag.pubads().enableSyncRendering();
 googletag.pubads().enableSingleRequest();
 googletag.enableServices();
-});
 </script>
+
+
+	<script type='text/javascript'>
+	// Only do anything if jQuery isn't defined
+	if (typeof jQuery == 'undefined') {
+		if (typeof $ == 'function') {
+			// warning, global var
+			thisPageUsingOtherJSLibrary = true;
+		}
+		
+		function getScript(url, success) {
+			var script = document.createElement('script');
+				script.src = url;
+			var head = document.getElementsByTagName('head')[0],
+			done = false;
+			// Attach handlers for all browsers
+			script.onload = script.onreadystatechange = function() {
+				if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) {
+					done = true;
+					// callback function provided as param
+					success();
+					script.onload = script.onreadystatechange = null;
+					head.removeChild(script);
+				};
+			};
+			head.appendChild(script);
+		};
+		
+		getScript('http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', function() {
+			if (typeof jQuery=='undefined') {
+				alert("Fail load jQuery");
+			} else {
+				loadAds();
+			}
+		});
+	} else { // jQuery was already loaded
+		loadAds();
+	};
+	function loadAds() {
+		googletag.display('div-gpt-ad-1416931753400-0');
+		setTimeout(function(){
+			googletag.display('div-gpt-ad-1416931545144-0-oop');
+		}, 1000);
+	}
+	</script>
+	<style type="text/css">
+		#block_autopromo{
+			position: absolute;
+			height: 100px;
+		}
+	</style>
+
 </head>
 <body>
-	<!-- 160X600_CFD_left -->
-<div id='div-gpt-ad-1416857097271-0' style='width:160px; height:600px;'>
-<script type='text/javascript'>
-googletag.cmd.push(function() { googletag.display('div-gpt-ad-1416857097271-0'); });
-</script>
+<!-- 970x90_CR_ALL -->
+<div id='div-gpt-ad-1416931753400-0' style='width:970px; height:90px;'>
 </div>
+<!-- intersitial_CR_ALL out-of-page -->
+<div id='div-gpt-ad-1416931545144-0-oop'>
+
+</div>
+
 </body>
 </html>
