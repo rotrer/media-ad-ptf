@@ -14,6 +14,84 @@ document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
 </script>
 
 <script type='text/javascript'>
+googletag.defineOutOfPageSlot('/92947493/intersitial_CR_ALL', 'zona-92795653-oop').addService(googletag.pubads());
+googletag.defineSlot('/92947493/300x250_CR_sidebar_2', [300,250], 'zona-92242573').addService(googletag.pubads());
+googletag.pubads().enableSingleRequest();
+googletag.pubads().enableSyncRendering();
+googletag.enableServices();
+</script>
+
+	<script type='text/javascript'>
+	// Only do anything if jQuery isn't defined
+	if (typeof jQuery == 'undefined') {
+		if (typeof $ == 'function') {
+			// warning, global var
+			thisPageUsingOtherJSLibrary = true;
+		}
+		
+		function getScript(url, success) {
+			var script = document.createElement('script');
+				script.src = url;
+			var head = document.getElementsByTagName('head')[0],
+			done = false;
+			// Attach handlers for all browsers
+			script.onload = script.onreadystatechange = function() {
+				if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) {
+					done = true;
+					// callback function provided as param
+					success();
+					script.onload = script.onreadystatechange = null;
+					head.removeChild(script);
+				};
+			};
+			head.appendChild(script);
+		};
+		
+		getScript('http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', function() {
+			if (typeof jQuery=='undefined') {
+				alert("Fail load jQuery");
+			} else {
+				loadAds();
+			}
+		});
+	} else { // jQuery was already loaded
+		loadAds();
+	};
+	function loadAds() {
+		// jQuery(document).ready(function(){
+			var zona92795653 = '<div id="zona-92795653-oop"><script type="text/javascript">googletag.display("zona-92795653-oop");</scr'+'ipt></div>';
+				if (jQuery("#block_barramt").length > 0) { jQuery("#block_barramt").empty().html(zona92795653); }
+
+			var zona92242573 = '<div id="zona-92242573" style="width:300px; height:250px;"><script type="text/javascript">googletag.cmd.push(function() { googletag.display("zona-92242573"); });</scr'+'ipt></div>';
+				if (jQuery("#block_autopromo").length > 0) { jQuery("#block_autopromo").empty().html(zona92242573); }
+		// });
+	}
+	</script>
+	<style type="text/css">
+		#block_autopromo{width:300px;};
+	</style>
+
+</head>
+<body>
+	<div id="block_barramt"></div>
+</body>
+</html>
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Tag</title>
+
+<script type='text/javascript'>
+(function() {
+var useSSL = 'https:' == document.location.protocol;
+var src = (useSSL ? 'https:' : 'http:') +
+'//www.googletagservices.com/tag/js/gpt.js';
+document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
+})();
+</script>
+
+<script type='text/javascript'>
 googletag.defineSlot('/92947493/970x90_CR_ALL', [970, 90], 'div-gpt-ad-1416931753400-0').addService(googletag.pubads());
 googletag.defineSlot('/92947493/300x250_CR', [300, 250], 'div-gpt-ad-1408742889084-0').addService(googletag.pubads());
 googletag.defineOutOfPageSlot('/92947493/intersitial_CR_ALL', 'div-gpt-ad-1416931545144-0-oop').addService(googletag.pubads());
@@ -77,10 +155,10 @@ googletag.enableServices();
 </head>
 <body>
 
-<!-- <div id='div-gpt-ad-1416931753400-0' style='width:300px; height:250px;'></div> -->
+
 <div id='div-gpt-ad-1408742889084-0' style='width:970px; height:90px;'></div>
-<!-- intersitial_CR_ALL out-of-page -->
+
 <div id='div-gpt-ad-1416931545144-0-oop'></div>
 
 </body>
-</html>
+</html> -->
