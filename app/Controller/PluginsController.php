@@ -663,10 +663,24 @@ class PluginsController extends AppController {
 
 	private function createZipPlugin($info) {
 		if ($info) {
-			$head_ads_all = $insert_ads_all = $styles_adunits = '';
+			$head_ads_all = $styles_adunits = '';
+			$insert_ads_all = array();
 			foreach ($info as $keyad => $ad) {
 				if (isset($ad['adunit']) && is_array($ad['adunit']) && !empty($ad['adunit'])) {
 					$adunit_code = $ad['adunit']['adunitcode'];
+					$adunit_tag_id = $ad['zona']['id_tag_template'];
+
+					if ($info['sync'] == 1) {
+						if ($ad['zona']['out_of_page'] == 0) {
+							$insert_ads = WWW_ROOT . 'template' .DS . 'insert_ads_sync.txt';
+						} else {
+							$insert_ads = WWW_ROOT . 'template' .DS . 'insert_ads_oop.txt';
+						}
+					} else {
+						$insert_ads = WWW_ROOT . 'template' .DS . 'insert_ads.txt';
+					}
+					
+
 					if ($ad['zona']['out_of_page'] == 0) {
 						$width =  $ad['adunit']['sizes'][0]['width'];
 						$height =  $ad['adunit']['sizes'][0]['height'];
@@ -679,13 +693,10 @@ class PluginsController extends AppController {
 							$replaceHead 	= array($info['networkcode'], $adunit_code, $adunit_size, $keyad);
 
 						//read inserts ads template
-						$adunit_tag_id = $ad['zona']['id_tag_template'];
-						$insert_ads = WWW_ROOT . 'template' .DS . 'insert_ads.txt';
 						$insert_ads_content = file_get_contents($insert_ads);
-							$find 		= array('{adunit_id}', '{width}', '{height}', '{adunit_tag_id}');
-							$replace 	= array($keyad, $width, $height, $adunit_tag_id);
+							$find 		= array('{adunit_id}', '{width}', '{height}');
+							$replace 	= array($keyad, $width, $height);
 
-						$insert_ads_all .= str_replace($find, $replace, $insert_ads_content);	
 					} else {
 						//read head ads template
 						$head_ads = WWW_ROOT . 'template' .DS . 'head_ads_oop.txt';
@@ -696,13 +707,15 @@ class PluginsController extends AppController {
 
 						//read inserts ads template
 						$adunit_tag_id = $ad['zona']['id_tag_template'];
-						$insert_ads = WWW_ROOT . 'template' .DS . 'insert_ads_oop.txt';
 						$insert_ads_content = file_get_contents($insert_ads);
-							$find 		= array('{adunit_id}', '{adunit_tag_id}');
-							$replace 	= array($keyad, $adunit_tag_id);
-
-						$insert_ads_all .= str_replace($find, $replace, $insert_ads_content);	
+							$find 		= array('{adunit_id}');
+							$replace 	= array($keyad);
 					}
+
+					$insert_ads_all[$keyad] = array(
+						'id_tag_template' => $adunit_tag_id,
+						'div_display' => str_replace($find, $replace, $insert_ads_content)
+					);
 					
 					if (!empty($ad['zona']['style']))
 						$styles_adunits .= $ad['zona']['id_tag_template'] . '{' . $ad['zona']['style'] . '};';
@@ -730,7 +743,7 @@ class PluginsController extends AppController {
 			
 			// reaplace tags on base content
 			$base_plugin_content = str_replace("{domain}", $domain_plugin, $base_plugin_content);
-			$base_plugin_content = str_replace("{insert_ads}", $insert_ads_all, $base_plugin_content);
+			$base_plugin_content = str_replace("{insert_ads}", json_encode($insert_ads_all), $base_plugin_content);
 			// replace sync and single request options
 			$base_plugin_content = str_replace("{sync_request}", $sync_file_content, $base_plugin_content);
 			// replace styles oop

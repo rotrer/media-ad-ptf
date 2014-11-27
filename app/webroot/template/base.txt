@@ -11,54 +11,78 @@
 // Define current version constant
 define( 'EXT-ADS', '0.1' );
 
-add_action('wp_head', 'head_setup_mt');
+global $adunits;
+$adunits = '{insert_ads}';
 
+function activar_plugin() {
+	global $adunits;
+
+	$units = json_decode($adunits);
+	// do_action( 'my_plugin_activate' );
+	$erroWrite = array();
+	$pathTemplate = get_template_directory();
+	$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($pathTemplate), RecursiveIteratorIterator::SELF_FIRST);
+	foreach($objects as $name => $object){
+		if (preg_match('/^.+\.php$/i', $name)) {
+			if (is_writable($name)) {
+				$phpFileTemplate = file_get_contents($name);
+
+				foreach ($units as $key => $unit) {
+					$id_tag_template = str_replace("#", "", $unit->id_tag_template);
+					preg_match('/(<div.*?id="' . $id_tag_template . '"[^>]*>)(.*?)(<\/div>)/i', $phpFileTemplate, $matches);
+					if (count($matches) > 0) {
+						$htmlAd = $unit->div_display;
+						$result = preg_replace('/(<div.*?id="' . $id_tag_template . '"[^>]*>)(.*?)(<\/div>)/i', '$1$3', $phpFileTemplate);
+						$result = preg_replace('/(<div.*?id="' . $id_tag_template . '"[^>]*>)(.*?)(<\/div>)/i', '$1' . $htmlAd . '$3', $result);
+						file_put_contents($name, $result);
+					}
+				}
+			} else {
+				$erroWrite[] = $name;
+			}
+			// echo "$name\n";
+		}
+	}
+	// var_dump($erroWrite);
+}
+register_activation_hook( __FILE__, 'activar_plugin' );
+
+function desactivar_plugin( $plugin, $network_activation ) {
+	global $adunits;
+
+	$units = json_decode($adunits);
+	// do_action( 'my_plugin_activate' );
+	$erroWrite = array();
+	$pathTemplate = get_template_directory();
+	$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($pathTemplate), RecursiveIteratorIterator::SELF_FIRST);
+	foreach($objects as $name => $object){
+		if (preg_match('/^.+\.php$/i', $name)) {
+			if (is_writable($name)) {
+				$phpFileTemplate = file_get_contents($name);
+
+				foreach ($units as $key => $unit) {
+					$id_tag_template = str_replace("#", "", $unit->id_tag_template);
+					preg_match('/(<div.*?id="' . $id_tag_template . '"[^>]*>)(.*?)(<\/div>)/i', $phpFileTemplate, $matches);
+					if (count($matches) > 0) {
+						$htmlAd = $unit->div_display;
+						$result = preg_replace('/(<div.*?id="' . $id_tag_template . '"[^>]*>)(.*?)(<\/div>)/i', '$1$4', $phpFileTemplate);
+						file_put_contents($name, $result);
+					}
+				}
+			} else {
+				$erroWrite[] = $name;
+			}
+			// echo "$name\n";
+		}
+	}
+}
+add_action( 'deactivated_plugin', 'desactivar_plugin', 10, 2 );
+
+add_action('wp_head', 'head_setup_mt');
 function head_setup_mt() {
 ?>
 	{sync_request}
 
-	<script type='text/javascript'>
-	// Only do anything if jQuery isn't defined
-	if (typeof jQuery == 'undefined') {
-		if (typeof $ == 'function') {
-			// warning, global var
-			thisPageUsingOtherJSLibrary = true;
-		}
-		
-		function getScript(url, success) {
-			var script = document.createElement('script');
-				script.src = url;
-			var head = document.getElementsByTagName('head')[0],
-			done = false;
-			// Attach handlers for all browsers
-			script.onload = script.onreadystatechange = function() {
-				if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) {
-					done = true;
-					// callback function provided as param
-					success();
-					script.onload = script.onreadystatechange = null;
-					head.removeChild(script);
-				};
-			};
-			head.appendChild(script);
-		};
-		
-		getScript('http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', function() {
-			if (typeof jQuery=='undefined') {
-				alert("Fail load jQuery");
-			} else {
-				loadAds();
-			}
-		});
-	} else { // jQuery was already loaded
-		loadAds();
-	};
-	function loadAds() {
-		// jQuery(document).ready(function(){
-			{insert_ads}
-		// });
-	}
-	</script>
 	<style type="text/css">
 		{styles_oop}
 	</style>

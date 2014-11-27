@@ -1,2 +1,1 @@
-var zona{adunit_id} = '<div id="zona-{adunit_id}-oop"><script type="text/javascript">googletag.display("zona-{adunit_id}-oop");</scr'+'ipt></div>';
-if (jQuery("{adunit_tag_id}").length > 0) { jQuery("{adunit_tag_id}").empty().html(zona{adunit_id}); }
+<div id="zona-{adunit_id}-oop"><script type="text/javascript">googletag.display("zona-{adunit_id}-oop");</script></div>

@@ -1,0 +1,1 @@
+<div id="zona-{adunit_id}" style="width:{width}px; height:{height}px;"><script type="text/javascript">googletag.display("zona-{adunit_id}");</script></div>

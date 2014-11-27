@@ -5,6 +5,67 @@
 	<title>Tag</title>
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+
+	<script type='text/javascript'>
+	(function() {
+	var useSSL = 'https:' == document.location.protocol;
+	var src = (useSSL ? 'https:' : 'http:') +
+	'//www.googletagservices.com/tag/js/gpt.js';
+	document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
+	})();
+	</script>
+
+	<script type='text/javascript'>
+	googletag.defineOutOfPageSlot('/92947493/intersitial_CR_ALL', 'block_autopromo').addService(googletag.pubads());
+	googletag.defineSlot('/92947493/300x250_CR_sidebar_2', [300,250], 'block_barramt').addService(googletag.pubads());
+	googletag.pubads().enableSingleRequest();
+	googletag.pubads().enableSyncRendering();
+	googletag.enableServices();
+	</script>
+	<style type="text/css">
+		#promo{width:300px;};
+	</style>
+
+
+</head>
+<body>
+<h1>Tags</h1>
+
+
+<div id="promo"></div>
+<div id="oop"></div>
+
+<footer>	
+	<!-- <div id="block_autopromo" style="display:none;"><script type='text/javascript'>googletag.display('block_barramt');</script></div> -->
+	<div id="block_barramt" style="display:none;"><script type='text/javascript'>googletag.display('block_autopromo');</script></div>
+	<script type='text/javascript'>
+		$('#promo').html("<script type='text/javascript'>googletag.display('block_autopromo');</sc" + "ript>");
+		$(document).ready(function(){
+			setTimeout(function(){
+				// $('#block_autopromo').appendTo('#promo').show();
+				var adPromo = $('#block_autopromo').html();
+				// $('#block_autopromo').remove();
+				// $('#promo').html(adPromo);
+
+				// var adOop = $('#block_barramt').html();
+				// $('#block_barramt').remove();
+				// $('#oop').append(adOop);
+			}, 3000);
+		});
+	</script>
+</footer>
+
+</body>
+</html>
+
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Tag</title>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 	<script src="js/jquery.dfp.js"></script>
 
 
@@ -22,3 +83,4 @@
 </script>
 </body>
 </html>
+-->
