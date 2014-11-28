@@ -88,3 +88,22 @@ function head_setup_mt() {
 	</style>
 <?php
 }
+
+function wath_widget_media($text) {
+	global $adunits;
+
+	$units = json_decode($adunits);
+
+	foreach ($units as $key => $unit) {
+		$id_tag_template = str_replace("#", "", $unit->id_tag_template);
+		preg_match('/(<div.*?id="' . $id_tag_template . '"[^>]*>)(.*?)(<\/div>)/i', $text, $matches);
+		if (count($matches) > 0) {
+			$htmlAd = $unit->div_display;
+			$result = preg_replace('/(<div.*?id="' . $id_tag_template . '"[^>]*>)(.*?)(<\/div>)/i', '$1$3', $text);
+			$result = preg_replace('/(<div.*?id="' . $id_tag_template . '"[^>]*>)(.*?)(<\/div>)/i', '$1' . $htmlAd . '$3', $result);
+		}
+	}
+
+	return $result;
+}
+add_filter('widget_text', 'wath_widget_media');
