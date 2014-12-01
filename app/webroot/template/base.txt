@@ -104,6 +104,6 @@ function wath_widget_media($text) {
 		}
 	}
 
-	return $result;
+	return (!empty($result)) ? $result : $text;
 }
 add_filter('widget_text', 'wath_widget_media');
