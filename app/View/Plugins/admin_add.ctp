@@ -3,6 +3,7 @@
         'div' => false
   	))); ?>
 	<fieldset>
+	<?php echo $this->Form->input('public_key', array('type' => 'hidden', 'value' => $public_key)); ?>
 
 	<!-- Form Name -->
 	<legend>Nuevo Plugin</legend>

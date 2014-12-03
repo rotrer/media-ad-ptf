@@ -6,12 +6,16 @@
 			<?php echo h($plugin['Plugin']['name']); ?> <?php echo $this->Html->link(__('Editar'), array('controller' => 'plugins', 'action' => 'edit', $plugin['Plugin']['id']), array('class' => '', 'role' => 'button')); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Sites'); ?></dt>
+		<dt><p><?php echo __('Public Key'); ?></p></dt>
+		<dd>
+			<p><?php echo h($site['Plugin']['public_key']); ?></p>
+		</dd>
+		<dt><?php echo __('Sitio'); ?></dt>
 		<dd>
 			<?php echo $this->Html->link($plugin['Sites']['name'], array('controller' => 'sites', 'action' => 'view', $plugin['Sites']['id'])); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Created'); ?></dt>
+		<dt><?php echo __('Fecha Registro'); ?></dt>
 		<dd>
 			<?php echo h($plugin['Plugin']['created']); ?>
 			&nbsp;

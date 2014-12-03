@@ -25,8 +25,6 @@
 	  </div>
 	</div>
 
-	<?php echo $this->Form->input('public_key', array('type' => 'hidden', 'value' => $public_key)); ?>
-
 	<!-- Select Basic -->
 	<div class="form-group">
 	  <label class="col-md-4 control-label" for="state">Estado</label>

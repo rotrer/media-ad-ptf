@@ -30,6 +30,8 @@
 			</div>
 		</div>
 
+		<?php echo $this->Form->input('public_key', array('type' => 'hidden')); ?>
+
 		<div class="row">
 			<div class="col-md-12">
 				<h4>Datos zonas</h4><br>

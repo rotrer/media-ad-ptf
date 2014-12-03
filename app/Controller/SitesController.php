@@ -89,8 +89,7 @@ class SitesController extends AppController {
 		}
 		#Generar token
 		$users = $this->Site->User->find('list');
-		$public_key = String::uuid();
-		$this->set(compact('users', 'public_key'));
+		$this->set(compact('users'));
 	}
 
 /**

@@ -209,8 +209,11 @@ class PluginsController extends AppController {
 			$lineList = array();
 		}
 
+		#Public Key para actualización plugin
+		$public_key = String::uuid();
+
 		$sites = $this->Site->find('list');
-		$this->set(compact('sites', 'lineList'));
+		$this->set(compact('sites', 'lineList', 'public_key'));
 	}
 
 /**
@@ -552,7 +555,6 @@ class PluginsController extends AppController {
 							$infoToPlugin[$la_zona['AdUnits']['adunit_id_dfp']] = array(
 									'site' => array(
 											'domain' => $plugin['Sites']['domain'],
-											'public_key' => $plugin['Sites']['public_key'],
 										),
 									'zona' => array(
 											'name' => $la_zona['Zona']['name'],

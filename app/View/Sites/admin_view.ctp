@@ -5,10 +5,6 @@
 		<dd>
 			<p><?php echo h($site['Site']['name']); ?></p>
 		</dd>
-		<dt><p><?php echo __('Public Key'); ?></p></dt>
-		<dd>
-			<p><?php echo h($site['Site']['public_key']); ?></p>
-		</dd>
 		<dt><p><?php echo __('State'); ?></p></dt>
 		<dd>
 			<p><?php echo h($site['Site']['state']); ?></p>
