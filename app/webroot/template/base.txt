@@ -109,7 +109,8 @@ add_filter('widget_text', 'wath_widget_media');
 //Update plugins
 //////////////////////////////
 $api_url = '{url_api_plugin}';
-$plugin_slug = '{public_key}';
+$plugin_slug = '{slug}';
+$plugin_key = '{public_key}';
 
 
 // Take over the update check

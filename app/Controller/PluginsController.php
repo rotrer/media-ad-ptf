@@ -776,9 +776,15 @@ class PluginsController extends AppController {
 			$base_plugin_content = str_replace("{version}", $info['plugin']['version'], $base_plugin_content);
 			// replace public_key plugin
 			$base_plugin_content = str_replace("{public_key}", $info['plugin']['public_key'], $base_plugin_content);
+			// replace plugin_slug plugin
+			$dir_slug = 'mt-' . $domain_plugin;
+			$file_slug = $domain_plugin . '.php';
+			$base_plugin_content = str_replace("{slug}", $dir_slug . '/' . $file_slug, $base_plugin_content);
 			// replace url_api_plugin plugin
 			$urlFullRepositories = Router::url( array('controller' => 'repositories', 'action' => 'index', 'admin' => false), true );
 			$base_plugin_content = str_replace("{url_api_plugin}", $urlFullRepositories, $base_plugin_content);
+			debug($base_plugin_content);
+			die();
 			// create dir plugin
 			$base_path = WWW_ROOT . "plugins";
 			$path_plugin = $base_path . DS . 'mt-' . $domain_plugin;

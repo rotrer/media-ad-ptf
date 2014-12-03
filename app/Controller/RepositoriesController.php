@@ -55,7 +55,7 @@ class RepositoriesController extends AppController {
 		}
 		// make sure it's an array
 		$packages = array();
-		$packages['547f0bfd-45cc-4c96-a33b-0d06de47d803'] = array( //Replace plugin with the plugin slug that updates will be checking for
+		$packages['mt-adnetworks.cl-2/adnetworks.cl.php'] = array( //Replace plugin with the plugin slug that updates will be checking for
 				'versions' => array(
 						'1.1' => array( //Array name should be set to current version of update
 								'version' => '1.1', //Current version available
@@ -136,7 +136,6 @@ class RepositoriesController extends AppController {
 				/*
 					An error message can be displayed to users who go directly to the update url
 				 */
-
 				echo 'Whoops, this page doesn\'t exist';
 		}
 
