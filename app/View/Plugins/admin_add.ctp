@@ -4,6 +4,7 @@
   	))); ?>
 	<fieldset>
 	<?php echo $this->Form->input('public_key', array('type' => 'hidden', 'value' => $public_key)); ?>
+	<?php echo $this->Form->input('version', array('type' => 'hidden', 'value' => $version)); ?>
 
 	<!-- Form Name -->
 	<legend>Nuevo Plugin</legend>

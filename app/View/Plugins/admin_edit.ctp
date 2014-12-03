@@ -31,6 +31,7 @@
 		</div>
 
 		<?php echo $this->Form->input('public_key', array('type' => 'hidden', 'value' => $plugin['Plugin']['public_key'])); ?>
+		<?php echo $this->Form->input('version', array('type' => 'hidden', 'value' => $plugin['Plugin']['version'])); ?>
 
 		<div class="row">
 			<div class="col-md-12">

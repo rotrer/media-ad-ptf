@@ -98,4 +98,17 @@ class AppController extends Controller {
 				$networksSelected =  ($this->Session->check('networksAdsSelected')) ? $this->Session->read('networksAdsSelected') : NULL;
 				return new DfpUser(Configure::read('pathAuthIni'), NULL, NULL, NULL, $networksSelected, NULL, NULL, NULL);
 		}
+
+		public function rrmdir($dir) {
+			if (is_dir($dir)) {
+				$objects = scandir($dir);
+				foreach ($objects as $object) {
+					if ($object != "." && $object != "..") {
+						if (filetype($dir."/".$object) == "dir") rrmdir($dir."/".$object); else unlink($dir."/".$object);
+					}
+				}
+				reset($objects);
+				rmdir($dir);
+			}
+		}
 }

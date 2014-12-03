@@ -211,9 +211,10 @@ class PluginsController extends AppController {
 
 		#Public Key para actualización plugin
 		$public_key = String::uuid();
+		$version = 1;
 
 		$sites = $this->Site->find('list');
-		$this->set(compact('sites', 'lineList', 'public_key'));
+		$this->set(compact('sites', 'lineList', 'public_key', 'version'));
 	}
 
 /**
@@ -230,6 +231,8 @@ class PluginsController extends AppController {
 		if ($this->request->is(array('post', 'put'))) {
 			
 			$this->Plugin->id = $id;
+			#Aumentar versión para actualización plugin
+			$this->request->data['Plugin']['version'] += 1;
 			$savedPlugin = $this->Plugin->save($this->request->data);
 			if ($savedPlugin) {
 				$idPlugin = $id;
@@ -533,12 +536,41 @@ class PluginsController extends AppController {
 		exit();
 	}
 
-	public function admin_download($id = null){
-		if (!$this->Plugin->exists($id)) {
-			throw new NotFoundException(__('Invalid plugin'));
+	public function admin_more($id = null){
+		$options = array('conditions' => array('Plugin.' . $this->Plugin->primaryKey => $id));
+		$plugin = $this->Plugin->find('first', $options);
+
+		$zonasInfo = $this->Zona->find('all', array('conditions' => array('Zona.plugins_id' => $id)));
+
+		$hasOop =  false;
+		if($zonasInfo) foreach ($zonasInfo as $key => $zona) {
+			if (!empty($zona['Zona']['style']))
+				$hasOop =  true;
+
+			$lineItemInfo = $this->LineItemsAdUnit->find('first', array('conditions' => array('LineItemsAdUnit.ad_units_id' => $zona['AdUnits']['id'])));
+			$zonasLineInfo[] = array_merge($zona, $lineItemInfo);
 		}
 
+		$this->set(compact('plugin', 'zonasLineInfo', 'hasOop'));
+	}
+	public function admin_updaterepo($id = null){
 		if ($this->request->is('post')) {
+			$id = $this->request->data['Plugin']['id'];
+			if (!$this->Plugin->exists($id)) {
+				throw new NotFoundException(__('Invalid plugin'));
+			}
+
+			die();
+			$this->Session->setFlash(__('Repositorio plugin ha sido actualizado correctamente.'), 'default', array('class' => 'alert alert-success'));
+			return $this->redirect(array('action' => 'index'));
+		}
+	}
+	public function admin_download(){
+		if ($this->request->is('post')) {
+			$id = $this->request->data['Plugin']['id'];
+			if (!$this->Plugin->exists($id)) {
+				throw new NotFoundException(__('Invalid plugin'));
+			}
 			$infoToPlugin = array();
 			$infoToPlugin['id'] 	= $id;
 			$infoToPlugin['unq'] 	= $this->request->data['Plugin']['unq'];
@@ -549,6 +581,10 @@ class PluginsController extends AppController {
 					// Get adunits
 					$zonasAll = $this->Zona->find('all', array('conditions' => array('Zona.plugins_id' => $id)));
 					$plugin = $this->Plugin->find('first', array('conditions' => array('Plugin.' . $this->Plugin->primaryKey => $id))); 
+					$infoToPlugin['plugin'] =  array(
+										'public_key' => $plugin['Plugin']['public_key'],
+										'version' => $plugin['Plugin']['version'],
+										);
 					// debug($plugin);
 					// debug($zonasAll);
 					// die();
@@ -647,22 +683,6 @@ class PluginsController extends AppController {
 
 			}//End if ($infoToPlugin) {
 		}
-
-		$options = array('conditions' => array('Plugin.' . $this->Plugin->primaryKey => $id));
-		$plugin = $this->Plugin->find('first', $options);
-
-		$zonasInfo = $this->Zona->find('all', array('conditions' => array('Zona.plugins_id' => $id)));
-
-		$hasOop =  false;
-		if($zonasInfo) foreach ($zonasInfo as $key => $zona) {
-			if (!empty($zona['Zona']['style']))
-				$hasOop =  true;
-
-			$lineItemInfo = $this->LineItemsAdUnit->find('first', array('conditions' => array('LineItemsAdUnit.ad_units_id' => $zona['AdUnits']['id'])));
-			$zonasLineInfo[] = array_merge($zona, $lineItemInfo);
-		}
-
-		$this->set(compact('plugin', 'zonasLineInfo', 'hasOop'));
 	}
 
 	private function createZipPlugin($info) {
@@ -752,7 +772,13 @@ class PluginsController extends AppController {
 			$base_plugin_content = str_replace("{sync_request}", $sync_file_content, $base_plugin_content);
 			// replace styles oop
 			$base_plugin_content = str_replace("{styles_oop}", $styles_adunits, $base_plugin_content);
-
+			// replace version plugin
+			$base_plugin_content = str_replace("{version}", $info['plugin']['version'], $base_plugin_content);
+			// replace public_key plugin
+			$base_plugin_content = str_replace("{public_key}", $info['plugin']['public_key'], $base_plugin_content);
+			// replace url_api_plugin plugin
+			$urlFullRepositories = Router::url( array('controller' => 'repositories', 'action' => 'index', 'admin' => false), true );
+			$base_plugin_content = str_replace("{url_api_plugin}", $urlFullRepositories, $base_plugin_content);
 			// create dir plugin
 			$base_path = WWW_ROOT . "plugins";
 			$path_plugin = $base_path . DS . 'mt-' . $domain_plugin;
@@ -771,6 +797,7 @@ class PluginsController extends AppController {
 
 			$zipFile = $base_path . DS . 'mt-' . $domain_plugin . '.zip';
 			$endZip = $this->Zip($path_plugin, $zipFile);
+			$this->rrmdir($path_plugin);
 			if ($endZip) {
 				return $zipFile;
 			} else {

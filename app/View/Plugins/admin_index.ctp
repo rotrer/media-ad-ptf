@@ -4,6 +4,7 @@
 		<thead>
 			<tr>
 				<th><?php echo $this->Paginator->sort('name', 'Nombre'); ?></th>
+				<th><?php echo $this->Paginator->sort('version', 'Versión'); ?></th>
 				<th><?php echo $this->Paginator->sort('public_key', 'Llave pública'); ?></th>
 				<th><?php echo $this->Paginator->sort('sites_id', 'Sitio Asociado'); ?></th>
 				<th><?php echo $this->Paginator->sort('created', 'Fecha registro'); ?></th>
@@ -14,12 +15,13 @@
 			<?php foreach ($plugins as $plugin): ?>
 			<tr>
 				<td><?php echo h($plugin['Plugin']['name']); ?>&nbsp;</td>
+				<td><?php echo h($plugin['Plugin']['version']); ?>&nbsp;</td>
 				<td><?php echo h($plugin['Plugin']['public_key']); ?>&nbsp;</td>
 				<td><?php echo $this->Html->link($plugin['Sites']['name'], array('controller' => 'sites', 'action' => 'view', $plugin['Sites']['id'])); ?>&nbsp;</td>
 				<td><?php echo date('d-m-Y', strtotime($plugin['Plugin']['created'])); ?>&nbsp;</td>
 				<td>
 					<div class="btn-group">
-						<?php echo $this->Html->link(__('Descargar'), array('controller' => 'plugins', 'action' => 'download', $plugin['Plugin']['id']), array('class' => 'btn btn-default', 'role' => 'button')); ?>
+						<?php echo $this->Html->link(__('Más'), array('controller' => 'plugins', 'action' => 'more', $plugin['Plugin']['id']), array('class' => 'btn btn-default', 'role' => 'button')); ?>
 						<?php echo $this->Html->link(__('Ver'), array('action' => 'view', $plugin['Plugin']['id']), array('class' => 'btn btn-default', 'role' => 'button')); ?>
 						<?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $plugin['Plugin']['id']), array('class' => 'btn btn-default', 'role' => 'button')); ?>
 						<?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $plugin['Plugin']['id']), array('class' => 'btn btn-danger', 'role' => 'button'), __('Seguro desea eliminar %s?', $plugin['Plugin']['name'])); ?>
