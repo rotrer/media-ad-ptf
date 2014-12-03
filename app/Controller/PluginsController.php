@@ -387,10 +387,12 @@ class PluginsController extends AppController {
 			throw new NotFoundException(__('Invalid plugin'));
 		}
 		$this->request->allowMethod('post', 'delete');
+
+		$this->Zona->deleteAll(array('Zona.plugins_id' => $id), false);
 		if ($this->Plugin->delete()) {
-			$this->Session->setFlash(__('The plugin has been deleted.'));
+			$this->Session->setFlash(__('Plugin ha sido eliminado correctamente.'), 'default', array('class' => 'alert alert-success'));
 		} else {
-			$this->Session->setFlash(__('The plugin could not be deleted. Please, try again.'));
+			$this->Session->setFlash(__('Plugin no ha sido guardado.'), 'default', array('class' => 'alert alert-danger'));
 		}
 		return $this->redirect(array('action' => 'index'));
 	}

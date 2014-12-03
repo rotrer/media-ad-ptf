@@ -30,7 +30,7 @@
 			</div>
 		</div>
 
-		<?php echo $this->Form->input('public_key', array('type' => 'hidden')); ?>
+		<?php echo $this->Form->input('public_key', array('type' => 'hidden', 'value' => $plugin['Plugin']['public_key'])); ?>
 
 		<div class="row">
 			<div class="col-md-12">
