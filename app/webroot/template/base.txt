@@ -14,8 +14,16 @@ $adunits = '{insert_ads}';
 function activar_plugin() {
 	global $adunits;
 
+	$hasPreviuos = get_option('mt_plugin');
+	if ($hasPreviuos) {
+		cleanTagTemplates($hasPreviuos);
+		add_option( 'mt_plugin', $adunits );
+	} else {
+		add_option( 'mt_plugin', $adunits );
+	}
+	
+
 	$units = json_decode($adunits);
-	// do_action( 'my_plugin_activate' );
 	$erroWrite = array();
 	$pathTemplate = get_template_directory();
 	$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($pathTemplate), RecursiveIteratorIterator::SELF_FIRST);
@@ -28,8 +36,13 @@ function activar_plugin() {
 					$id_tag_template = str_replace("#", "", $unit->id_tag_template);
 					preg_match('/(<div.*?id="' . $id_tag_template . '"[^>]*>)(.*?)(<\/div>)/i', $phpFileTemplate, $matches);
 					if (count($matches) > 0) {
+						if (!empty($matches[2])) {
+							$divReplace = '$1$4';
+						} else {
+							$divReplace = '$1$3';
+						}
 						$htmlAd = $unit->div_display;
-						$result = preg_replace('/(<div.*?id="' . $id_tag_template . '"[^>]*>)(.*?)(<\/div>)/i', '$1$3', $phpFileTemplate);
+						$result = preg_replace('/(<div.*?id="' . $id_tag_template . '"[^>]*>)(.*?)(<\/div>)/i', $divReplace, $phpFileTemplate);
 						$result = preg_replace('/(<div.*?id="' . $id_tag_template . '"[^>]*>)(.*?)(<\/div>)/i', '$1' . $htmlAd . '$3', $result);
 						file_put_contents($name, $result);
 					}
@@ -37,41 +50,15 @@ function activar_plugin() {
 			} else {
 				$erroWrite[] = $name;
 			}
-			// echo "$name\n";
 		}
 	}
-	// var_dump($erroWrite);
 }
 register_activation_hook( __FILE__, 'activar_plugin' );
 
 function desactivar_plugin( $plugin, $network_activation ) {
 	global $adunits;
-
-	$units = json_decode($adunits);
-	// do_action( 'my_plugin_activate' );
-	$erroWrite = array();
-	$pathTemplate = get_template_directory();
-	$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($pathTemplate), RecursiveIteratorIterator::SELF_FIRST);
-	foreach($objects as $name => $object){
-		if (preg_match('/^.+\.php$/i', $name)) {
-			if (is_writable($name)) {
-				$phpFileTemplate = file_get_contents($name);
-
-				foreach ($units as $key => $unit) {
-					$id_tag_template = str_replace("#", "", $unit->id_tag_template);
-					preg_match('/(<div.*?id="' . $id_tag_template . '"[^>]*>)(.*?)(<\/div>)/i', $phpFileTemplate, $matches);
-					if (count($matches) > 0) {
-						$htmlAd = $unit->div_display;
-						$result = preg_replace('/(<div.*?id="' . $id_tag_template . '"[^>]*>)(.*?)(<\/div>)/i', '$1$4', $phpFileTemplate);
-						file_put_contents($name, $result);
-					}
-				}
-			} else {
-				$erroWrite[] = $name;
-			}
-			// echo "$name\n";
-		}
-	}
+	cleanTagTemplates($adunits);
+	delete_option( 'mt_plugin' );
 }
 add_action( 'deactivated_plugin', 'desactivar_plugin', 10, 2 );
 
@@ -104,6 +91,51 @@ function wath_widget_media($text) {
 	return (!empty($result)) ? $result : $text;
 }
 add_filter('widget_text', 'wath_widget_media');
+
+function cleanTagTemplates($adunits) {
+	$units = json_decode($adunits);
+	$erroWrite = array();
+	$pathTemplate = get_template_directory();
+	$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($pathTemplate), RecursiveIteratorIterator::SELF_FIRST);
+	foreach($objects as $name => $object){
+		if (preg_match('/^.+\.php$/i', $name)) {
+			if (is_writable($name)) {
+				$phpFileTemplate = file_get_contents($name);
+
+				foreach ($units as $key => $unit) {
+					$id_tag_template = str_replace("#", "", $unit->id_tag_template);
+					preg_match('/(<div.*?id="' . $id_tag_template . '"[^>]*>)(.*?)(<\/div>)/i', $phpFileTemplate, $matches);
+					if (count($matches) > 0) {
+						if (!empty($matches[2])) {
+							$htmlAd = $unit->div_display; echo $htmlAd;
+							$result = preg_replace('/(<div.*?id="' . $id_tag_template . '"[^>]*>)(.*?)(<\/div>)/i', '$1$4', $phpFileTemplate);
+							file_put_contents($name, $result);
+						}
+					}
+				}
+			} else {
+				$erroWrite[] = $name;
+			}
+		}
+	}
+}
+
+//////////////////////////////
+//Delete plugins
+//////////////////////////////
+ /**
+ * Check for hook
+ */
+if ( function_exists('register_uninstall_hook') )
+	register_uninstall_hook(__FILE__, 'uninstall_mt');
+
+/**
+ * Delete options in database
+ */
+function uninstall_mt() {
+	global $adunits;
+	cleanTagTemplates($adunits);
+}
 
 //////////////////////////////
 //Update plugins
