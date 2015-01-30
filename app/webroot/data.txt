@@ -1,0 +1,660 @@
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+    [REDIRECT_REDIRECT_STATUS] => 200
+    [REDIRECT_STATUS] => 200
+    [HTTP_USER_AGENT] => WordPress/; http://media-adserver.media.cl/app/webroot/wp
+    [HTTP_HOST] => media-adserver.media.cl
+    [HTTP_ACCEPT] => */*
+    [HTTP_ACCEPT_ENCODING] => deflate;q=1.0, compress;q=0.5, gzip;q=0.5
+    [CONTENT_TYPE] => application/x-www-form-urlencoded; charset=UTF-8
+    [CONTENT_LENGTH] => 214
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache
+    [SERVER_NAME] => media-adserver.media.cl
+    [SERVER_ADDR] => 127.0.0.1
+    [SERVER_PORT] => 80
+    [REMOTE_ADDR] => 127.0.0.1
+    [DOCUMENT_ROOT] => /Users/cristian/Proyectos/labs/ptf
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Users/cristian/Proyectos/labs/ptf/app/webroot/index.php
+    [REMOTE_PORT] => 60690
+    [REDIRECT_URL] => /app/webroot/repositories
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.0
+    [REQUEST_METHOD] => POST
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /repositories
+    [SCRIPT_NAME] => /app/webroot/index.php
+    [PHP_SELF] => /app/webroot/index.php
+    [REQUEST_TIME_FLOAT] => 1422648985.99
+    [REQUEST_TIME] => 1422648985
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+    [REDIRECT_REDIRECT_STATUS] => 200
+    [REDIRECT_STATUS] => 200
+    [HTTP_USER_AGENT] => WordPress/; http://media-adserver.media.cl/app/webroot/wp
+    [HTTP_HOST] => media-adserver.media.cl
+    [HTTP_ACCEPT] => */*
+    [HTTP_ACCEPT_ENCODING] => deflate;q=1.0, compress;q=0.5, gzip;q=0.5
+    [CONTENT_TYPE] => application/x-www-form-urlencoded; charset=UTF-8
+    [CONTENT_LENGTH] => 214
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache
+    [SERVER_NAME] => media-adserver.media.cl
+    [SERVER_ADDR] => 127.0.0.1
+    [SERVER_PORT] => 80
+    [REMOTE_ADDR] => 127.0.0.1
+    [DOCUMENT_ROOT] => /Users/cristian/Proyectos/labs/ptf
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Users/cristian/Proyectos/labs/ptf/app/webroot/index.php
+    [REMOTE_PORT] => 60695
+    [REDIRECT_URL] => /app/webroot/repositories
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.0
+    [REQUEST_METHOD] => POST
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /repositories
+    [SCRIPT_NAME] => /app/webroot/index.php
+    [PHP_SELF] => /app/webroot/index.php
+    [REQUEST_TIME_FLOAT] => 1422648987.39
+    [REQUEST_TIME] => 1422648987
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+    [REDIRECT_REDIRECT_STATUS] => 200
+    [REDIRECT_STATUS] => 200
+    [HTTP_USER_AGENT] => WordPress/; http://media-adserver.media.cl/app/webroot/wp
+    [HTTP_HOST] => media-adserver.media.cl
+    [HTTP_ACCEPT] => */*
+    [HTTP_ACCEPT_ENCODING] => deflate;q=1.0, compress;q=0.5, gzip;q=0.5
+    [CONTENT_TYPE] => application/x-www-form-urlencoded; charset=UTF-8
+    [CONTENT_LENGTH] => 214
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache
+    [SERVER_NAME] => media-adserver.media.cl
+    [SERVER_ADDR] => 127.0.0.1
+    [SERVER_PORT] => 80
+    [REMOTE_ADDR] => 127.0.0.1
+    [DOCUMENT_ROOT] => /Users/cristian/Proyectos/labs/ptf
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Users/cristian/Proyectos/labs/ptf/app/webroot/index.php
+    [REMOTE_PORT] => 60707
+    [REDIRECT_URL] => /app/webroot/repositories
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.0
+    [REQUEST_METHOD] => POST
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /repositories
+    [SCRIPT_NAME] => /app/webroot/index.php
+    [PHP_SELF] => /app/webroot/index.php
+    [REQUEST_TIME_FLOAT] => 1422649010.18
+    [REQUEST_TIME] => 1422649010
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+    [REDIRECT_REDIRECT_STATUS] => 200
+    [REDIRECT_STATUS] => 200
+    [HTTP_USER_AGENT] => WordPress/; http://media-adserver.media.cl/app/webroot/wp
+    [HTTP_HOST] => media-adserver.media.cl
+    [HTTP_ACCEPT] => */*
+    [HTTP_ACCEPT_ENCODING] => deflate;q=1.0, compress;q=0.5, gzip;q=0.5
+    [CONTENT_TYPE] => application/x-www-form-urlencoded; charset=UTF-8
+    [CONTENT_LENGTH] => 214
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache
+    [SERVER_NAME] => media-adserver.media.cl
+    [SERVER_ADDR] => 127.0.0.1
+    [SERVER_PORT] => 80
+    [REMOTE_ADDR] => 127.0.0.1
+    [DOCUMENT_ROOT] => /Users/cristian/Proyectos/labs/ptf
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Users/cristian/Proyectos/labs/ptf/app/webroot/index.php
+    [REMOTE_PORT] => 60712
+    [REDIRECT_URL] => /app/webroot/repositories
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.0
+    [REQUEST_METHOD] => POST
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /repositories
+    [SCRIPT_NAME] => /app/webroot/index.php
+    [PHP_SELF] => /app/webroot/index.php
+    [REQUEST_TIME_FLOAT] => 1422649010.81
+    [REQUEST_TIME] => 1422649010
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+    [REDIRECT_REDIRECT_STATUS] => 200
+    [REDIRECT_STATUS] => 200
+    [HTTP_USER_AGENT] => WordPress/; http://media-adserver.media.cl/app/webroot/wp
+    [HTTP_HOST] => media-adserver.media.cl
+    [HTTP_ACCEPT] => */*
+    [HTTP_ACCEPT_ENCODING] => deflate;q=1.0, compress;q=0.5, gzip;q=0.5
+    [CONTENT_TYPE] => application/x-www-form-urlencoded; charset=UTF-8
+    [CONTENT_LENGTH] => 214
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache
+    [SERVER_NAME] => media-adserver.media.cl
+    [SERVER_ADDR] => 127.0.0.1
+    [SERVER_PORT] => 80
+    [REMOTE_ADDR] => 127.0.0.1
+    [DOCUMENT_ROOT] => /Users/cristian/Proyectos/labs/ptf
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Users/cristian/Proyectos/labs/ptf/app/webroot/index.php
+    [REMOTE_PORT] => 60726
+    [REDIRECT_URL] => /app/webroot/repositories
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.0
+    [REQUEST_METHOD] => POST
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /repositories
+    [SCRIPT_NAME] => /app/webroot/index.php
+    [PHP_SELF] => /app/webroot/index.php
+    [REQUEST_TIME_FLOAT] => 1422649015.71
+    [REQUEST_TIME] => 1422649015
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+    [REDIRECT_REDIRECT_STATUS] => 200
+    [REDIRECT_STATUS] => 200
+    [HTTP_USER_AGENT] => WordPress/; http://media-adserver.media.cl/app/webroot/wp
+    [HTTP_HOST] => media-adserver.media.cl
+    [HTTP_ACCEPT] => */*
+    [HTTP_ACCEPT_ENCODING] => deflate;q=1.0, compress;q=0.5, gzip;q=0.5
+    [CONTENT_TYPE] => application/x-www-form-urlencoded; charset=UTF-8
+    [CONTENT_LENGTH] => 214
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache
+    [SERVER_NAME] => media-adserver.media.cl
+    [SERVER_ADDR] => 127.0.0.1
+    [SERVER_PORT] => 80
+    [REMOTE_ADDR] => 127.0.0.1
+    [DOCUMENT_ROOT] => /Users/cristian/Proyectos/labs/ptf
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Users/cristian/Proyectos/labs/ptf/app/webroot/index.php
+    [REMOTE_PORT] => 60731
+    [REDIRECT_URL] => /app/webroot/repositories
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.0
+    [REQUEST_METHOD] => POST
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /repositories
+    [SCRIPT_NAME] => /app/webroot/index.php
+    [PHP_SELF] => /app/webroot/index.php
+    [REQUEST_TIME_FLOAT] => 1422649016.35
+    [REQUEST_TIME] => 1422649016
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+    [REDIRECT_REDIRECT_STATUS] => 200
+    [REDIRECT_STATUS] => 200
+    [HTTP_USER_AGENT] => WordPress/; http://media-adserver.media.cl/app/webroot/wp
+    [HTTP_HOST] => media-adserver.media.cl
+    [HTTP_ACCEPT] => */*
+    [HTTP_ACCEPT_ENCODING] => deflate;q=1.0, compress;q=0.5, gzip;q=0.5
+    [CONTENT_TYPE] => application/x-www-form-urlencoded; charset=UTF-8
+    [CONTENT_LENGTH] => 214
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache
+    [SERVER_NAME] => media-adserver.media.cl
+    [SERVER_ADDR] => 127.0.0.1
+    [SERVER_PORT] => 80
+    [REMOTE_ADDR] => 127.0.0.1
+    [DOCUMENT_ROOT] => /Users/cristian/Proyectos/labs/ptf
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Users/cristian/Proyectos/labs/ptf/app/webroot/index.php
+    [REMOTE_PORT] => 60741
+    [REDIRECT_URL] => /app/webroot/repositories
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.0
+    [REQUEST_METHOD] => POST
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /repositories
+    [SCRIPT_NAME] => /app/webroot/index.php
+    [PHP_SELF] => /app/webroot/index.php
+    [REQUEST_TIME_FLOAT] => 1422649019.07
+    [REQUEST_TIME] => 1422649019
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+    [REDIRECT_REDIRECT_STATUS] => 200
+    [REDIRECT_STATUS] => 200
+    [HTTP_USER_AGENT] => WordPress/; http://media-adserver.media.cl/app/webroot/wp
+    [HTTP_HOST] => media-adserver.media.cl
+    [HTTP_ACCEPT] => */*
+    [HTTP_ACCEPT_ENCODING] => deflate;q=1.0, compress;q=0.5, gzip;q=0.5
+    [CONTENT_TYPE] => application/x-www-form-urlencoded; charset=UTF-8
+    [CONTENT_LENGTH] => 214
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache
+    [SERVER_NAME] => media-adserver.media.cl
+    [SERVER_ADDR] => 127.0.0.1
+    [SERVER_PORT] => 80
+    [REMOTE_ADDR] => 127.0.0.1
+    [DOCUMENT_ROOT] => /Users/cristian/Proyectos/labs/ptf
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Users/cristian/Proyectos/labs/ptf/app/webroot/index.php
+    [REMOTE_PORT] => 60746
+    [REDIRECT_URL] => /app/webroot/repositories
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.0
+    [REQUEST_METHOD] => POST
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /repositories
+    [SCRIPT_NAME] => /app/webroot/index.php
+    [PHP_SELF] => /app/webroot/index.php
+    [REQUEST_TIME_FLOAT] => 1422649019.83
+    [REQUEST_TIME] => 1422649019
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+    [REDIRECT_REDIRECT_STATUS] => 200
+    [REDIRECT_STATUS] => 200
+    [HTTP_USER_AGENT] => WordPress/; http://media-adserver.media.cl/app/webroot/wp
+    [HTTP_HOST] => media-adserver.media.cl
+    [HTTP_ACCEPT] => */*
+    [HTTP_ACCEPT_ENCODING] => deflate;q=1.0, compress;q=0.5, gzip;q=0.5
+    [CONTENT_TYPE] => application/x-www-form-urlencoded; charset=UTF-8
+    [CONTENT_LENGTH] => 214
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache
+    [SERVER_NAME] => media-adserver.media.cl
+    [SERVER_ADDR] => 127.0.0.1
+    [SERVER_PORT] => 80
+    [REMOTE_ADDR] => 127.0.0.1
+    [DOCUMENT_ROOT] => /Users/cristian/Proyectos/labs/ptf
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Users/cristian/Proyectos/labs/ptf/app/webroot/index.php
+    [REMOTE_PORT] => 60763
+    [REDIRECT_URL] => /app/webroot/repositories
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.0
+    [REQUEST_METHOD] => POST
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /repositories
+    [SCRIPT_NAME] => /app/webroot/index.php
+    [PHP_SELF] => /app/webroot/index.php
+    [REQUEST_TIME_FLOAT] => 1422649121.63
+    [REQUEST_TIME] => 1422649121
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+    [REDIRECT_REDIRECT_STATUS] => 200
+    [REDIRECT_STATUS] => 200
+    [HTTP_USER_AGENT] => WordPress/; http://media-adserver.media.cl/app/webroot/wp
+    [HTTP_HOST] => media-adserver.media.cl
+    [HTTP_ACCEPT] => */*
+    [HTTP_ACCEPT_ENCODING] => deflate;q=1.0, compress;q=0.5, gzip;q=0.5
+    [CONTENT_TYPE] => application/x-www-form-urlencoded; charset=UTF-8
+    [CONTENT_LENGTH] => 214
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache
+    [SERVER_NAME] => media-adserver.media.cl
+    [SERVER_ADDR] => 127.0.0.1
+    [SERVER_PORT] => 80
+    [REMOTE_ADDR] => 127.0.0.1
+    [DOCUMENT_ROOT] => /Users/cristian/Proyectos/labs/ptf
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Users/cristian/Proyectos/labs/ptf/app/webroot/index.php
+    [REMOTE_PORT] => 60768
+    [REDIRECT_URL] => /app/webroot/repositories
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.0
+    [REQUEST_METHOD] => POST
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /repositories
+    [SCRIPT_NAME] => /app/webroot/index.php
+    [PHP_SELF] => /app/webroot/index.php
+    [REQUEST_TIME_FLOAT] => 1422649122.68
+    [REQUEST_TIME] => 1422649122
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+    [REDIRECT_REDIRECT_STATUS] => 200
+    [REDIRECT_STATUS] => 200
+    [HTTP_USER_AGENT] => WordPress/; http://media-adserver.media.cl/app/webroot/wp
+    [HTTP_HOST] => media-adserver.media.cl
+    [HTTP_ACCEPT] => */*
+    [HTTP_ACCEPT_ENCODING] => deflate;q=1.0, compress;q=0.5, gzip;q=0.5
+    [CONTENT_TYPE] => application/x-www-form-urlencoded; charset=UTF-8
+    [CONTENT_LENGTH] => 214
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache
+    [SERVER_NAME] => media-adserver.media.cl
+    [SERVER_ADDR] => 127.0.0.1
+    [SERVER_PORT] => 80
+    [REMOTE_ADDR] => 127.0.0.1
+    [DOCUMENT_ROOT] => /Users/cristian/Proyectos/labs/ptf
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Users/cristian/Proyectos/labs/ptf/app/webroot/index.php
+    [REMOTE_PORT] => 60780
+    [REDIRECT_URL] => /app/webroot/repositories
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.0
+    [REQUEST_METHOD] => POST
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /repositories
+    [SCRIPT_NAME] => /app/webroot/index.php
+    [PHP_SELF] => /app/webroot/index.php
+    [REQUEST_TIME_FLOAT] => 1422649124.95
+    [REQUEST_TIME] => 1422649124
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+)
+Array
+(
+    [action] => basic_check
+    [request] => a:2:{s:4:"slug";s:49:"mt-www.chilerunning.com_/www.chilerunning.com.php";s:7:"version";s:1:"2";}
+    [api-key] => 8667cd16d8bddc397ad894233dadac58
+)
+Array
+(
+    [REDIRECT_REDIRECT_STATUS] => 200
+    [REDIRECT_STATUS] => 200
+    [HTTP_USER_AGENT] => WordPress/; http://media-adserver.media.cl/app/webroot/wp
+    [HTTP_HOST] => media-adserver.media.cl
+    [HTTP_ACCEPT] => */*
+    [HTTP_ACCEPT_ENCODING] => deflate;q=1.0, compress;q=0.5, gzip;q=0.5
+    [CONTENT_TYPE] => application/x-www-form-urlencoded; charset=UTF-8
+    [CONTENT_LENGTH] => 214
+    [PATH] => /usr/bin:/bin:/usr/sbin:/sbin
+    [SERVER_SIGNATURE] => 
+    [SERVER_SOFTWARE] => Apache
+    [SERVER_NAME] => media-adserver.media.cl
+    [SERVER_ADDR] => 127.0.0.1
+    [SERVER_PORT] => 80
+    [REMOTE_ADDR] => 127.0.0.1
+    [DOCUMENT_ROOT] => /Users/cristian/Proyectos/labs/ptf
+    [SERVER_ADMIN] => you@example.com
+    [SCRIPT_FILENAME] => /Users/cristian/Proyectos/labs/ptf/app/webroot/index.php
+    [REMOTE_PORT] => 60785
+    [REDIRECT_URL] => /app/webroot/repositories
+    [GATEWAY_INTERFACE] => CGI/1.1
+    [SERVER_PROTOCOL] => HTTP/1.0
+    [REQUEST_METHOD] => POST
+    [QUERY_STRING] => 
+    [REQUEST_URI] => /repositories
+    [SCRIPT_NAME] => /app/webroot/index.php
+    [PHP_SELF] => /app/webroot/index.php
+    [REQUEST_TIME_FLOAT] => 1422649125.67
+    [REQUEST_TIME] => 1422649125
+    [argv] => Array
+        (
+        )
+
+    [argc] => 0
+)

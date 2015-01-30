@@ -585,9 +585,6 @@ class PluginsController extends AppController {
 										'public_key' => $plugin['Plugin']['public_key'],
 										'version' => $plugin['Plugin']['version'],
 										);
-					// debug($plugin);
-					// debug($zonasAll);
-					// die();
 					if ($zonasAll) {
 						foreach ($zonasAll as $key => $la_zona) {
 							$infoToPlugin[$la_zona['AdUnits']['adunit_id_dfp']] = array(
@@ -783,8 +780,6 @@ class PluginsController extends AppController {
 			// replace url_api_plugin plugin
 			$urlFullRepositories = Router::url( array('controller' => 'repositories', 'action' => 'index', 'admin' => false), true );
 			$base_plugin_content = str_replace("{url_api_plugin}", $urlFullRepositories, $base_plugin_content);
-			debug($base_plugin_content);
-			die();
 			// create dir plugin
 			$base_path = WWW_ROOT . "plugins";
 			$path_plugin = $base_path . DS . 'mt-' . $domain_plugin;
