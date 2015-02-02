@@ -898,6 +898,10 @@ class PluginsController extends AppController {
 			$base_plugin_content = str_replace("{url_api_plugin}", $urlFullRepositories, $base_plugin_content);
 			// create dir plugin
 			$base_path = WWW_ROOT . "plugins";
+			// check if dir exists
+			if (!is_dir($base_path)) {
+				mkdir($base_path);
+			}
 			$path_plugin = $base_path . DS . $info['plugin']['public_key'];
 
 			// check if dir exists
