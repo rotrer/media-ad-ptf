@@ -36,13 +36,6 @@ class RepositoriesController extends AppController {
 		// Pull user agent  
 		$user_agent = $_SERVER['HTTP_USER_AGENT'];
 
-		$fp = fopen('data.txt', 'a');
-		fwrite($fp, print_r($_GET, true));
-		fwrite($fp, print_r($_POST, true));
-		fwrite($fp, print_r($_COOKIE, true));
-		fwrite($fp, print_r($_REQUEST, true));
-		fwrite($fp, print_r($_SERVER, true));
-		fclose($fp);
 		//Kill magic quotes.  Can't unserialize POST variable otherwise
 		if ( get_magic_quotes_gpc() ) {
 				$process = array( &$_GET, &$_POST, &$_COOKIE, &$_REQUEST );
@@ -61,7 +54,7 @@ class RepositoriesController extends AppController {
 		}
 		// make sure it's an array
 		$packages = array();
-		$packages['mt-www.chilerunning.com_/www.chilerunning.com.php'] = array( //Replace plugin with the plugin slug that updates will be checking for
+		$packages['547f0bfd-45cc-4c96-a33b-0d06de47d803'] = array( //Replace plugin with the plugin slug that updates will be checking for
 				'versions' => array(
 						'3' => array( //Array name should be set to current version of update
 								'version' => '3', //Current version available
@@ -144,6 +137,102 @@ class RepositoriesController extends AppController {
 				 */
 				echo 'Whoops, this page doesn\'t exist';
 		}
+
+	}
+
+	public function api() {
+		$this->layout = 'ajax';
+
+		// Process API requests
+
+		$action = $_POST['action'];
+		$args = unserialize($_POST['request']);
+
+		// $fp = fopen('request', 'a');
+		// fwrite($fp, print_r($args, true));
+		
+
+
+		//Search plugin info
+		$public_key = $args['slug'];
+		// $public_key = '547f0bf8-d340-4497-8a23-0d06de47d803';
+		$options = array('conditions' => array('Plugin.public_key' => $public_key));
+		$plugin = $this->Plugin->find('first', $options);
+
+		//Info plugin
+		$packages[$plugin['Plugin']['public_key']] = array(
+			'versions' => array(
+				$plugin['Plugin']['version'] => array(
+					'version' => $plugin['Plugin']['version'],
+					'date' => date('Y-m-d', strtotime($plugin['Plugin']['created'])),
+					'package' => Router::url( '/plugins/' . $plugin['Plugin']['public_key'] . '.zip' , true )
+				)
+			),
+			'info' => array(
+				'url' => 'http://media-adserver.media.cl'
+			)	
+		);
+		// fwrite($fp, print_r($public_key, true));
+		// fwrite($fp, print_r($packages, true));
+		// fclose($fp);
+		if (is_array($args))
+			$args = $this->array_to_object($args);
+
+		$latest_package = array_shift($packages[$args->slug]['versions']);
+
+
+
+		// basic_check
+
+		if ($action == 'basic_check') {	
+			$update_info = $this->array_to_object($latest_package);
+			$update_info->slug = $args->slug;
+			
+			if (version_compare($args->version, $latest_package['version'], '<'))
+				$update_info->new_version = $update_info->version;
+			
+			print serialize($update_info);
+		}
+
+
+		// plugin_information
+
+		if ($action == 'plugin_information') {	
+			$data = new stdClass;
+			
+			$data->slug = $args->slug;
+			$data->version = $latest_package['version'];
+			$data->last_updated = $latest_package['date'];
+			$data->download_link = $latest_package['package'];
+			$data->sections = array(
+					'description' => 'Actualización contenido.');
+			// $data->sections = array('description' => '<h2>$_POST</h2><small><pre>'.var_export($_POST, true).'</pre></small>'
+			// 	. '<h2>Response</h2><small><pre>'.var_export($data, true).'</pre></small>'
+			// 	. '<h2>Packages</h2><small><pre>'.var_export($packages, true).'</pre></small>');
+
+			print serialize($data);
+		}
+
+
+		// theme_update
+
+		if ($action == 'theme_update') {
+			$update_info = $this->array_to_object($latest_package);
+			
+			//$update_data = new stdClass;
+			$update_data = array();
+			$update_data['package'] = $update_info->package;	
+			$update_data['new_version'] = $update_info->version;
+			$update_data['url'] = $packages[$args->slug]['info']['url'];
+				
+			if (version_compare($args->version, $latest_package['version'], '<'))
+				print serialize($update_data);	
+		}
+
+		exit();
+	}
+
+	public function download() {
 
 	}
 

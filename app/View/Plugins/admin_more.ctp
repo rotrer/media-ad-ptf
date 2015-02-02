@@ -93,6 +93,26 @@
   </div>
 </div>
 
+<!-- Multiple Checkboxes (inline) -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="SiteUnq">Habilitar solicitud única</label>
+  <div class="col-md-4">
+    <label class="checkbox-inline" for="SiteUnq">
+      <?php echo $this->Form->input('unq', array('type' => 'checkbox', 'value' => 1, 'label' => false, 'div' => false)); ?>
+    </label>
+  </div>
+</div>
+
+<!-- Multiple Checkboxes (inline) -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="SiteSync">Habilitar la solicitud síncronica</label>
+  <div class="col-md-4">
+    <label class="checkbox-inline" for="SiteSync">
+      <?php echo $this->Form->input('sync', array('type' => 'checkbox', 'checked' => $hasOop, 'value' => 1, 'label' => false, 'div' => false)); ?>
+    </label>
+  </div>
+</div>
+
 <!-- Button -->
 <div class="form-group">
   <label class="col-md-4 control-label" for="repobutton"></label>

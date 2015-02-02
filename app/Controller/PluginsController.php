@@ -560,9 +560,125 @@ class PluginsController extends AppController {
 				throw new NotFoundException(__('Invalid plugin'));
 			}
 
-			die();
-			$this->Session->setFlash(__('Repositorio plugin ha sido actualizado correctamente.'), 'default', array('class' => 'alert alert-success'));
-			return $this->redirect(array('action' => 'index'));
+			$options = array('conditions' => array('Plugin.' . $this->Site->primaryKey => $id));
+			$pluingData = $this->Plugin->find('first', $options);
+			$newVersion = $pluingData['Plugin']['version'] + 1;
+			$dataUpdate = array(
+					'version' => $newVersion
+				);
+			$this->Plugin->id = $id;
+			if ($this->Plugin->save($dataUpdate)) {
+				$this->Session->setFlash(__('Repositorio plugin ha sido actualizado correctamente.'), 'default', array('class' => 'alert alert-success'));
+			} else {
+				$this->Session->setFlash(__('Plugin no actualizado, favor intentar nuevamente.'), 'default', array('class' => 'alert alert-danger'));
+			}
+
+			////////////////////////////////////////////////////////////////
+			$infoToPlugin = array();
+			$infoToPlugin['id'] 	= $id;
+			$infoToPlugin['unq'] 	= $this->request->data['Plugin']['unq'];
+			$infoToPlugin['sync'] = $this->request->data['Plugin']['sync'];
+
+			if ($infoToPlugin) {
+				try {
+					// Get adunits
+					$zonasAll = $this->Zona->find('all', array('conditions' => array('Zona.plugins_id' => $id)));
+					$plugin = $this->Plugin->find('first', array('conditions' => array('Plugin.' . $this->Plugin->primaryKey => $id))); 
+					$infoToPlugin['plugin'] =  array(
+										'public_key' => $plugin['Plugin']['public_key'],
+										'version' => $plugin['Plugin']['version'],
+										);
+					if ($zonasAll) {
+						foreach ($zonasAll as $key => $la_zona) {
+							$infoToPlugin[$la_zona['AdUnits']['adunit_id_dfp']] = array(
+									'site' => array(
+											'domain' => $plugin['Sites']['domain'],
+										),
+									'zona' => array(
+											'name' => $la_zona['Zona']['name'],
+											'id_tag_template' => $la_zona['Zona']['id_tag_template'],
+											'out_of_page' => $la_zona['Zona']['out_of_page'],
+											'style' => $la_zona['Zona']['style'],
+										),
+									'adunit' => array(
+										)
+								);
+							$adunits_ids_arr[] = $la_zona['AdUnits']['adunit_id_dfp'];
+						}
+					} else {
+						//Sin zonas...
+					}
+					$adunits_ids = implode(",", $adunits_ids_arr);
+					/*
+					*DFP
+					*/
+					// Log SOAP XML request and response.
+					$this->instanceDfp()->LogDefaults();
+					// Get the InventoryService.
+					$inventoryService = $this->instanceDfp()->GetService('InventoryService', 'v201403');
+
+					// Get the NetworkService.
+	  				$networkService = $this->instanceDfp()->GetService('NetworkService', 'v201403');
+
+					// Get the effective root ad unit's ID.
+					$network = $networkService->getCurrentNetwork();
+					$effectiveRootAdUnitId = $network->effectiveRootAdUnitId;
+
+					//Save network code for plugin WP
+					$infoToPlugin['networkcode'] = $network->networkCode;
+
+					// Create a statement to select the children of the effective root ad unit.
+					$filterStatement =
+						new Statement("WHERE parentId = :id AND status = 'ACTIVE' AND id  IN ($adunits_ids) LIMIT 500",
+										MapUtils::GetMapEntries(array(
+																		'id' => new NumberValue($effectiveRootAdUnitId)
+																	)
+																)
+									);
+
+					// Get ad units by statement.
+					$page = $inventoryService->getAdUnitsByStatement($filterStatement);
+
+					// Display results.
+					if (isset($page->results)) {
+						$i = $page->startIndex;
+						foreach ($page->results as $adUnit) {
+							$sizes_to_unit = array();
+							foreach ($adUnit->adUnitSizes as $key => $sizes) {
+								$sizes_to_unit[] = array(
+										'width' => $sizes->size->width,
+										'height' => $sizes->size->height,
+									);
+							}
+							// Get unit code and unit size
+							$infoToPlugin[$adUnit->id]['adunit'] = array(
+									'adunitcode' => $adUnit->adUnitCode,
+									'sizes' => $sizes_to_unit,
+								);
+						}
+					}
+					
+					//All ok to create zip plugin
+					$fileInfo = $this->createZipPlugin($infoToPlugin);
+					if ($fileInfo) {
+						$this->redirect(array('action' => 'more', $id));
+					}
+
+				} catch (OAuth2Exception $e) {
+					$this->Session->write('redirect_url', $this->request->url);
+					$this->redirect(array('controller' => 'users', 'action' => 'call_oauth', 'admin' => false));
+
+				} catch (ValidationException $e) {
+					#ExampleUtils::CheckForOAuth2Errors($e);
+				} catch (Exception $e) {
+					print $e->getMessage() . "\n";
+				}
+				die();
+
+			}//End if ($infoToPlugin) {
+			////////////////////////////////////////////////////////////////
+
+			// return $this->redirect(array('action' => 'more', $id));
 		}
 	}
 	public function admin_download(){
@@ -778,11 +894,11 @@ class PluginsController extends AppController {
 			$file_slug = $domain_plugin . '.php';
 			$base_plugin_content = str_replace("{slug}", $dir_slug . '/' . $file_slug, $base_plugin_content);
 			// replace url_api_plugin plugin
-			$urlFullRepositories = Router::url( array('controller' => 'repositories', 'action' => 'index', 'admin' => false), true );
+			$urlFullRepositories = Router::url( array('controller' => 'repositories', 'action' => 'api', 'admin' => false), true );
 			$base_plugin_content = str_replace("{url_api_plugin}", $urlFullRepositories, $base_plugin_content);
 			// create dir plugin
 			$base_path = WWW_ROOT . "plugins";
-			$path_plugin = $base_path . DS . 'mt-' . $domain_plugin;
+			$path_plugin = $base_path . DS . $info['plugin']['public_key'];
 
 			// check if dir exists
 			if (!is_dir($path_plugin)) {
@@ -790,13 +906,13 @@ class PluginsController extends AppController {
 			}
 
 			// create file index.php plugin
-			$index_plugin = $path_plugin . DS . $domain_plugin . '.php';
+			$index_plugin = $path_plugin . DS . $info['plugin']['public_key'] . '.php';
 			if (file_exists($index_plugin)) {
 				unlink($index_plugin);
 			}
 			file_put_contents($index_plugin, $base_plugin_content);
 
-			$zipFile = $base_path . DS . 'mt-' . $domain_plugin . '.zip';
+			$zipFile = $base_path . DS . $info['plugin']['public_key'] . '.zip';
 			$endZip = $this->Zip($path_plugin, $zipFile);
 			$this->rrmdir($path_plugin);
 			if ($endZip) {
