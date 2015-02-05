@@ -3,10 +3,10 @@ app/[Cc]onfig/core.php
 app/[Cc]onfig/database.php
 app/webroot/plugins/*
 !empty
-#Ignore ssl certs
 **.crt
 **.key
-#Ignore .DS_Store
 **.DS_Store
 app/webroot/wp/
 app/webroot/api
+dploy.yaml
+site
