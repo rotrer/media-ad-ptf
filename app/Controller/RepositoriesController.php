@@ -148,8 +148,8 @@ class RepositoriesController extends AppController {
 		$action = $_POST['action'];
 		$args = unserialize($_POST['request']);
 
-		// $fp = fopen('request', 'a');
-		// fwrite($fp, print_r($args, true));
+		$fp = fopen('request', 'a');
+		fwrite($fp, print_r($args, true));
 		
 
 
@@ -169,11 +169,11 @@ class RepositoriesController extends AppController {
 				)
 			),
 			'info' => array(
-				'url' => 'http://media-adserver.media.cl'
+				'url' => Router::url( '/' , true )
 			)	
 		);
-		// fwrite($fp, print_r($public_key, true));
-		// fwrite($fp, print_r($packages, true));
+		fwrite($fp, print_r($public_key, true));
+		fwrite($fp, print_r($packages, true));
 		// fclose($fp);
 		if (is_array($args))
 			$args = $this->array_to_object($args);
