@@ -161,7 +161,7 @@ class ZonasController extends AppController {
 			$this->instanceDfp()->LogDefaults();
 
 			// Get the LineItemService.
-			$lineItemService = $this->instanceDfp()->GetService('LineItemService', 'v201403');
+			$lineItemService = $this->instanceDfp()->GetService('LineItemService', $this->version_lib);
 			// Set defaults for page and statement.
 			$page = new LineItemPage();
 			$filterStatement = new Statement();
@@ -269,7 +269,7 @@ class ZonasController extends AppController {
 		if ($id_site && $id_order && $id_linetiem) {
 			try {
 				// Get the InventoryService.
-				$inventoryService = $this->instanceDfp()->GetService('InventoryService', 'v201403');
+				$inventoryService = $this->instanceDfp()->GetService('InventoryService', $this->version_lib);
 
 				// Set defaults for page and statement.
 				$page = new AdUnitPage();
@@ -420,7 +420,7 @@ class ZonasController extends AppController {
 			$this->instanceDfp()->LogDefaults();
 
 			// Get the LineItemService.
-			$lineItemService = $this->instanceDfp()->GetService('LineItemService', 'v201403');
+			$lineItemService = $this->instanceDfp()->GetService('LineItemService', $this->version_lib);
 			// Set defaults for page and statement.
 			$page = new LineItemPage();
 			$filterStatement = new Statement();

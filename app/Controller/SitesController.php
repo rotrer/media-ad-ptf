@@ -204,7 +204,7 @@ class SitesController extends AppController {
 				// Log SOAP XML request and response.
 				$this->instanceDfp()->LogDefaults();
 				// Get the OrderService.
-				$orderService = $this->instanceDfp()->GetService('OrderService', 'v201403');
+				$orderService = $this->instanceDfp()->GetService('OrderService', $this->version_lib);
 
 				// Create a datetime representing today.
 				$today = date(DateTimeUtils::$DFP_DATE_TIME_STRING_FORMAT, strtotime('now'));
@@ -276,7 +276,7 @@ class SitesController extends AppController {
 			if ($this->request->data['order_id']) {
 				$orderId = $this->request->data['order_id'];
 
-				$lineItemService = $this->instanceDfp()->GetService('LineItemService', 'v201403');
+				$lineItemService = $this->instanceDfp()->GetService('LineItemService', $this->version_lib);
 
 				// Create bind variables.
 				$vars =

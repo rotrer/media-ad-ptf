@@ -11,8 +11,8 @@
  */
 
 App::uses('Controller', 'Controller');
-App::import('Vendor', 'DfpUser', array('file' => 'googleads-lib'.DS.'src'.DS.'Google'.DS.'Api'.DS.'Ads'.DS.'Dfp'.DS.'Lib'.DS.'DfpUser.php'));
-App::import('Vendor', 'DateTimeUtils', array('file' => 'googleads-lib'.DS.'src'.DS.'Google'.DS.'Api'.DS.'Ads'.DS.'Dfp'.DS.'Util'.DS.'DateTimeUtils.php'));
+App::import('Vendor', 'DfpUser', array('file' => 'googleads-lib'.DS.'lib'.DS.'Google'.DS.'Api'.DS.'Ads'.DS.'Dfp'.DS.'Lib'.DS.'DfpUser.php'));
+App::import('Vendor', 'DateTimeUtils', array('file' => 'googleads-lib'.DS.'lib'.DS.'Google'.DS.'Api'.DS.'Ads'.DS.'Dfp'.DS.'Util'.DS.'v201508'.DS.'DateTimeUtils.php'));
 /**
  * Application Controller
  *
@@ -23,7 +23,9 @@ App::import('Vendor', 'DateTimeUtils', array('file' => 'googleads-lib'.DS.'src'.
  * @link        http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-	public $uses = array('Sessions');
+		public $uses = array('Sessions');
+
+		public $version_lib = 'v201508';
 
 		public function beforeFilter() {
 				if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
@@ -94,9 +96,10 @@ class AppController extends Controller {
 				// } else {
 				// 		$dataUser = NULL;
 				// }
-
 				$networksSelected =  ($this->Session->check('networksAdsSelected')) ? $this->Session->read('networksAdsSelected') : NULL;
-				return new DfpUser(Configure::read('pathAuthIni'), NULL, NULL, NULL, $networksSelected, NULL, NULL, NULL);
+				$dfpObj = new DfpUser(Configure::read('pathAuthIni'), NULL, $networksSelected, NULL, NULL);
+
+				return $dfpObj;
 		}
 
 		public function rrmdir($dir) {

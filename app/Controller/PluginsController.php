@@ -170,7 +170,7 @@ class PluginsController extends AppController {
 		$this->instanceDfp()->LogDefaults();
 
 		// Get the LineItemService.
-		$lineItemService = $this->instanceDfp()->GetService('LineItemService', 'v201403');
+		$lineItemService = $this->instanceDfp()->GetService('LineItemService', $this->version_lib);
 		// Set defaults for page and statement.
 		$page = new LineItemPage();
 		$filterStatement = new Statement();
@@ -333,7 +333,7 @@ class PluginsController extends AppController {
 		$this->instanceDfp()->LogDefaults();
 
 		// Get the LineItemService.
-		$lineItemService = $this->instanceDfp()->GetService('LineItemService', 'v201403');
+		$lineItemService = $this->instanceDfp()->GetService('LineItemService', $this->version_lib);
 		// Set defaults for page and statement.
 		$page = new LineItemPage();
 		$filterStatement = new Statement();
@@ -408,7 +408,7 @@ class PluginsController extends AppController {
 		$this->instanceDfp()->LogDefaults();
 
 		// Get the LineItemService.
-		$lineItemService = $this->instanceDfp()->GetService('LineItemService', 'v201403');
+		$lineItemService = $this->instanceDfp()->GetService('LineItemService', $this->version_lib);
 		// Set defaults for page and statement.
 		$page = new LineItemPage();
 		$filterStatement = new Statement();
@@ -500,10 +500,10 @@ class PluginsController extends AppController {
 				$this->instanceDfp()->LogDefaults();
 
 				// Get the InventoryService.
-				$inventoryService = $this->instanceDfp()->GetService('InventoryService', 'v201403');
+				$inventoryService = $this->instanceDfp()->GetService('InventoryService', $this->version_lib);
 
 				// Get the NetworkService.
-				$networkService = $this->instanceDfp()->GetService('NetworkService', 'v201403');
+				$networkService = $this->instanceDfp()->GetService('NetworkService', $this->version_lib);
 
 				// Get the effective root ad unit's ID.
 				$network = $networkService->getCurrentNetwork();
@@ -615,10 +615,10 @@ class PluginsController extends AppController {
 					// Log SOAP XML request and response.
 					$this->instanceDfp()->LogDefaults();
 					// Get the InventoryService.
-					$inventoryService = $this->instanceDfp()->GetService('InventoryService', 'v201403');
+					$inventoryService = $this->instanceDfp()->GetService('InventoryService', $this->version_lib);
 
 					// Get the NetworkService.
-	  				$networkService = $this->instanceDfp()->GetService('NetworkService', 'v201403');
+	  				$networkService = $this->instanceDfp()->GetService('NetworkService', $this->version_lib);
 
 					// Get the effective root ad unit's ID.
 					$network = $networkService->getCurrentNetwork();
@@ -728,10 +728,10 @@ class PluginsController extends AppController {
 					// Log SOAP XML request and response.
 					$this->instanceDfp()->LogDefaults();
 					// Get the InventoryService.
-					$inventoryService = $this->instanceDfp()->GetService('InventoryService', 'v201403');
+					$inventoryService = $this->instanceDfp()->GetService('InventoryService', $this->version_lib);
 
 					// Get the NetworkService.
-	  				$networkService = $this->instanceDfp()->GetService('NetworkService', 'v201403');
+	  				$networkService = $this->instanceDfp()->GetService('NetworkService', $this->version_lib);
 
 					// Get the effective root ad unit's ID.
 					$network = $networkService->getCurrentNetwork();

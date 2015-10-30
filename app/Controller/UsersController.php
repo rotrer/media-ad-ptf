@@ -258,7 +258,7 @@ class UsersController extends AppController {
 		$this->instanceDfp()->LogDefaults();
 
 		// Get the NetworkService.
-		$networkService = $this->instanceDfp()->GetService('NetworkService', 'v201403');
+		$networkService = $this->instanceDfp()->GetService('NetworkService', $this->version_lib);
 
 		// Get all networks that you have access to with the current login
 		// credentials.
@@ -314,7 +314,7 @@ class UsersController extends AppController {
 				$this->instanceDfp()->LogDefaults();
 
 				// Get the NetworkService.
-				$networkService = $this->instanceDfp()->GetService('NetworkService', 'v201403');
+				$networkService = $this->instanceDfp()->GetService('NetworkService', $this->version_lib);
 
 				// Get all networks that you have access to with the current login
 				// credentials.
@@ -427,7 +427,7 @@ class UsersController extends AppController {
 	// 		$this->instanceDfp()->LogDefaults();
 
 	// 		// Get the NetworkService.
-	// 		$networkService = $this->instanceDfp()->GetService('NetworkService', 'v201403');
+	// 		$networkService = $this->instanceDfp()->GetService('NetworkService', $this->version_lib);
 
 	// 		// Get all networks that you have access to with the current login
 	// 		// credentials.
