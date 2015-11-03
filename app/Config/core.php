@@ -365,5 +365,5 @@ Cache::config('_cake_model_', array(
 	'duration' => $duration
 ));
 
-$pathAuthIni = APP . WEBROOT_DIR . DS . 'auth_dfp.ini';
+$pathAuthIni = APP . WEBROOT_DIR . DS . 'auth_dfp_prod.ini';
 Configure::write('pathAuthIni', $pathAuthIni);
